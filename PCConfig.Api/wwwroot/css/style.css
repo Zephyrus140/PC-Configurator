@@ -444,9 +444,75 @@ body {
 }
 .empty-state i { font-size: 3rem; display: block; margin-bottom: 1rem; }
 
+/* ─── Brand chips ────────────────────────────────────────────────────────────── */
+.brands-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+.brand-chip {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: #999;
+  border-radius: 20px;
+  padding: 0.2rem 0.8rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.brand-chip:hover {
+  border-color: rgba(252,232,3,0.45);
+  color: var(--accent);
+}
+.brand-chip.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #000;
+}
+
+/* ─── Sidebar toggle (hamburger) ─────────────────────────────────────────────── */
+.sidebar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #ccc;
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 0 0.15rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.sidebar-toggle:hover { color: #fff; }
+
+/* ─── Sidebar overlay ────────────────────────────────────────────────────────── */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 250;
+}
+.sidebar-overlay.visible { display: block; }
+
 /* ─── Responsive ─────────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .configurator-sidebar { display: none; }
-  .configurator-main    { padding: 1rem; }
-  .step-title           { font-size: 1.4rem; }
+  .sidebar-toggle { display: block; }
+
+  .configurator-sidebar {
+    display: flex !important;
+    position: fixed;
+    left: calc(-1 * var(--sidebar-w) - 10px);
+    top: var(--navbar-h);
+    height: calc(100vh - var(--navbar-h));
+    z-index: 300;
+    transition: left 0.25s ease;
+  }
+  .configurator-sidebar.open { left: 0; }
+
+  .configurator-main { padding: 1rem; }
+  .step-title        { font-size: 1.4rem; }
 }
