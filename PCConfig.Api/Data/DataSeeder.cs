@@ -11,14 +11,14 @@ public static class DataSeeder
 
         var categories = new[]
         {
-            new Category { Slug = "case",        Name = "Корпус",             Icon = "bi-pc-display",       SortOrder = 1 },
-            new Category { Slug = "cpu",         Name = "Процессор",           Icon = "bi-cpu",              SortOrder = 2 },
-            new Category { Slug = "cooler",      Name = "Охлаждение CPU",      Icon = "bi-wind",             SortOrder = 3 },
-            new Category { Slug = "motherboard", Name = "Материнская плата",   Icon = "bi-motherboard",      SortOrder = 4 },
-            new Category { Slug = "ram",         Name = "Оперативная память",  Icon = "bi-memory",           SortOrder = 5 },
-            new Category { Slug = "gpu",         Name = "Видеокарта",          Icon = "bi-gpu-card",         SortOrder = 6 },
-            new Category { Slug = "storage",     Name = "Накопитель",          Icon = "bi-device-ssd",       SortOrder = 7 },
-            new Category { Slug = "psu",         Name = "Блок питания",        Icon = "bi-lightning-charge", SortOrder = 8 },
+            new Category { Slug = "cpu",         Name = "Процессор",           Icon = "bi-cpu",              SortOrder = 1 },
+            new Category { Slug = "motherboard", Name = "Материнская плата",   Icon = "bi-motherboard",      SortOrder = 2 },
+            new Category { Slug = "ram",         Name = "Оперативная память",  Icon = "bi-memory",           SortOrder = 3 },
+            new Category { Slug = "gpu",         Name = "Видеокарта",          Icon = "bi-gpu-card",         SortOrder = 4 },
+            new Category { Slug = "storage",     Name = "Накопитель",          Icon = "bi-device-ssd",       SortOrder = 5 },
+            new Category { Slug = "psu",         Name = "Блок питания",        Icon = "bi-lightning-charge", SortOrder = 6 },
+            new Category { Slug = "cooler",      Name = "Охлаждение CPU",      Icon = "bi-wind",             SortOrder = 7 },
+            new Category { Slug = "case",        Name = "Корпус",              Icon = "bi-pc-display",       SortOrder = 8 },
         };
 
         db.Categories.AddRange(categories);

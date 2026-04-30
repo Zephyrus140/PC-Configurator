@@ -1,13 +1,13 @@
 // ─── Steps config ─────────────────────────────────────────────────────────────
 const STEPS = [
-  { id: 'case',        label: 'Корпус',             icon: 'bi-pc-display',       desc: 'Выберите корпус для вашей сборки' },
   { id: 'cpu',         label: 'Процессор',           icon: 'bi-cpu',              desc: 'Выберите центральный процессор' },
-  { id: 'cooler',      label: 'Охлаждение CPU',      icon: 'bi-wind',             desc: 'Выберите систему охлаждения процессора' },
   { id: 'motherboard', label: 'Материнская плата',   icon: 'bi-motherboard',      desc: 'Выберите материнскую плату' },
   { id: 'ram',         label: 'Оперативная память',  icon: 'bi-memory',           desc: 'Выберите оперативную память' },
   { id: 'gpu',         label: 'Видеокарта',          icon: 'bi-gpu-card',         desc: 'Выберите графическую карту' },
   { id: 'storage',     label: 'Накопитель',          icon: 'bi-device-ssd',       desc: 'Выберите накопитель для системы' },
   { id: 'psu',         label: 'Блок питания',        icon: 'bi-lightning-charge', desc: 'Выберите блок питания' },
+  { id: 'cooler',      label: 'Охлаждение CPU',      icon: 'bi-wind',             desc: 'Выберите систему охлаждения процессора' },
+  { id: 'case',        label: 'Корпус',              icon: 'bi-pc-display',       desc: 'Выберите корпус для вашей сборки' },
 ];
 
 const CATEGORY_ICONS = {
@@ -18,15 +18,17 @@ const CATEGORY_ICONS = {
 
 // ─── Build state ──────────────────────────────────────────────────────────────
 const state = {
-  selected:     {},       // { stepId: componentObject }
-  currentStep:  'case',
+  selected:     {},
+  currentStep:  'cpu',
   searchQuery:  '',
   sortBy:       'default',
-  _cache:       {},       // loaded components per step
+  brandFilter:  '',
+  _cache:       {},
 };
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
+  loadPersistedBuild();
   renderSidebar();
   await renderCurrentStep();
   bindEvents();
@@ -62,11 +64,13 @@ async function navigateTo(stepId) {
   state.currentStep = stepId;
   state.searchQuery = '';
   state.sortBy = 'default';
+  state.brandFilter = '';
   document.getElementById('searchInput').value = '';
   document.getElementById('sortSelect').value = 'default';
   renderSidebar();
   await renderCurrentStep();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  closeSidebar();
 }
 
 async function navigatePrev() {
@@ -82,7 +86,7 @@ async function navigateNext() {
 // ─── Sidebar ──────────────────────────────────────────────────────────────────
 function renderSidebar() {
   document.getElementById('sidebarSteps').innerHTML = STEPS.map(step => {
-    const sel     = state.selected[step.id];
+    const sel      = state.selected[step.id];
     const isActive = step.id === state.currentStep;
     const cls = ['step-item', isActive && 'active', sel && 'selected'].filter(Boolean).join(' ');
 
@@ -120,7 +124,7 @@ async function renderCurrentStep() {
   document.getElementById('stepProgressLabel').textContent =
     `Шаг ${idx + 1} / ${STEPS.length}`;
 
-  await renderComponentGrid();
+  await Promise.all([renderBrandChips(), renderComponentGrid()]);
   checkCompatibility();
   updateTotalPrice();
 }
@@ -135,6 +139,10 @@ async function loadStep(stepId) {
 
 async function getFiltered() {
   let list = [...await loadStep(state.currentStep)];
+
+  if (state.brandFilter) {
+    list = list.filter(c => c.brand === state.brandFilter);
+  }
 
   if (state.searchQuery) {
     list = list.filter(c =>
@@ -152,6 +160,25 @@ async function getFiltered() {
   return list;
 }
 
+// ─── Brand chips ──────────────────────────────────────────────────────────────
+async function renderBrandChips() {
+  const all    = await loadStep(state.currentStep);
+  const brands = [...new Set(all.map(c => c.brand))].sort();
+  const bar    = document.getElementById('brandsBar');
+
+  bar.innerHTML = [
+    `<button class="brand-chip${!state.brandFilter ? ' active' : ''}" onclick="setBrand('')">Все</button>`,
+    ...brands.map(b =>
+      `<button class="brand-chip${state.brandFilter === b ? ' active' : ''}" onclick="setBrand(${JSON.stringify(b)})">${b}</button>`)
+  ].join('');
+}
+
+function setBrand(brand) {
+  state.brandFilter = brand;
+  renderBrandChips();
+  renderComponentGrid();
+}
+
 // ─── Component grid ───────────────────────────────────────────────────────────
 async function renderComponentGrid() {
   const grid = document.getElementById('componentsGrid');
@@ -166,7 +193,7 @@ async function renderComponentGrid() {
   const selectedId = state.selected[state.currentStep]?.id;
 
   document.getElementById('resultsCount').textContent =
-    `${list.length} позиц${pluralRu(list.length, 'ия', 'ии', 'ий')}`;
+    `${list.length} позиц${pluralRu(list.length, 'ия', 'ии', 'ий')}`;
 
   if (!list.length) {
     grid.innerHTML = `
@@ -219,10 +246,35 @@ async function toggleComponent(compId) {
     state.selected[stepId] = comp;
   }
 
+  persistBuild();
   renderSidebar();
   renderComponentGrid();
   checkCompatibility();
   updateTotalPrice();
+}
+
+// ─── Reset build ──────────────────────────────────────────────────────────────
+function resetBuild() {
+  if (!Object.keys(state.selected).length) return;
+  if (!confirm('Сбросить всю сборку? Все выбранные компоненты будут удалены.')) return;
+  state.selected = {};
+  persistBuild();
+  renderSidebar();
+  renderComponentGrid();
+  checkCompatibility();
+  updateTotalPrice();
+}
+
+// ─── Persistence ──────────────────────────────────────────────────────────────
+function persistBuild() {
+  localStorage.setItem('cyberrig-build', JSON.stringify(state.selected));
+}
+
+function loadPersistedBuild() {
+  try {
+    const raw = localStorage.getItem('cyberrig-build');
+    if (raw) state.selected = JSON.parse(raw);
+  } catch {}
 }
 
 // ─── Price ────────────────────────────────────────────────────────────────────
@@ -243,6 +295,12 @@ function checkCompatibility() {
     warnings.push(
       `<i class="bi bi-x-circle-fill me-1"></i>` +
       `Несовместимый сокет: CPU <b>${s.cpu.socket}</b> ≠ плата <b>${s.motherboard.socket}</b>`);
+
+  if (s.ram && s.motherboard && s.ram.ramType && s.motherboard.ramType
+      && s.ram.ramType !== s.motherboard.ramType)
+    warnings.push(
+      `<i class="bi bi-x-circle-fill me-1"></i>` +
+      `Несовместимая память: ОЗУ <b>${s.ram.ramType}</b> ≠ плата <b>${s.motherboard.ramType}</b>`);
 
   if (s.cpu && s.cooler && s.cooler.maxTdp < s.cpu.tdp)
     warnings.push(
@@ -306,6 +364,17 @@ async function handleOrder() {
   } catch {
     alert('Ошибка сохранения. Убедитесь что бэкенд запущен (dotnet run).');
   }
+}
+
+// ─── Mobile sidebar ───────────────────────────────────────────────────────────
+function toggleSidebar() {
+  document.querySelector('.configurator-sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('visible');
+}
+
+function closeSidebar() {
+  document.querySelector('.configurator-sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('visible');
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
