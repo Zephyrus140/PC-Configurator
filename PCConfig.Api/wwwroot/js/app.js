@@ -169,7 +169,7 @@ async function renderBrandChips() {
   bar.innerHTML = [
     `<button class="brand-chip${!state.brandFilter ? ' active' : ''}" onclick="setBrand('')">Все</button>`,
     ...brands.map(b =>
-      `<button class="brand-chip${state.brandFilter === b ? ' active' : ''}" onclick="setBrand(${JSON.stringify(b)})">${b}</button>`)
+      `<button class="brand-chip${state.brandFilter === b ? ' active' : ''}" onclick="setBrand('${b.replace(/'/g, "\\'")}')">${b}</button>`)
   ].join('');
 }
 
