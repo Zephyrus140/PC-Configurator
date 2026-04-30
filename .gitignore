@@ -1,0 +1,42 @@
+## .NET / ASP.NET Core
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.swp
+
+## EF Core migrations output (keep Migrations/ source, ignore generated snapshots if desired)
+# Migrations/
+
+## Publish output
+publish/
+out/
+
+## SQLite dev database
+*.db
+*.db-shm
+*.db-wal
+
+## Secrets
+appsettings.Production.json
+secrets.json
+
+## Node
+node_modules/
+npm-debug.log*
+.vite/
+dist/
+package-lock.json
+
+## OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+## IDE
+.idea/
+.vscode/settings.json
+*.ncb
+*.sdf
+*.opensdf

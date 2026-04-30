@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(New-Item -ItemType Directory -Force \"h:\\\\PC-Config\\\\css\")",
+      "PowerShell(New-Item -ItemType Directory -Force \"h:\\\\PC-Config\\\\js\")",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "PowerShell(Copy-Item \"h:\\\\PC-Config\\\\css\\\\style.css\"  \"h:\\\\PC-Config\\\\PCConfig.Api\\\\wwwroot\\\\css\\\\style.css\" -Force)",
+      "PowerShell(Copy-Item \"h:\\\\PC-Config\\\\js\\\\data.js\"     \"h:\\\\PC-Config\\\\PCConfig.Api\\\\wwwroot\\\\js\\\\data.js\"    -Force)",
+      "PowerShell(New-Item -ItemType Directory -Force \"h:\\\\PC-Config\\\\PCConfig.Api\\\\Properties\")",
+      "Bash(dotnet restore *)",
+      "Bash(dotnet build *)",
+      "PowerShell(winget --version)"
+    ]
+  }
+}
