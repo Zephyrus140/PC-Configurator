@@ -24,6 +24,7 @@ const state = {
   sortBy:       'default',
   brandFilter:  '',
   chipFilter:   '',
+  cpuFilters:   { socket: '', series: '', cores: '' },
   _cache:       {},
 };
 
@@ -63,8 +64,9 @@ async function navigateTo(stepId) {
   state.currentStep = stepId;
   state.searchQuery = '';
   state.sortBy = 'default';
-  state.brandFilter = '';
-  state.chipFilter  = '';
+  state.brandFilter  = '';
+  state.chipFilter   = '';
+  state.cpuFilters   = { socket: '', series: '', cores: '' };
   document.getElementById('searchInput').value = '';
   resetSortDropdown();
   renderSidebar();
@@ -144,6 +146,11 @@ async function getFiltered() {
   if (state.brandFilter) {
     list = list.filter(c => c.brand === state.brandFilter);
   }
+  if (state.currentStep === 'cpu') {
+    if (state.cpuFilters.socket) list = list.filter(c => c.socket === state.cpuFilters.socket);
+    if (state.cpuFilters.series) list = list.filter(c => cpuSeries(c.name) === state.cpuFilters.series);
+    if (state.cpuFilters.cores)  list = list.filter(c => cpuCores(c.specs) === parseInt(state.cpuFilters.cores));
+  }
 
   if (state.searchQuery) {
     list = list.filter(c =>
@@ -161,12 +168,64 @@ async function getFiltered() {
   return list;
 }
 
+// ─── CPU spec helpers ──────────────────────────────────────────────────────────
+function cpuSeries(name) {
+  const m = name.match(/Ryzen\s+[3579]|Core\s+i[3579]/);
+  return m ? m[0] : '';
+}
+
+function cpuCores(specs) {
+  const s = specs.find(x => /Cores/i.test(x));
+  if (!s) return 0;
+  const m = s.match(/^(\d+)/);
+  return m ? parseInt(m[1]) : 0;
+}
+
+function chip(label, active, onclick) {
+  return `<button class="brand-chip${active ? ' active' : ''}" onclick="${onclick}">${label}</button>`;
+}
+
 // ─── Brand chips ──────────────────────────────────────────────────────────────
 async function renderBrandChips() {
   const all = await loadStep(state.currentStep);
   const bar = document.getElementById('brandsBar');
 
-  if (state.currentStep === 'gpu') {
+  if (state.currentStep === 'cpu') {
+    const brands = [...new Set(all.map(c => c.brand))].sort();
+
+    // Cascade: each row derived from upstream selections
+    const afterBrand  = state.brandFilter ? all.filter(c => c.brand === state.brandFilter) : all;
+    const sockets     = [...new Set(afterBrand.map(c => c.socket).filter(Boolean))].sort();
+
+    const afterSocket = state.cpuFilters.socket ? afterBrand.filter(c => c.socket === state.cpuFilters.socket) : afterBrand;
+    const seriesList  = [...new Set(afterSocket.map(c => cpuSeries(c.name)).filter(Boolean))].sort();
+
+    const afterSeries = state.cpuFilters.series ? afterSocket.filter(c => cpuSeries(c.name) === state.cpuFilters.series) : afterSocket;
+    const coresList   = [...new Set(afterSeries.map(c => cpuCores(c.specs)).filter(Boolean))].sort((a, b) => a - b);
+
+    bar.innerHTML = `
+      <div class="filter-row">
+        <span class="filter-row-label">Бренд:</span>
+        ${chip('Все', !state.brandFilter, "setBrand('')")}
+        ${brands.map(b => chip(b, state.brandFilter === b, `setBrand('${b}')`)).join('')}
+      </div>
+      <div class="filter-row">
+        <span class="filter-row-label">Сокет:</span>
+        ${chip('Все', !state.cpuFilters.socket, "setCpuFilter('socket','')")}
+        ${sockets.map(s => chip(s, state.cpuFilters.socket === s, `setCpuFilter('socket','${s}')`)).join('')}
+      </div>
+      <div class="filter-row">
+        <span class="filter-row-label">Серия:</span>
+        ${chip('Все', !state.cpuFilters.series, "setCpuFilter('series','')")}
+        ${seriesList.map(s => chip(s, state.cpuFilters.series === s, `setCpuFilter('series','${s.replace(/'/g, "\\'")}')`)).join('')}
+      </div>
+      <div class="filter-row">
+        <span class="filter-row-label">Ядра:</span>
+        ${chip('Все', !state.cpuFilters.cores, "setCpuFilter('cores','')")}
+        ${coresList.map(n => chip(`${n}`, state.cpuFilters.cores === String(n), `setCpuFilter('cores','${n}')`)).join('')}
+      </div>`;
+
+  } else if (state.currentStep === 'gpu') {
     const chips      = [...new Set(all.map(c => c.chipBrand).filter(Boolean))].sort();
     const forPartner = state.chipFilter ? all.filter(c => c.chipBrand === state.chipFilter) : all;
     const partners   = [...new Set(forPartner.map(c => c.brand))].sort();
@@ -174,22 +233,30 @@ async function renderBrandChips() {
     bar.innerHTML = `
       <div class="filter-row">
         <span class="filter-row-label">Чип:</span>
-        <button class="brand-chip${!state.chipFilter ? ' active' : ''}" onclick="setChip('')">Все</button>
-        ${chips.map(b => `<button class="brand-chip${state.chipFilter === b ? ' active' : ''}" onclick="setChip('${b}')">${b}</button>`).join('')}
+        ${chip('Все', !state.chipFilter, "setChip('')")}
+        ${chips.map(b => chip(b, state.chipFilter === b, `setChip('${b}')`)).join('')}
       </div>
       <div class="filter-row">
         <span class="filter-row-label">Производитель:</span>
-        <button class="brand-chip${!state.brandFilter ? ' active' : ''}" onclick="setBrand('')">Все</button>
-        ${partners.map(b => `<button class="brand-chip${state.brandFilter === b ? ' active' : ''}" onclick="setBrand('${b.replace(/'/g, "\\'")}')">${b}</button>`).join('')}
+        ${chip('Все', !state.brandFilter, "setBrand('')")}
+        ${partners.map(b => chip(b, state.brandFilter === b, `setBrand('${b.replace(/'/g, "\\'")}')`)).join('')}
       </div>`;
+
   } else {
     const brands = [...new Set(all.map(c => c.brand))].sort();
     bar.innerHTML = [
-      `<button class="brand-chip${!state.brandFilter ? ' active' : ''}" onclick="setBrand('')">Все</button>`,
-      ...brands.map(b =>
-        `<button class="brand-chip${state.brandFilter === b ? ' active' : ''}" onclick="setBrand('${b.replace(/'/g, "\\'")}')">${b}</button>`)
+      chip('Все', !state.brandFilter, "setBrand('')"),
+      ...brands.map(b => chip(b, state.brandFilter === b, `setBrand('${b.replace(/'/g, "\\'")}')`)),
     ].join('');
   }
+}
+
+function setCpuFilter(key, value) {
+  state.cpuFilters[key] = value;
+  if (key === 'socket') { state.cpuFilters.series = ''; state.cpuFilters.cores = ''; }
+  if (key === 'series') { state.cpuFilters.cores  = ''; }
+  renderBrandChips();
+  renderComponentGrid();
 }
 
 function setChip(chip) {
@@ -201,6 +268,7 @@ function setChip(chip) {
 
 function setBrand(brand) {
   state.brandFilter = brand;
+  if (state.currentStep === 'cpu') state.cpuFilters = { socket: '', series: '', cores: '' };
   renderBrandChips();
   renderComponentGrid();
 }
