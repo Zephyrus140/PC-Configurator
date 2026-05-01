@@ -178,46 +178,55 @@ const COMPONENTS = {
   ],
 
   gpu: [
-    // ── Budget ────────────────────────────────────────────────────────────────
-    { id: 'gpu-1', brand: 'AMD', name: 'Radeon RX 7600 8GB', price: 269.99,
-      specs: ['8GB GDDR6', '165W TDP', 'PCIe 4.0 ×16', 'FSR 3', '1080p Gaming'],
-      tdp: 165 },
-    { id: 'gpu-2', brand: 'NVIDIA', name: 'GeForce RTX 4060 8GB', price: 299.99,
-      specs: ['8GB GDDR6', '115W TDP', 'PCIe 4.0 ×16', 'DLSS 3', '1080p Gaming'],
-      tdp: 115 },
-    { id: 'gpu-3', brand: 'Intel', name: 'Arc A770 16GB', price: 329.99,
-      specs: ['16GB GDDR6', '225W TDP', 'PCIe 4.0 ×16', 'XeSS / DX12U', '1080p / 1440p'],
-      tdp: 225 },
-    // ── Mid-range ─────────────────────────────────────────────────────────────
-    { id: 'gpu-4', brand: 'NVIDIA', name: 'GeForce RTX 4060 Ti 8GB', price: 399.99,
-      specs: ['8GB GDDR6', '160W TDP', 'PCIe 4.0 ×16', 'DLSS 3', '1080p / 1440p'],
-      tdp: 160 },
-    { id: 'gpu-5', brand: 'AMD', name: 'Radeon RX 7800 XT 16GB', price: 499.99,
-      specs: ['16GB GDDR6', '263W TDP', 'PCIe 4.0 ×16', 'FSR 3', '1440p Gaming'],
-      tdp: 263 },
-    { id: 'gpu-6', brand: 'AMD', name: 'Radeon RX 7900 GRE 16GB', price: 549.99,
-      specs: ['16GB GDDR6', '260W TDP', 'PCIe 4.0 ×16', 'FSR 3', '1440p / 4K'],
-      tdp: 260 },
-    { id: 'gpu-7', brand: 'NVIDIA', name: 'GeForce RTX 4070 12GB', price: 589.99,
-      specs: ['12GB GDDR6X', '200W TDP', 'PCIe 4.0 ×16', 'DLSS 3', '1440p Gaming'],
-      tdp: 200 },
-    { id: 'gpu-8', brand: 'NVIDIA', name: 'GeForce RTX 4070 Super 12GB', price: 599.99,
-      specs: ['12GB GDDR6X', '220W TDP', 'PCIe 4.0 ×16', 'DLSS 3', '1440p / 4K'],
-      tdp: 220 },
-    { id: 'gpu-9', brand: 'NVIDIA', name: 'GeForce RTX 4070 Ti Super 16GB', price: 799.99,
-      specs: ['16GB GDDR6X', '285W TDP', 'PCIe 4.0 ×16', 'DLSS 3.5', '4K Gaming'],
-      tdp: 285 },
-    // ── High-end ──────────────────────────────────────────────────────────────
-    { id: 'gpu-10', brand: 'AMD', name: 'Radeon RX 7900 XTX 24GB', price: 749.99,
-      specs: ['24GB GDDR6', '355W TDP', 'PCIe 4.0 ×16', 'FSR 3', '4K Ultra'],
-      tdp: 355 },
-    { id: 'gpu-11', brand: 'NVIDIA', name: 'GeForce RTX 4080 Super 16GB', price: 999.99,
-      specs: ['16GB GDDR6X', '320W TDP', 'PCIe 4.0 ×16', 'DLSS 3.5', '4K Gaming'],
-      tdp: 320 },
-    // ── Extreme ───────────────────────────────────────────────────────────────
-    { id: 'gpu-12', brand: 'NVIDIA', name: 'GeForce RTX 4090 24GB', price: 1799.99,
-      specs: ['24GB GDDR6X', '450W TDP', 'PCIe 4.0 ×16', 'DLSS 3.5', '4K Ultra / 8K'],
-      tdp: 450 },
+    // ── NVIDIA RTX 4060 8GB — Budget 1080p ────────────────────────────────────
+    { id: 'gpu-1',  chipBrand: 'NVIDIA', brand: 'MSI',      name: 'VENTUS 2X OC GeForce RTX 4060 8GB',         price: 299.99,  specs: ['8GB GDDR6', '115W TDP', 'PCIe 4.0 ×16', 'DLSS 3', 'Dual-Fan', 'Boost 2505MHz'], tdp: 115 },
+    { id: 'gpu-2',  chipBrand: 'NVIDIA', brand: 'Gigabyte', name: 'WINDFORCE OC GeForce RTX 4060 8GB',         price: 299.99,  specs: ['8GB GDDR6', '115W TDP', 'PCIe 4.0 ×16', 'DLSS 3', 'Triple-Fan', 'RGB Fusion 2.0'], tdp: 115 },
+    { id: 'gpu-3',  chipBrand: 'NVIDIA', brand: 'ASUS',     name: 'DUAL OC GeForce RTX 4060 8GB',              price: 309.99,  specs: ['8GB GDDR6', '115W TDP', 'PCIe 4.0 ×16', 'DLSS 3', 'Dual-Fan', 'Auto-Extreme'], tdp: 115 },
+    { id: 'gpu-4',  chipBrand: 'NVIDIA', brand: 'Zotac',    name: 'GAMING Twin Edge OC RTX 4060 8GB',          price: 299.99,  specs: ['8GB GDDR6', '115W TDP', 'PCIe 4.0 ×16', 'DLSS 3', 'Dual-Fan', 'IceStorm 2.0'], tdp: 115 },
+    { id: 'gpu-5',  chipBrand: 'NVIDIA', brand: 'Colorful', name: 'iGame GeForce RTX 4060 Ultra W OC 8GB',     price: 299.99,  specs: ['8GB GDDR6', '115W TDP', 'PCIe 4.0 ×16', 'DLSS 3', 'Triple-Fan', 'ARGB'], tdp: 115 },
+    // ── NVIDIA RTX 4060 Ti 8GB ────────────────────────────────────────────────
+    { id: 'gpu-6',  chipBrand: 'NVIDIA', brand: 'MSI',      name: 'GAMING X GeForce RTX 4060 Ti 8GB',          price: 419.99,  specs: ['8GB GDDR6', '160W TDP', 'PCIe 4.0 ×16', 'DLSS 3', 'Triple-Fan', 'TORX Fan 5.0'], tdp: 160 },
+    { id: 'gpu-7',  chipBrand: 'NVIDIA', brand: 'ASUS',     name: 'TUF Gaming OC GeForce RTX 4060 Ti 8GB',     price: 409.99,  specs: ['8GB GDDR6', '160W TDP', 'PCIe 4.0 ×16', 'DLSS 3', 'Triple-Fan', 'Military-Grade'], tdp: 160 },
+    { id: 'gpu-8',  chipBrand: 'NVIDIA', brand: 'Palit',    name: 'Dual OC GeForce RTX 4060 Ti 8GB',           price: 399.99,  specs: ['8GB GDDR6', '160W TDP', 'PCIe 4.0 ×16', 'DLSS 3', 'Dual-Fan', 'Compact Design'], tdp: 160 },
+    // ── NVIDIA RTX 4070 Super 12GB ────────────────────────────────────────────
+    { id: 'gpu-9',  chipBrand: 'NVIDIA', brand: 'MSI',      name: 'GAMING X SLIM OC GeForce RTX 4070 Super 12GB', price: 609.99, specs: ['12GB GDDR6X', '220W TDP', 'PCIe 4.0 ×16', 'DLSS 3', 'Dual-Fan Slim', 'TORX Fan 5.0'], tdp: 220 },
+    { id: 'gpu-10', chipBrand: 'NVIDIA', brand: 'ASUS',     name: 'TUF Gaming OC GeForce RTX 4070 Super 12GB', price: 619.99,  specs: ['12GB GDDR6X', '220W TDP', 'PCIe 4.0 ×16', 'DLSS 3', 'Triple-Fan', 'Military-Grade'], tdp: 220 },
+    { id: 'gpu-11', chipBrand: 'NVIDIA', brand: 'PNY',      name: 'XLR8 Verto OC GeForce RTX 4070 Super 12GB', price: 589.99,  specs: ['12GB GDDR6X', '220W TDP', 'PCIe 4.0 ×16', 'DLSS 3', 'Triple-Fan', 'VERTO Cooler'], tdp: 220 },
+    { id: 'gpu-12', chipBrand: 'NVIDIA', brand: 'Inno3D',   name: 'Twin X2 OC GeForce RTX 4070 Super 12GB',    price: 599.99,  specs: ['12GB GDDR6X', '220W TDP', 'PCIe 4.0 ×16', 'DLSS 3', 'Dual-Fan', 'Compact Build'], tdp: 220 },
+    // ── NVIDIA RTX 4070 Ti Super 16GB ─────────────────────────────────────────
+    { id: 'gpu-13', chipBrand: 'NVIDIA', brand: 'MSI',      name: 'SUPRIM X GeForce RTX 4070 Ti Super 16GB',   price: 829.99,  specs: ['16GB GDDR6X', '285W TDP', 'PCIe 4.0 ×16', 'DLSS 3.5', 'Triple-Fan', 'Boost 2700MHz'], tdp: 285 },
+    { id: 'gpu-14', chipBrand: 'NVIDIA', brand: 'ASUS',     name: 'ROG STRIX OC GeForce RTX 4070 Ti Super 16GB', price: 849.99, specs: ['16GB GDDR6X', '285W TDP', 'PCIe 4.0 ×16', 'DLSS 3.5', 'Triple-Fan', 'ARGB'], tdp: 285 },
+    { id: 'gpu-15', chipBrand: 'NVIDIA', brand: 'Gigabyte', name: 'AORUS MASTER GeForce RTX 4070 Ti Super 16GB', price: 839.99, specs: ['16GB GDDR6X', '285W TDP', 'PCIe 4.0 ×16', 'DLSS 3.5', 'Triple-Fan', 'LCD Edge View'], tdp: 285 },
+    // ── NVIDIA RTX 4080 Super 16GB ────────────────────────────────────────────
+    { id: 'gpu-16', chipBrand: 'NVIDIA', brand: 'ASUS',     name: 'ROG STRIX OC GeForce RTX 4080 Super 16GB',  price: 1049.99, specs: ['16GB GDDR6X', '320W TDP', 'PCIe 4.0 ×16', 'DLSS 3.5', 'Triple-Fan', 'ARGB'], tdp: 320 },
+    { id: 'gpu-17', chipBrand: 'NVIDIA', brand: 'MSI',      name: 'SUPRIM X GeForce RTX 4080 Super 16GB',      price: 1029.99, specs: ['16GB GDDR6X', '320W TDP', 'PCIe 4.0 ×16', 'DLSS 3.5', 'Triple-Fan', 'Boost 2640MHz'], tdp: 320 },
+    { id: 'gpu-18', chipBrand: 'NVIDIA', brand: 'Zotac',    name: 'GAMING AMP Extreme GeForce RTX 4080 Super 16GB', price: 999.99, specs: ['16GB GDDR6X', '320W TDP', 'PCIe 4.0 ×16', 'DLSS 3.5', 'Triple-Fan', 'IceStorm 3.0'], tdp: 320 },
+    // ── NVIDIA RTX 4090 24GB — Extreme ────────────────────────────────────────
+    { id: 'gpu-19', chipBrand: 'NVIDIA', brand: 'ASUS',     name: 'ROG STRIX OC GeForce RTX 4090 24GB',        price: 1899.99, specs: ['24GB GDDR6X', '450W TDP', 'PCIe 4.0 ×16', 'DLSS 3.5', 'Triple-Fan', 'ARGB'], tdp: 450 },
+    { id: 'gpu-20', chipBrand: 'NVIDIA', brand: 'MSI',      name: 'SUPRIM X GeForce RTX 4090 24GB',            price: 1849.99, specs: ['24GB GDDR6X', '450W TDP', 'PCIe 4.0 ×16', 'DLSS 3.5', 'Triple-Fan', 'TriFrozr 3S'], tdp: 450 },
+    { id: 'gpu-21', chipBrand: 'NVIDIA', brand: 'Zotac',    name: 'GAMING AMP Extreme Holo RTX 4090 24GB',     price: 1799.99, specs: ['24GB GDDR6X', '450W TDP', 'PCIe 4.0 ×16', 'DLSS 3.5', 'Triple-Fan', 'Holo ARGB'], tdp: 450 },
+    { id: 'gpu-22', chipBrand: 'NVIDIA', brand: 'Gigabyte', name: 'AORUS MASTER GeForce RTX 4090 24GB',        price: 1849.99, specs: ['24GB GDDR6X', '450W TDP', 'PCIe 4.0 ×16', 'DLSS 3.5', 'Triple-Fan', 'LCD Edge View'], tdp: 450 },
+    // ── AMD RX 7600 8GB — Budget 1080p ────────────────────────────────────────
+    { id: 'gpu-23', chipBrand: 'AMD',    brand: 'MSI',      name: 'MECH 2X OC Radeon RX 7600 8GB',             price: 269.99,  specs: ['8GB GDDR6', '165W TDP', 'PCIe 4.0 ×16', 'FSR 3', 'Dual-Fan', 'Boost 2755MHz'], tdp: 165 },
+    { id: 'gpu-24', chipBrand: 'AMD',    brand: 'ASUS',     name: 'DUAL OC Radeon RX 7600 8GB',                price: 279.99,  specs: ['8GB GDDR6', '165W TDP', 'PCIe 4.0 ×16', 'FSR 3', 'Dual-Fan', 'Auto-Extreme'], tdp: 165 },
+    { id: 'gpu-25', chipBrand: 'AMD',    brand: 'Gigabyte', name: 'EAGLE OC Radeon RX 7600 8GB',               price: 269.99,  specs: ['8GB GDDR6', '165W TDP', 'PCIe 4.0 ×16', 'FSR 3', 'Dual-Fan', 'WINDFORCE 2X'], tdp: 165 },
+    { id: 'gpu-26', chipBrand: 'AMD',    brand: 'ASRock',   name: 'Challenger OC Radeon RX 7600 8GB',          price: 269.99,  specs: ['8GB GDDR6', '165W TDP', 'PCIe 4.0 ×16', 'FSR 3', 'Dual-Fan', 'Boost 2755MHz'], tdp: 165 },
+    // ── AMD RX 7800 XT 16GB — 1440p ───────────────────────────────────────────
+    { id: 'gpu-27', chipBrand: 'AMD',    brand: 'MSI',      name: 'GAMING Radeon RX 7800 XT 16GB',             price: 499.99,  specs: ['16GB GDDR6', '263W TDP', 'PCIe 4.0 ×16', 'FSR 3', 'Triple-Fan', 'TORX Fan 5.0'], tdp: 263 },
+    { id: 'gpu-28', chipBrand: 'AMD',    brand: 'ASUS',     name: 'TUF Gaming OC Radeon RX 7800 XT 16GB',      price: 519.99,  specs: ['16GB GDDR6', '263W TDP', 'PCIe 4.0 ×16', 'FSR 3', 'Triple-Fan', 'Military-Grade'], tdp: 263 },
+    { id: 'gpu-29', chipBrand: 'AMD',    brand: 'Gigabyte', name: 'GAMING OC Radeon RX 7800 XT 16GB',          price: 509.99,  specs: ['16GB GDDR6', '263W TDP', 'PCIe 4.0 ×16', 'FSR 3', 'Triple-Fan', 'WINDFORCE 3X'], tdp: 263 },
+    { id: 'gpu-30', chipBrand: 'AMD',    brand: 'ASRock',   name: 'Challenger Pro OC Radeon RX 7800 XT 16GB',  price: 499.99,  specs: ['16GB GDDR6', '263W TDP', 'PCIe 4.0 ×16', 'FSR 3', 'Triple-Fan', 'Boost 2520MHz'], tdp: 263 },
+    // ── AMD RX 7900 GRE 16GB — 1440p / 4K ────────────────────────────────────
+    { id: 'gpu-31', chipBrand: 'AMD',    brand: 'MSI',      name: 'GAMING Radeon RX 7900 GRE 16GB',            price: 549.99,  specs: ['16GB GDDR6', '260W TDP', 'PCIe 4.0 ×16', 'FSR 3', 'Triple-Fan', 'TORX Fan 5.0'], tdp: 260 },
+    { id: 'gpu-32', chipBrand: 'AMD',    brand: 'ASUS',     name: 'TUF Gaming OC Radeon RX 7900 GRE 16GB',     price: 569.99,  specs: ['16GB GDDR6', '260W TDP', 'PCIe 4.0 ×16', 'FSR 3', 'Triple-Fan', 'Military-Grade'], tdp: 260 },
+    { id: 'gpu-33', chipBrand: 'AMD',    brand: 'Gigabyte', name: 'GAMING OC Radeon RX 7900 GRE 16GB',         price: 559.99,  specs: ['16GB GDDR6', '260W TDP', 'PCIe 4.0 ×16', 'FSR 3', 'Triple-Fan', 'WINDFORCE 3X'], tdp: 260 },
+    // ── AMD RX 7900 XTX 24GB — 4K Ultra ──────────────────────────────────────
+    { id: 'gpu-34', chipBrand: 'AMD',    brand: 'ASUS',     name: 'ROG STRIX LC OC Radeon RX 7900 XTX 24GB',   price: 799.99,  specs: ['24GB GDDR6', '355W TDP', 'PCIe 4.0 ×16', 'FSR 3', 'AIO Liquid Cool', 'ARGB'], tdp: 355 },
+    { id: 'gpu-35', chipBrand: 'AMD',    brand: 'MSI',      name: 'GAMING TRIO Radeon RX 7900 XTX 24GB',       price: 779.99,  specs: ['24GB GDDR6', '355W TDP', 'PCIe 4.0 ×16', 'FSR 3', 'Triple-Fan', 'TORX Fan 5.0'], tdp: 355 },
+    { id: 'gpu-36', chipBrand: 'AMD',    brand: 'Gigabyte', name: 'GAMING OC Radeon RX 7900 XTX 24GB',         price: 769.99,  specs: ['24GB GDDR6', '355W TDP', 'PCIe 4.0 ×16', 'FSR 3', 'Triple-Fan', 'WINDFORCE 3X'], tdp: 355 },
+    // ── Intel Arc A770 16GB ───────────────────────────────────────────────────
+    { id: 'gpu-37', chipBrand: 'Intel',  brand: 'ASRock',   name: 'Arc A770 Challenger OC 16GB',               price: 329.99,  specs: ['16GB GDDR6', '225W TDP', 'PCIe 4.0 ×16', 'XeSS / DX12U', 'Dual-Fan', 'Boost 2400MHz'], tdp: 225 },
+    { id: 'gpu-38', chipBrand: 'Intel',  brand: 'ASUS',     name: 'Arc A770 Dual OC 16GB',                     price: 339.99,  specs: ['16GB GDDR6', '225W TDP', 'PCIe 4.0 ×16', 'XeSS / DX12U', 'Dual-Fan', 'Auto-Extreme'], tdp: 225 },
   ],
 
   storage: [

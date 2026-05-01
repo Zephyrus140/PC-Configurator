@@ -16,4 +16,5 @@ public class ComponentDto
     public int? Wattage { get; set; }
     public string? RamType { get; set; }
     public List<string>? SupportedFormFactors { get; set; }
+    public string? ChipBrand { get; set; }
 }

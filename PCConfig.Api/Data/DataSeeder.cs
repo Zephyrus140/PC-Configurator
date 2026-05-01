@@ -213,37 +213,65 @@ public static class DataSeeder
 
             // ── GPUs ───────────────────────────────────────────────────────────
 
-            // Budget
-            new() { CategoryId = cat["gpu"], Brand = "AMD",    Name = "Radeon RX 7600 8GB",          Price = 269.99m,
-                SpecsJson = S("8GB GDDR6","165W TDP","PCIe 4.0 ×16","FSR 3","1080p Gaming"), Tdp = 165 },
-            new() { CategoryId = cat["gpu"], Brand = "NVIDIA", Name = "GeForce RTX 4060 8GB",        Price = 299.99m,
-                SpecsJson = S("8GB GDDR6","115W TDP","PCIe 4.0 ×16","DLSS 3","1080p Gaming"), Tdp = 115 },
-            new() { CategoryId = cat["gpu"], Brand = "Intel",  Name = "Arc A770 16GB",               Price = 329.99m,
-                SpecsJson = S("16GB GDDR6","225W TDP","PCIe 4.0 ×16","XeSS / DX12U","1080p / 1440p"), Tdp = 225 },
+            // NVIDIA RTX 4060 8GB
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "MSI",      Name = "VENTUS 2X OC GeForce RTX 4060 8GB",           Price = 299.99m,  SpecsJson = S("8GB GDDR6","115W TDP","PCIe 4.0 ×16","DLSS 3","Dual-Fan","Boost 2505MHz"), Tdp = 115 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "Gigabyte", Name = "WINDFORCE OC GeForce RTX 4060 8GB",           Price = 299.99m,  SpecsJson = S("8GB GDDR6","115W TDP","PCIe 4.0 ×16","DLSS 3","Triple-Fan","RGB Fusion 2.0"), Tdp = 115 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "ASUS",     Name = "DUAL OC GeForce RTX 4060 8GB",                Price = 309.99m,  SpecsJson = S("8GB GDDR6","115W TDP","PCIe 4.0 ×16","DLSS 3","Dual-Fan","Auto-Extreme"), Tdp = 115 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "Zotac",    Name = "GAMING Twin Edge OC RTX 4060 8GB",            Price = 299.99m,  SpecsJson = S("8GB GDDR6","115W TDP","PCIe 4.0 ×16","DLSS 3","Dual-Fan","IceStorm 2.0"), Tdp = 115 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "Colorful", Name = "iGame GeForce RTX 4060 Ultra W OC 8GB",       Price = 299.99m,  SpecsJson = S("8GB GDDR6","115W TDP","PCIe 4.0 ×16","DLSS 3","Triple-Fan","ARGB"), Tdp = 115 },
 
-            // Mid
-            new() { CategoryId = cat["gpu"], Brand = "NVIDIA", Name = "GeForce RTX 4060 Ti 8GB",    Price = 399.99m,
-                SpecsJson = S("8GB GDDR6","160W TDP","PCIe 4.0 ×16","DLSS 3","1080p / 1440p"), Tdp = 160 },
-            new() { CategoryId = cat["gpu"], Brand = "AMD",    Name = "Radeon RX 7800 XT 16GB",     Price = 499.99m,
-                SpecsJson = S("16GB GDDR6","263W TDP","PCIe 4.0 ×16","FSR 3","1440p Gaming"), Tdp = 263 },
-            new() { CategoryId = cat["gpu"], Brand = "AMD",    Name = "Radeon RX 7900 GRE 16GB",    Price = 549.99m,
-                SpecsJson = S("16GB GDDR6","260W TDP","PCIe 4.0 ×16","FSR 3","1440p / 4K"), Tdp = 260 },
-            new() { CategoryId = cat["gpu"], Brand = "NVIDIA", Name = "GeForce RTX 4070 12GB",      Price = 589.99m,
-                SpecsJson = S("12GB GDDR6X","200W TDP","PCIe 4.0 ×16","DLSS 3","1440p Gaming"), Tdp = 200 },
-            new() { CategoryId = cat["gpu"], Brand = "NVIDIA", Name = "GeForce RTX 4070 Super 12GB", Price = 599.99m,
-                SpecsJson = S("12GB GDDR6X","220W TDP","PCIe 4.0 ×16","DLSS 3","1440p / 4K"), Tdp = 220 },
-            new() { CategoryId = cat["gpu"], Brand = "NVIDIA", Name = "GeForce RTX 4070 Ti Super 16GB", Price = 799.99m,
-                SpecsJson = S("16GB GDDR6X","285W TDP","PCIe 4.0 ×16","DLSS 3.5","4K Gaming"), Tdp = 285 },
+            // NVIDIA RTX 4060 Ti 8GB
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "MSI",      Name = "GAMING X GeForce RTX 4060 Ti 8GB",            Price = 419.99m,  SpecsJson = S("8GB GDDR6","160W TDP","PCIe 4.0 ×16","DLSS 3","Triple-Fan","TORX Fan 5.0"), Tdp = 160 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "ASUS",     Name = "TUF Gaming OC GeForce RTX 4060 Ti 8GB",       Price = 409.99m,  SpecsJson = S("8GB GDDR6","160W TDP","PCIe 4.0 ×16","DLSS 3","Triple-Fan","Military-Grade"), Tdp = 160 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "Palit",    Name = "Dual OC GeForce RTX 4060 Ti 8GB",             Price = 399.99m,  SpecsJson = S("8GB GDDR6","160W TDP","PCIe 4.0 ×16","DLSS 3","Dual-Fan","Compact Design"), Tdp = 160 },
 
-            // High-end
-            new() { CategoryId = cat["gpu"], Brand = "AMD",    Name = "Radeon RX 7900 XTX 24GB",   Price = 749.99m,
-                SpecsJson = S("24GB GDDR6","355W TDP","PCIe 4.0 ×16","FSR 3","4K Ultra"), Tdp = 355 },
-            new() { CategoryId = cat["gpu"], Brand = "NVIDIA", Name = "GeForce RTX 4080 Super 16GB", Price = 999.99m,
-                SpecsJson = S("16GB GDDR6X","320W TDP","PCIe 4.0 ×16","DLSS 3.5","4K Gaming"), Tdp = 320 },
+            // NVIDIA RTX 4070 Super 12GB
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "MSI",      Name = "GAMING X SLIM OC GeForce RTX 4070 Super 12GB", Price = 609.99m, SpecsJson = S("12GB GDDR6X","220W TDP","PCIe 4.0 ×16","DLSS 3","Dual-Fan Slim","TORX Fan 5.0"), Tdp = 220 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "ASUS",     Name = "TUF Gaming OC GeForce RTX 4070 Super 12GB",   Price = 619.99m,  SpecsJson = S("12GB GDDR6X","220W TDP","PCIe 4.0 ×16","DLSS 3","Triple-Fan","Military-Grade"), Tdp = 220 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "PNY",      Name = "XLR8 Verto OC GeForce RTX 4070 Super 12GB",   Price = 589.99m,  SpecsJson = S("12GB GDDR6X","220W TDP","PCIe 4.0 ×16","DLSS 3","Triple-Fan","VERTO Cooler"), Tdp = 220 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "Inno3D",   Name = "Twin X2 OC GeForce RTX 4070 Super 12GB",      Price = 599.99m,  SpecsJson = S("12GB GDDR6X","220W TDP","PCIe 4.0 ×16","DLSS 3","Dual-Fan","Compact Build"), Tdp = 220 },
 
-            // Extreme
-            new() { CategoryId = cat["gpu"], Brand = "NVIDIA", Name = "GeForce RTX 4090 24GB",     Price = 1799.99m,
-                SpecsJson = S("24GB GDDR6X","450W TDP","PCIe 4.0 ×16","DLSS 3.5","4K Ultra / 8K"), Tdp = 450 },
+            // NVIDIA RTX 4070 Ti Super 16GB
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "MSI",      Name = "SUPRIM X GeForce RTX 4070 Ti Super 16GB",     Price = 829.99m,  SpecsJson = S("16GB GDDR6X","285W TDP","PCIe 4.0 ×16","DLSS 3.5","Triple-Fan","Boost 2700MHz"), Tdp = 285 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "ASUS",     Name = "ROG STRIX OC GeForce RTX 4070 Ti Super 16GB", Price = 849.99m,  SpecsJson = S("16GB GDDR6X","285W TDP","PCIe 4.0 ×16","DLSS 3.5","Triple-Fan","ARGB"), Tdp = 285 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "Gigabyte", Name = "AORUS MASTER GeForce RTX 4070 Ti Super 16GB", Price = 839.99m,  SpecsJson = S("16GB GDDR6X","285W TDP","PCIe 4.0 ×16","DLSS 3.5","Triple-Fan","LCD Edge View"), Tdp = 285 },
+
+            // NVIDIA RTX 4080 Super 16GB
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "ASUS",     Name = "ROG STRIX OC GeForce RTX 4080 Super 16GB",    Price = 1049.99m, SpecsJson = S("16GB GDDR6X","320W TDP","PCIe 4.0 ×16","DLSS 3.5","Triple-Fan","ARGB"), Tdp = 320 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "MSI",      Name = "SUPRIM X GeForce RTX 4080 Super 16GB",        Price = 1029.99m, SpecsJson = S("16GB GDDR6X","320W TDP","PCIe 4.0 ×16","DLSS 3.5","Triple-Fan","Boost 2640MHz"), Tdp = 320 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "Zotac",    Name = "GAMING AMP Extreme GeForce RTX 4080 Super 16GB", Price = 999.99m, SpecsJson = S("16GB GDDR6X","320W TDP","PCIe 4.0 ×16","DLSS 3.5","Triple-Fan","IceStorm 3.0"), Tdp = 320 },
+
+            // NVIDIA RTX 4090 24GB
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "ASUS",     Name = "ROG STRIX OC GeForce RTX 4090 24GB",          Price = 1899.99m, SpecsJson = S("24GB GDDR6X","450W TDP","PCIe 4.0 ×16","DLSS 3.5","Triple-Fan","ARGB"), Tdp = 450 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "MSI",      Name = "SUPRIM X GeForce RTX 4090 24GB",              Price = 1849.99m, SpecsJson = S("24GB GDDR6X","450W TDP","PCIe 4.0 ×16","DLSS 3.5","Triple-Fan","TriFrozr 3S"), Tdp = 450 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "Zotac",    Name = "GAMING AMP Extreme Holo RTX 4090 24GB",       Price = 1799.99m, SpecsJson = S("24GB GDDR6X","450W TDP","PCIe 4.0 ×16","DLSS 3.5","Triple-Fan","Holo ARGB"), Tdp = 450 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "NVIDIA", Brand = "Gigabyte", Name = "AORUS MASTER GeForce RTX 4090 24GB",          Price = 1849.99m, SpecsJson = S("24GB GDDR6X","450W TDP","PCIe 4.0 ×16","DLSS 3.5","Triple-Fan","LCD Edge View"), Tdp = 450 },
+
+            // AMD RX 7600 8GB
+            new() { CategoryId = cat["gpu"], ChipBrand = "AMD",    Brand = "MSI",      Name = "MECH 2X OC Radeon RX 7600 8GB",               Price = 269.99m,  SpecsJson = S("8GB GDDR6","165W TDP","PCIe 4.0 ×16","FSR 3","Dual-Fan","Boost 2755MHz"), Tdp = 165 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "AMD",    Brand = "ASUS",     Name = "DUAL OC Radeon RX 7600 8GB",                  Price = 279.99m,  SpecsJson = S("8GB GDDR6","165W TDP","PCIe 4.0 ×16","FSR 3","Dual-Fan","Auto-Extreme"), Tdp = 165 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "AMD",    Brand = "Gigabyte", Name = "EAGLE OC Radeon RX 7600 8GB",                 Price = 269.99m,  SpecsJson = S("8GB GDDR6","165W TDP","PCIe 4.0 ×16","FSR 3","Dual-Fan","WINDFORCE 2X"), Tdp = 165 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "AMD",    Brand = "ASRock",   Name = "Challenger OC Radeon RX 7600 8GB",            Price = 269.99m,  SpecsJson = S("8GB GDDR6","165W TDP","PCIe 4.0 ×16","FSR 3","Dual-Fan","Boost 2755MHz"), Tdp = 165 },
+
+            // AMD RX 7800 XT 16GB
+            new() { CategoryId = cat["gpu"], ChipBrand = "AMD",    Brand = "MSI",      Name = "GAMING Radeon RX 7800 XT 16GB",               Price = 499.99m,  SpecsJson = S("16GB GDDR6","263W TDP","PCIe 4.0 ×16","FSR 3","Triple-Fan","TORX Fan 5.0"), Tdp = 263 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "AMD",    Brand = "ASUS",     Name = "TUF Gaming OC Radeon RX 7800 XT 16GB",        Price = 519.99m,  SpecsJson = S("16GB GDDR6","263W TDP","PCIe 4.0 ×16","FSR 3","Triple-Fan","Military-Grade"), Tdp = 263 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "AMD",    Brand = "Gigabyte", Name = "GAMING OC Radeon RX 7800 XT 16GB",            Price = 509.99m,  SpecsJson = S("16GB GDDR6","263W TDP","PCIe 4.0 ×16","FSR 3","Triple-Fan","WINDFORCE 3X"), Tdp = 263 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "AMD",    Brand = "ASRock",   Name = "Challenger Pro OC Radeon RX 7800 XT 16GB",    Price = 499.99m,  SpecsJson = S("16GB GDDR6","263W TDP","PCIe 4.0 ×16","FSR 3","Triple-Fan","Boost 2520MHz"), Tdp = 263 },
+
+            // AMD RX 7900 GRE 16GB
+            new() { CategoryId = cat["gpu"], ChipBrand = "AMD",    Brand = "MSI",      Name = "GAMING Radeon RX 7900 GRE 16GB",              Price = 549.99m,  SpecsJson = S("16GB GDDR6","260W TDP","PCIe 4.0 ×16","FSR 3","Triple-Fan","TORX Fan 5.0"), Tdp = 260 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "AMD",    Brand = "ASUS",     Name = "TUF Gaming OC Radeon RX 7900 GRE 16GB",       Price = 569.99m,  SpecsJson = S("16GB GDDR6","260W TDP","PCIe 4.0 ×16","FSR 3","Triple-Fan","Military-Grade"), Tdp = 260 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "AMD",    Brand = "Gigabyte", Name = "GAMING OC Radeon RX 7900 GRE 16GB",           Price = 559.99m,  SpecsJson = S("16GB GDDR6","260W TDP","PCIe 4.0 ×16","FSR 3","Triple-Fan","WINDFORCE 3X"), Tdp = 260 },
+
+            // AMD RX 7900 XTX 24GB
+            new() { CategoryId = cat["gpu"], ChipBrand = "AMD",    Brand = "ASUS",     Name = "ROG STRIX LC OC Radeon RX 7900 XTX 24GB",    Price = 799.99m,  SpecsJson = S("24GB GDDR6","355W TDP","PCIe 4.0 ×16","FSR 3","AIO Liquid Cool","ARGB"), Tdp = 355 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "AMD",    Brand = "MSI",      Name = "GAMING TRIO Radeon RX 7900 XTX 24GB",         Price = 779.99m,  SpecsJson = S("24GB GDDR6","355W TDP","PCIe 4.0 ×16","FSR 3","Triple-Fan","TORX Fan 5.0"), Tdp = 355 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "AMD",    Brand = "Gigabyte", Name = "GAMING OC Radeon RX 7900 XTX 24GB",           Price = 769.99m,  SpecsJson = S("24GB GDDR6","355W TDP","PCIe 4.0 ×16","FSR 3","Triple-Fan","WINDFORCE 3X"), Tdp = 355 },
+
+            // Intel Arc A770 16GB
+            new() { CategoryId = cat["gpu"], ChipBrand = "Intel",  Brand = "ASRock",   Name = "Arc A770 Challenger OC 16GB",                 Price = 329.99m,  SpecsJson = S("16GB GDDR6","225W TDP","PCIe 4.0 ×16","XeSS / DX12U","Dual-Fan","Boost 2400MHz"), Tdp = 225 },
+            new() { CategoryId = cat["gpu"], ChipBrand = "Intel",  Brand = "ASUS",     Name = "Arc A770 Dual OC 16GB",                       Price = 339.99m,  SpecsJson = S("16GB GDDR6","225W TDP","PCIe 4.0 ×16","XeSS / DX12U","Dual-Fan","Auto-Extreme"), Tdp = 225 },
 
             // ── Storage ────────────────────────────────────────────────────────
 

@@ -23,6 +23,7 @@ const state = {
   searchQuery:  '',
   sortBy:       'default',
   brandFilter:  '',
+  chipFilter:   '',
   _cache:       {},
 };
 
@@ -46,10 +47,8 @@ function bindEvents() {
     renderComponentGrid();
   });
 
-  ['btnPrev', 'btnPrevBottom'].forEach(id =>
-    document.getElementById(id).addEventListener('click', navigatePrev));
-  ['btnNext', 'btnNextBottom'].forEach(id =>
-    document.getElementById(id).addEventListener('click', navigateNext));
+  document.getElementById('btnPrevBottom').addEventListener('click', navigatePrev);
+  document.getElementById('btnNextBottom').addEventListener('click', navigateNext);
 
   document.getElementById('summaryModal')
     .addEventListener('show.bs.modal', renderSummary);
@@ -65,6 +64,7 @@ async function navigateTo(stepId) {
   state.searchQuery = '';
   state.sortBy = 'default';
   state.brandFilter = '';
+  state.chipFilter  = '';
   document.getElementById('searchInput').value = '';
   document.getElementById('sortSelect').value = 'default';
   renderSidebar();
@@ -114,9 +114,7 @@ async function renderCurrentStep() {
 
   const isFirst = idx === 0;
   const isLast  = idx === STEPS.length - 1;
-  document.getElementById('btnPrev').disabled       = isFirst;
   document.getElementById('btnPrevBottom').disabled = isFirst;
-  document.getElementById('btnNext').disabled       = isLast;
   document.getElementById('btnNextBottom').disabled = isLast;
 
   document.getElementById('stepProgress').style.width =
@@ -140,6 +138,9 @@ async function loadStep(stepId) {
 async function getFiltered() {
   let list = [...await loadStep(state.currentStep)];
 
+  if (state.currentStep === 'gpu' && state.chipFilter) {
+    list = list.filter(c => c.chipBrand === state.chipFilter);
+  }
   if (state.brandFilter) {
     list = list.filter(c => c.brand === state.brandFilter);
   }
@@ -162,15 +163,40 @@ async function getFiltered() {
 
 // ─── Brand chips ──────────────────────────────────────────────────────────────
 async function renderBrandChips() {
-  const all    = await loadStep(state.currentStep);
-  const brands = [...new Set(all.map(c => c.brand))].sort();
-  const bar    = document.getElementById('brandsBar');
+  const all = await loadStep(state.currentStep);
+  const bar = document.getElementById('brandsBar');
 
-  bar.innerHTML = [
-    `<button class="brand-chip${!state.brandFilter ? ' active' : ''}" onclick="setBrand('')">Все</button>`,
-    ...brands.map(b =>
-      `<button class="brand-chip${state.brandFilter === b ? ' active' : ''}" onclick="setBrand('${b.replace(/'/g, "\\'")}')">${b}</button>`)
-  ].join('');
+  if (state.currentStep === 'gpu') {
+    const chips      = [...new Set(all.map(c => c.chipBrand).filter(Boolean))].sort();
+    const forPartner = state.chipFilter ? all.filter(c => c.chipBrand === state.chipFilter) : all;
+    const partners   = [...new Set(forPartner.map(c => c.brand))].sort();
+
+    bar.innerHTML = `
+      <div class="filter-row">
+        <span class="filter-row-label">Чип:</span>
+        <button class="brand-chip${!state.chipFilter ? ' active' : ''}" onclick="setChip('')">Все</button>
+        ${chips.map(b => `<button class="brand-chip${state.chipFilter === b ? ' active' : ''}" onclick="setChip('${b}')">${b}</button>`).join('')}
+      </div>
+      <div class="filter-row">
+        <span class="filter-row-label">Производитель:</span>
+        <button class="brand-chip${!state.brandFilter ? ' active' : ''}" onclick="setBrand('')">Все</button>
+        ${partners.map(b => `<button class="brand-chip${state.brandFilter === b ? ' active' : ''}" onclick="setBrand('${b.replace(/'/g, "\\'")}')">${b}</button>`).join('')}
+      </div>`;
+  } else {
+    const brands = [...new Set(all.map(c => c.brand))].sort();
+    bar.innerHTML = [
+      `<button class="brand-chip${!state.brandFilter ? ' active' : ''}" onclick="setBrand('')">Все</button>`,
+      ...brands.map(b =>
+        `<button class="brand-chip${state.brandFilter === b ? ' active' : ''}" onclick="setBrand('${b.replace(/'/g, "\\'")}')">${b}</button>`)
+    ].join('');
+  }
+}
+
+function setChip(chip) {
+  state.chipFilter  = chip;
+  state.brandFilter = '';
+  renderBrandChips();
+  renderComponentGrid();
 }
 
 function setBrand(brand) {

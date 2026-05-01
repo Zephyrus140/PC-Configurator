@@ -451,6 +451,23 @@ body {
   gap: 0.4rem;
   margin-bottom: 0.75rem;
 }
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+}
+.filter-row-label {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-right: 0.15rem;
+}
+
 .brand-chip {
   background: var(--surface-2);
   border: 1px solid var(--border);

@@ -50,5 +50,6 @@ public class ComponentService(AppDbContext db) : IComponentService
         SupportedFormFactors = c.SupportedFormFactorsJson is not null
             ? JsonSerializer.Deserialize<List<string>>(c.SupportedFormFactorsJson)
             : null,
+        ChipBrand = c.ChipBrand,
     };
 }

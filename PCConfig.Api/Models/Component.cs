@@ -17,6 +17,7 @@ public class Component
     public int? Wattage { get; set; }                       // PSU: rated watts
     public string? RamType { get; set; }                    // MB / RAM: "DDR5"
     public string? SupportedFormFactorsJson { get; set; }   // Case: JSON string[]
+    public string? ChipBrand { get; set; }                   // GPU: "NVIDIA" | "AMD" | "Intel"
 
     public Category Category { get; set; } = null!;
     public ICollection<BuildItem> BuildItems { get; set; } = [];
