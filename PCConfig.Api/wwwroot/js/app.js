@@ -210,7 +210,7 @@ async function renderComponentGrid() {
   const grid = document.getElementById('componentsGrid');
   grid.innerHTML = `
     <div class="col-12 text-center py-5">
-      <div class="spinner-border" style="color:var(--accent)" role="status">
+      <div class="spinner-border" style="color:var(--cyan)" role="status">
         <span class="visually-hidden">Загрузка...</span>
       </div>
     </div>`;
@@ -241,7 +241,7 @@ async function renderComponentGrid() {
           <div class="selected-badge"><i class="bi bi-check-lg"></i></div>
           <div class="card-img-area">
             <i class="bi ${CATEGORY_ICONS[state.currentStep] ?? 'bi-box'}"
-               style="font-size:4rem;color:#444;"></i>
+               style="font-size:3.75rem;color:rgba(155,48,255,0.35);"></i>
           </div>
           <div class="card-body d-flex flex-column">
             <div class="comp-brand">${comp.brand}</div>
