@@ -281,9 +281,7 @@ function loadPersistedBuild() {
 function updateTotalPrice() {
   const total = Object.values(state.selected)
     .reduce((s, c) => s + Number(c.price), 0);
-  const fmt = `$${total.toFixed(2)}`;
-  document.getElementById('totalPriceNav').textContent     = fmt;
-  document.getElementById('totalPriceSidebar').textContent = fmt;
+  document.getElementById('totalPriceSidebar').textContent = `$${total.toFixed(2)}`;
 }
 
 // ─── Compatibility ────────────────────────────────────────────────────────────
