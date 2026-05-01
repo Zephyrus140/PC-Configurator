@@ -42,9 +42,9 @@ function bindEvents() {
     renderComponentGrid();
   });
 
-  document.getElementById('sortSelect').addEventListener('change', e => {
-    state.sortBy = e.target.value;
-    renderComponentGrid();
+  document.addEventListener('click', e => {
+    const dd = document.getElementById('sortDropdown');
+    if (dd && !dd.contains(e.target)) closeSortDropdown();
   });
 
   document.getElementById('btnPrevBottom').addEventListener('click', navigatePrev);
@@ -66,7 +66,7 @@ async function navigateTo(stepId) {
   state.brandFilter = '';
   state.chipFilter  = '';
   document.getElementById('searchInput').value = '';
-  document.getElementById('sortSelect').value = 'default';
+  resetSortDropdown();
   renderSidebar();
   await renderCurrentStep();
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -399,6 +399,33 @@ function toggleSidebar() {
 function closeSidebar() {
   document.querySelector('.configurator-sidebar').classList.remove('open');
   document.getElementById('sidebarOverlay').classList.remove('visible');
+}
+
+// ─── Sort dropdown ────────────────────────────────────────────────────────────
+function toggleSortDropdown() {
+  document.getElementById('sortDropdown').classList.toggle('open');
+}
+
+function closeSortDropdown() {
+  document.getElementById('sortDropdown').classList.remove('open');
+}
+
+function resetSortDropdown() {
+  closeSortDropdown();
+  document.getElementById('sortLabel').textContent = 'По умолчанию';
+  document.querySelectorAll('.sort-option').forEach(el => {
+    el.classList.toggle('active', el.dataset.value === 'default');
+  });
+}
+
+function setSortOption(value, label) {
+  state.sortBy = value;
+  document.getElementById('sortLabel').textContent = label;
+  document.querySelectorAll('.sort-option').forEach(el => {
+    el.classList.toggle('active', el.dataset.value === value);
+  });
+  closeSortDropdown();
+  renderComponentGrid();
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
