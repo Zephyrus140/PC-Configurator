@@ -108,6 +108,33 @@ const COMPONENTS = {
     { id: 'mb-15', brand: 'Gigabyte', name: 'Z790 AORUS Master', price: 419.99,
       specs: ['LGA1700 Socket', 'ATX', 'DDR5 до 8000MHz', 'PCIe 5.0', '5x M.2', 'USB4 40Gbps'],
       socket: 'LGA1700', formFactor: 'ATX', ramType: 'DDR5' },
+    // ── ASRock ────────────────────────────────────────────────────────────────
+    { id: 'mb-16', brand: 'ASRock', name: 'B550 Phantom Gaming 4', price: 99.99,
+      specs: ['AM4 Socket', 'ATX', 'DDR4 до 4733MHz', 'PCIe 4.0', '2x M.2', 'USB 3.2'],
+      socket: 'AM4', formFactor: 'ATX', ramType: 'DDR4' },
+    { id: 'mb-17', brand: 'ASRock', name: 'B650E PG Riptide WiFi', price: 199.99,
+      specs: ['AM5 Socket', 'ATX', 'DDR5 до 6400MHz', 'PCIe 5.0 x2', '3x M.2', 'WiFi 6E'],
+      socket: 'AM5', formFactor: 'ATX', ramType: 'DDR5' },
+    { id: 'mb-18', brand: 'ASRock', name: 'Z790 Pro RS DDR5', price: 199.99,
+      specs: ['LGA1700 Socket', 'ATX', 'DDR5 до 7200MHz', 'PCIe 5.0', '4x M.2', '2.5G LAN'],
+      socket: 'LGA1700', formFactor: 'ATX', ramType: 'DDR5' },
+    { id: 'mb-19', brand: 'ASRock', name: 'X670E Taichi', price: 399.99,
+      specs: ['AM5 Socket', 'ATX', 'DDR5 до 8000MHz', 'PCIe 5.0 x2', '5x M.2', 'WiFi 6E', 'Thunderbolt 4'],
+      socket: 'AM5', formFactor: 'ATX', ramType: 'DDR5' },
+    // ── Biostar ───────────────────────────────────────────────────────────────
+    { id: 'mb-20', brand: 'Biostar', name: 'B550MX/E Pro', price: 79.99,
+      specs: ['AM4 Socket', 'mATX', 'DDR4 до 4400MHz', 'PCIe 4.0', '1x M.2', 'USB 3.2', 'Бюджет'],
+      socket: 'AM4', formFactor: 'mATX', ramType: 'DDR4' },
+    { id: 'mb-21', brand: 'Biostar', name: 'B760MX-E Pro DDR5', price: 89.99,
+      specs: ['LGA1700 Socket', 'mATX', 'DDR5 до 5600MHz', 'PCIe 4.0', '2x M.2', 'USB 3.2', 'Бюджет'],
+      socket: 'LGA1700', formFactor: 'mATX', ramType: 'DDR5' },
+    // ── NZXT ──────────────────────────────────────────────────────────────────
+    { id: 'mb-22', brand: 'NZXT', name: 'N7 B550', price: 179.99,
+      specs: ['AM4 Socket', 'ATX', 'DDR4 до 4400MHz', 'PCIe 4.0', '2x M.2', 'WiFi 6', 'Стальная крышка'],
+      socket: 'AM4', formFactor: 'ATX', ramType: 'DDR4' },
+    { id: 'mb-23', brand: 'NZXT', name: 'N7 Z790', price: 279.99,
+      specs: ['LGA1700 Socket', 'ATX', 'DDR5 до 6400MHz', 'PCIe 5.0', '4x M.2', 'WiFi 6E', 'Стальная крышка'],
+      socket: 'LGA1700', formFactor: 'ATX', ramType: 'DDR5' },
   ],
 
   ram: [

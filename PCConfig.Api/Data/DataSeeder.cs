@@ -149,6 +149,36 @@ public static class DataSeeder
                 SpecsJson = S("LGA1700 Socket","ATX","DDR5 до 8000MHz","PCIe 5.0","5x M.2","USB4 40Gbps"),
                 Socket = "LGA1700", FormFactor = "ATX",  RamType = "DDR5" },
 
+            // ── ASRock
+            new() { CategoryId = cat["motherboard"], Brand = "ASRock",  Name = "B550 Phantom Gaming 4",    Price = 99.99m,
+                SpecsJson = S("AM4 Socket","ATX","DDR4 до 4733MHz","PCIe 4.0","2x M.2","USB 3.2"),
+                Socket = "AM4",     FormFactor = "ATX",  RamType = "DDR4" },
+            new() { CategoryId = cat["motherboard"], Brand = "ASRock",  Name = "B650E PG Riptide WiFi",    Price = 199.99m,
+                SpecsJson = S("AM5 Socket","ATX","DDR5 до 6400MHz","PCIe 5.0 x2","3x M.2","WiFi 6E"),
+                Socket = "AM5",     FormFactor = "ATX",  RamType = "DDR5" },
+            new() { CategoryId = cat["motherboard"], Brand = "ASRock",  Name = "Z790 Pro RS DDR5",         Price = 199.99m,
+                SpecsJson = S("LGA1700 Socket","ATX","DDR5 до 7200MHz","PCIe 5.0","4x M.2","2.5G LAN"),
+                Socket = "LGA1700", FormFactor = "ATX",  RamType = "DDR5" },
+            new() { CategoryId = cat["motherboard"], Brand = "ASRock",  Name = "X670E Taichi",             Price = 399.99m,
+                SpecsJson = S("AM5 Socket","ATX","DDR5 до 8000MHz","PCIe 5.0 x2","5x M.2","WiFi 6E","Thunderbolt 4"),
+                Socket = "AM5",     FormFactor = "ATX",  RamType = "DDR5" },
+
+            // ── Biostar
+            new() { CategoryId = cat["motherboard"], Brand = "Biostar", Name = "B550MX/E Pro",             Price = 79.99m,
+                SpecsJson = S("AM4 Socket","mATX","DDR4 до 4400MHz","PCIe 4.0","1x M.2","USB 3.2","Бюджет"),
+                Socket = "AM4",     FormFactor = "mATX", RamType = "DDR4" },
+            new() { CategoryId = cat["motherboard"], Brand = "Biostar", Name = "B760MX-E Pro DDR5",        Price = 89.99m,
+                SpecsJson = S("LGA1700 Socket","mATX","DDR5 до 5600MHz","PCIe 4.0","2x M.2","USB 3.2","Бюджет"),
+                Socket = "LGA1700", FormFactor = "mATX", RamType = "DDR5" },
+
+            // ── NZXT
+            new() { CategoryId = cat["motherboard"], Brand = "NZXT",    Name = "N7 B550",                  Price = 179.99m,
+                SpecsJson = S("AM4 Socket","ATX","DDR4 до 4400MHz","PCIe 4.0","2x M.2","WiFi 6","Стальная крышка"),
+                Socket = "AM4",     FormFactor = "ATX",  RamType = "DDR4" },
+            new() { CategoryId = cat["motherboard"], Brand = "NZXT",    Name = "N7 Z790",                  Price = 279.99m,
+                SpecsJson = S("LGA1700 Socket","ATX","DDR5 до 6400MHz","PCIe 5.0","4x M.2","WiFi 6E","Стальная крышка"),
+                Socket = "LGA1700", FormFactor = "ATX",  RamType = "DDR5" },
+
             // ── RAM ────────────────────────────────────────────────────────────
 
             // DDR4
