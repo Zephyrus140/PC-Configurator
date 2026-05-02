@@ -232,9 +232,9 @@ const COMPONENTS = {
   storage: [
     // ── Budget PCIe 3.0 ───────────────────────────────────────────────────────
     { id: 'storage-1', brand: 'Crucial', name: 'P3 1TB NVMe M.2 PCIe 3.0', price: 59.99,
-      specs: ['1TB', 'PCIe 3.0 NVMe M.2', '3 500 MB/s Read', '3 000 MB/s Write', 'Бюджет'] },
+      specs: ['1TB', 'PCIe 3.0 NVMe M.2', '3 500 MB/s Read', '3 000 MB/s Write'] },
     { id: 'storage-2', brand: 'Kingston', name: 'NV3 2TB NVMe M.2 PCIe 4.0', price: 79.99,
-      specs: ['2TB', 'PCIe 4.0 NVMe M.2', '6 000 MB/s Read', '4 000 MB/s Write', 'Бюджет'] },
+      specs: ['2TB', 'PCIe 4.0 NVMe M.2', '6 000 MB/s Read', '4 000 MB/s Write'] },
     // ── SATA SSD ──────────────────────────────────────────────────────────────
     { id: 'storage-3', brand: 'Samsung', name: '870 EVO 1TB SATA', price: 89.99,
       specs: ['1TB', 'SATA III 2.5"', '560 MB/s Read', '530 MB/s Write', 'MLC NAND'] },

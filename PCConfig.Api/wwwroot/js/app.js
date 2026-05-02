@@ -27,7 +27,8 @@ const state = {
   cpuFilters:   { socket: '', series: '', cores: '' },
   mbFilters:    { socket: '', formFactor: '', ramType: '' },
   ramFilters:   { ramType: '', capacity: '' },
-  gpuFilters:   { vram: '', fans: '' },
+  gpuFilters:     { vram: '', fans: '' },
+  storageFilters: { capacity: '', formFactor: '', interface: '', readSpeed: '' },
   _cache:       {},
 };
 
@@ -72,7 +73,8 @@ async function navigateTo(stepId) {
   state.cpuFilters   = { socket: '', series: '', cores: '' };
   state.mbFilters    = { socket: '', formFactor: '', ramType: '' };
   state.ramFilters   = { ramType: '', capacity: '' };
-  state.gpuFilters   = { vram: '', fans: '' };
+  state.gpuFilters     = { vram: '', fans: '' };
+  state.storageFilters = { capacity: '', formFactor: '', interface: '', readSpeed: '' };
   document.getElementById('searchInput').value = '';
   resetSortDropdown();
   closeAllFilterDds();
@@ -162,6 +164,13 @@ async function getFiltered() {
     if (state.cpuFilters.series) list = list.filter(c => cpuSeries(c.name) === state.cpuFilters.series);
     if (state.cpuFilters.cores)  list = list.filter(c => cpuCores(c.specs) === parseInt(state.cpuFilters.cores));
   }
+  if (state.currentStep === 'storage') {
+    const sf = state.storageFilters;
+    if (sf.capacity)   list = list.filter(c => storageCapacity(c.specs)   === sf.capacity);
+    if (sf.formFactor) list = list.filter(c => storageFormFactor(c.specs) === sf.formFactor);
+    if (sf.interface)  list = list.filter(c => storageInterface(c.specs)  === sf.interface);
+    if (sf.readSpeed)  list = list.filter(c => storageReadSpeed(c.specs)  === parseInt(sf.readSpeed));
+  }
   if (state.currentStep === 'ram') {
     if (state.ramFilters.ramType)  list = list.filter(c => c.ramType === state.ramFilters.ramType);
     if (state.ramFilters.capacity) list = list.filter(c => ramCapacity(c.specs) === state.ramFilters.capacity);
@@ -220,6 +229,37 @@ function gpuFans(specs) {
   return '';
 }
 
+function storageCapacity(specs) {
+  return (specs[0] && /^\d+TB$/.test(specs[0])) ? specs[0] : '';
+}
+
+function storageFormFactor(specs) {
+  const s = specs.find(x => /M\.2|2\.5/i.test(x));
+  if (!s) return '';
+  return /M\.2/i.test(s) ? 'M.2' : '2.5"';
+}
+
+function storageInterface(specs) {
+  const s = specs.find(x => /PCIe|SATA/i.test(x));
+  if (!s) return '';
+  if (/PCIe 3\.0/i.test(s)) return 'PCIe 3.0';
+  if (/PCIe 4\.0/i.test(s)) return 'PCIe 4.0';
+  if (/SATA/i.test(s))      return 'SATA';
+  return '';
+}
+
+function storageReadSpeed(specs) {
+  const s = specs.find(x => /Read/i.test(x));
+  if (!s) return 0;
+  return parseInt(s.replace(/\s/g, ''));
+}
+
+function fmtSpeed(n) {
+  return n >= 1000
+    ? `${Math.floor(n / 1000)} ${String(n % 1000).padStart(3, '0')} МБ/с`
+    : `${n} МБ/с`;
+}
+
 // ─── Filter dropdown builder ───────────────────────────────────────────────────
 function buildFilterDd(ddId, label, currentVal, options) {
   const hasVal  = currentVal !== '';
@@ -275,6 +315,39 @@ async function renderBrandChips() {
       buildFilterDd('cores', 'Ядра', state.cpuFilters.cores, [
         { val: '', label: 'Все', fn: "setCpuFilter('cores','')" },
         ...coresList.map(n => ({ val: String(n), label: `${n} ядер`, fn: `setCpuFilter('cores','${n}')` })),
+      ]),
+    ].join('');
+
+  } else if (state.currentStep === 'storage') {
+    const sf      = state.storageFilters;
+    const brands  = [...new Set(all.map(c => c.brand))].sort();
+    const caps    = [...new Set(all.map(c => storageCapacity(c.specs)).filter(Boolean))]
+                     .sort((a, b) => parseInt(a) - parseInt(b));
+    const forms   = [...new Set(all.map(c => storageFormFactor(c.specs)).filter(Boolean))].sort();
+    const ifaces  = [...new Set(all.map(c => storageInterface(c.specs)).filter(Boolean))].sort();
+    const speeds  = [...new Set(all.map(c => storageReadSpeed(c.specs)).filter(Boolean))]
+                     .sort((a, b) => a - b);
+
+    bar.innerHTML = [
+      buildFilterDd('brand', 'Бренд', state.brandFilter, [
+        { val: '', label: 'Все', fn: "setBrand('')" },
+        ...brands.map(b => ({ val: b, label: b, fn: `setBrand('${b}')` })),
+      ]),
+      buildFilterDd('st-cap', 'Ёмкость', sf.capacity, [
+        { val: '', label: 'Все', fn: "setStorageFilter('capacity','')" },
+        ...caps.map(c => ({ val: c, label: c, fn: `setStorageFilter('capacity','${c}')` })),
+      ]),
+      buildFilterDd('st-form', 'Формат', sf.formFactor, [
+        { val: '', label: 'Все', fn: "setStorageFilter('formFactor','')" },
+        ...forms.map(f => ({ val: f, label: f, fn: `setStorageFilter('formFactor','${f}')` })),
+      ]),
+      buildFilterDd('st-iface', 'Тип', sf.interface, [
+        { val: '', label: 'Все', fn: "setStorageFilter('interface','')" },
+        ...ifaces.map(i => ({ val: i, label: i, fn: `setStorageFilter('interface','${i}')` })),
+      ]),
+      buildFilterDd('st-speed', 'Скорость чтения', sf.readSpeed, [
+        { val: '', label: 'Все', fn: "setStorageFilter('readSpeed','')" },
+        ...speeds.map(n => ({ val: String(n), label: fmtSpeed(n), fn: `setStorageFilter('readSpeed','${n}')` })),
       ]),
     ].join('');
 
@@ -381,6 +454,13 @@ function setCpuFilter(key, value) {
 function setGpuFilter(key, value) {
   state.gpuFilters[key] = value;
   if (key === 'vram') state.gpuFilters.fans = '';
+  closeAllFilterDds();
+  renderBrandChips();
+  renderComponentGrid();
+}
+
+function setStorageFilter(key, value) {
+  state.storageFilters[key] = value;
   closeAllFilterDds();
   renderBrandChips();
   renderComponentGrid();
