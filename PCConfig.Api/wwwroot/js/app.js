@@ -44,8 +44,8 @@ function bindEvents() {
   });
 
   document.addEventListener('click', e => {
-    const dd = document.getElementById('sortDropdown');
-    if (dd && !dd.contains(e.target)) closeSortDropdown();
+    if (!e.target.closest('#sortDropdown'))    closeSortDropdown();
+    if (!e.target.closest('.filter-dropdown')) closeAllFilterDds();
   });
 
   document.getElementById('btnPrevBottom').addEventListener('click', navigatePrev);
@@ -69,6 +69,7 @@ async function navigateTo(stepId) {
   state.cpuFilters   = { socket: '', series: '', cores: '' };
   document.getElementById('searchInput').value = '';
   resetSortDropdown();
+  closeAllFilterDds();
   renderSidebar();
   await renderCurrentStep();
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -181,73 +182,86 @@ function cpuCores(specs) {
   return m ? parseInt(m[1]) : 0;
 }
 
-function chip(label, active, onclick) {
-  return `<button class="brand-chip${active ? ' active' : ''}" onclick="${onclick}">${label}</button>`;
+// ─── Filter dropdown builder ───────────────────────────────────────────────────
+function buildFilterDd(ddId, label, currentVal, options) {
+  const hasVal  = currentVal !== '';
+  const selOpt  = options.find(o => String(o.val) === String(currentVal));
+  const btnText = hasVal ? `${label}: ${selOpt ? selOpt.label : currentVal}` : label;
+  const items   = options.map(o =>
+    `<div class="filter-option${String(o.val) === String(currentVal) ? ' active' : ''}" onclick="${o.fn}">${o.label}</div>`
+  ).join('');
+  return `<div class="filter-dropdown${hasVal ? ' has-value' : ''}" id="fdd-${ddId}">
+    <button class="filter-trigger" onclick="toggleFilterDd('${ddId}')">${btnText}<i class="bi bi-chevron-down filter-arrow"></i></button>
+    <div class="filter-menu">${items}</div>
+  </div>`;
 }
 
-// ─── Brand chips ──────────────────────────────────────────────────────────────
+function toggleFilterDd(ddId) {
+  const dd = document.getElementById(`fdd-${ddId}`);
+  const wasOpen = dd.classList.contains('open');
+  closeAllFilterDds();
+  if (!wasOpen) dd.classList.add('open');
+}
+
+function closeAllFilterDds() {
+  document.querySelectorAll('.filter-dropdown.open').forEach(el => el.classList.remove('open'));
+}
+
+// ─── Filters ──────────────────────────────────────────────────────────────────
 async function renderBrandChips() {
   const all = await loadStep(state.currentStep);
   const bar = document.getElementById('brandsBar');
 
   if (state.currentStep === 'cpu') {
-    const brands = [...new Set(all.map(c => c.brand))].sort();
-
-    // Cascade: each row derived from upstream selections
+    const brands      = [...new Set(all.map(c => c.brand))].sort();
     const afterBrand  = state.brandFilter ? all.filter(c => c.brand === state.brandFilter) : all;
     const sockets     = [...new Set(afterBrand.map(c => c.socket).filter(Boolean))].sort();
-
     const afterSocket = state.cpuFilters.socket ? afterBrand.filter(c => c.socket === state.cpuFilters.socket) : afterBrand;
     const seriesList  = [...new Set(afterSocket.map(c => cpuSeries(c.name)).filter(Boolean))].sort();
-
     const afterSeries = state.cpuFilters.series ? afterSocket.filter(c => cpuSeries(c.name) === state.cpuFilters.series) : afterSocket;
     const coresList   = [...new Set(afterSeries.map(c => cpuCores(c.specs)).filter(Boolean))].sort((a, b) => a - b);
 
-    bar.innerHTML = `
-      <div class="filter-row">
-        <span class="filter-row-label">Бренд:</span>
-        ${chip('Все', !state.brandFilter, "setBrand('')")}
-        ${brands.map(b => chip(b, state.brandFilter === b, `setBrand('${b}')`)).join('')}
-      </div>
-      <div class="filter-row">
-        <span class="filter-row-label">Сокет:</span>
-        ${chip('Все', !state.cpuFilters.socket, "setCpuFilter('socket','')")}
-        ${sockets.map(s => chip(s, state.cpuFilters.socket === s, `setCpuFilter('socket','${s}')`)).join('')}
-      </div>
-      <div class="filter-row">
-        <span class="filter-row-label">Серия:</span>
-        ${chip('Все', !state.cpuFilters.series, "setCpuFilter('series','')")}
-        ${seriesList.map(s => chip(s, state.cpuFilters.series === s, `setCpuFilter('series','${s.replace(/'/g, "\\'")}')`)).join('')}
-      </div>
-      <div class="filter-row">
-        <span class="filter-row-label">Ядра:</span>
-        ${chip('Все', !state.cpuFilters.cores, "setCpuFilter('cores','')")}
-        ${coresList.map(n => chip(`${n}`, state.cpuFilters.cores === String(n), `setCpuFilter('cores','${n}')`)).join('')}
-      </div>`;
+    bar.innerHTML = [
+      buildFilterDd('brand', 'Бренд', state.brandFilter, [
+        { val: '', label: 'Все', fn: "setBrand('')" },
+        ...brands.map(b => ({ val: b, label: b, fn: `setBrand('${b}')` })),
+      ]),
+      buildFilterDd('socket', 'Сокет', state.cpuFilters.socket, [
+        { val: '', label: 'Все', fn: "setCpuFilter('socket','')" },
+        ...sockets.map(s => ({ val: s, label: s, fn: `setCpuFilter('socket','${s}')` })),
+      ]),
+      buildFilterDd('series', 'Серия', state.cpuFilters.series, [
+        { val: '', label: 'Все', fn: "setCpuFilter('series','')" },
+        ...seriesList.map(s => ({ val: s, label: s, fn: `setCpuFilter('series','${s.replace(/'/g, "\\'")}')` })),
+      ]),
+      buildFilterDd('cores', 'Ядра', state.cpuFilters.cores, [
+        { val: '', label: 'Все', fn: "setCpuFilter('cores','')" },
+        ...coresList.map(n => ({ val: String(n), label: `${n} ядер`, fn: `setCpuFilter('cores','${n}')` })),
+      ]),
+    ].join('');
 
   } else if (state.currentStep === 'gpu') {
     const chips      = [...new Set(all.map(c => c.chipBrand).filter(Boolean))].sort();
     const forPartner = state.chipFilter ? all.filter(c => c.chipBrand === state.chipFilter) : all;
     const partners   = [...new Set(forPartner.map(c => c.brand))].sort();
 
-    bar.innerHTML = `
-      <div class="filter-row">
-        <span class="filter-row-label">Чип:</span>
-        ${chip('Все', !state.chipFilter, "setChip('')")}
-        ${chips.map(b => chip(b, state.chipFilter === b, `setChip('${b}')`)).join('')}
-      </div>
-      <div class="filter-row">
-        <span class="filter-row-label">Производитель:</span>
-        ${chip('Все', !state.brandFilter, "setBrand('')")}
-        ${partners.map(b => chip(b, state.brandFilter === b, `setBrand('${b.replace(/'/g, "\\'")}')`)).join('')}
-      </div>`;
+    bar.innerHTML = [
+      buildFilterDd('chip', 'Чип', state.chipFilter, [
+        { val: '', label: 'Все', fn: "setChip('')" },
+        ...chips.map(b => ({ val: b, label: b, fn: `setChip('${b}')` })),
+      ]),
+      buildFilterDd('partner', 'Производитель', state.brandFilter, [
+        { val: '', label: 'Все', fn: "setBrand('')" },
+        ...partners.map(b => ({ val: b, label: b, fn: `setBrand('${b.replace(/'/g, "\\'")}')` })),
+      ]),
+    ].join('');
 
   } else {
     const brands = [...new Set(all.map(c => c.brand))].sort();
-    bar.innerHTML = [
-      chip('Все', !state.brandFilter, "setBrand('')"),
-      ...brands.map(b => chip(b, state.brandFilter === b, `setBrand('${b.replace(/'/g, "\\'")}')`)),
-    ].join('');
+    bar.innerHTML = buildFilterDd('brand', 'Бренд', state.brandFilter, [
+      { val: '', label: 'Все', fn: "setBrand('')" },
+      ...brands.map(b => ({ val: b, label: b, fn: `setBrand('${b.replace(/'/g, "\\'")}')` })),
+    ]);
   }
 }
 
@@ -255,13 +269,15 @@ function setCpuFilter(key, value) {
   state.cpuFilters[key] = value;
   if (key === 'socket') { state.cpuFilters.series = ''; state.cpuFilters.cores = ''; }
   if (key === 'series') { state.cpuFilters.cores  = ''; }
+  closeAllFilterDds();
   renderBrandChips();
   renderComponentGrid();
 }
 
-function setChip(chip) {
-  state.chipFilter  = chip;
+function setChip(val) {
+  state.chipFilter  = val;
   state.brandFilter = '';
+  closeAllFilterDds();
   renderBrandChips();
   renderComponentGrid();
 }
@@ -269,6 +285,7 @@ function setChip(chip) {
 function setBrand(brand) {
   state.brandFilter = brand;
   if (state.currentStep === 'cpu') state.cpuFilters = { socket: '', series: '', cores: '' };
+  closeAllFilterDds();
   renderBrandChips();
   renderComponentGrid();
 }

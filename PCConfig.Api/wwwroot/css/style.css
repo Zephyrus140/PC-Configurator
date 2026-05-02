@@ -698,63 +698,107 @@ body {
 }
 .empty-state i { font-size: 3rem; display: block; margin-bottom: 1rem; color: rgba(155,48,255,0.4); }
 
-/* ─── Brand chips ────────────────────────────────────────────────────────────── */
+/* ─── Filter dropdowns ───────────────────────────────────────────────────────── */
 .brands-bar {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
   margin-bottom: 0.75rem;
 }
-.filter-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem;
-  width: 100%;
-  padding-bottom: 0.35rem;
-}
-.filter-row + .filter-row {
-  padding-top: 0.1rem;
-  border-top: 1px solid rgba(255,255,255,0.04);
-}
-.filter-row-label {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--text-muted);
-  white-space: nowrap;
+
+.filter-dropdown {
+  position: relative;
+  user-select: none;
   flex-shrink: 0;
-  margin-right: 0.15rem;
 }
 
-.brand-chip {
+.filter-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   background: var(--surface-2);
   border: 1px solid var(--border);
+  border-radius: var(--radius);
   color: #7070a0;
-  border-radius: 2px;
-  padding: 0.22rem 0.85rem;
+  padding: 0.28rem 0.75rem;
   font-family: 'Rajdhani', sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.18s;
   white-space: nowrap;
+  transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
-.brand-chip:hover {
-  border-color: rgba(0,212,255,0.45);
+.filter-trigger:hover {
+  border-color: rgba(0,212,255,0.35);
   color: var(--cyan);
-  background: var(--cyan-dim);
 }
-.brand-chip.active {
-  background: var(--cyan-dim);
+.filter-dropdown.open .filter-trigger {
   border-color: var(--cyan);
   color: var(--cyan);
-  box-shadow: 0 0 10px rgba(0,212,255,0.25);
+  box-shadow: 0 0 8px rgba(0,212,255,0.15);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
+.filter-dropdown.has-value .filter-trigger {
+  border-color: rgba(155,48,255,0.5);
+  color: var(--purple);
+}
+.filter-dropdown.has-value.open .filter-trigger {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+.filter-arrow {
+  font-size: 0.65rem;
+  flex-shrink: 0;
+  margin-left: 0.15rem;
+  transition: transform 0.2s ease;
+}
+.filter-dropdown.open .filter-arrow { transform: rotate(180deg); }
+
+.filter-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--cyan);
+  border-top: none;
+  border-bottom-left-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
+  z-index: 110;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.55), 0 0 14px rgba(0,212,255,0.1);
+}
+.filter-dropdown.open .filter-menu { display: block; }
+
+.filter-option {
+  padding: 0.42rem 0.85rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #7070a0;
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  white-space: nowrap;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.filter-option:hover {
+  background: rgba(0,212,255,0.07);
+  color: var(--cyan);
+  border-left-color: var(--cyan);
+}
+.filter-option.active {
+  color: var(--cyan);
+  background: rgba(0,212,255,0.06);
+  border-left-color: var(--cyan);
+}
+.filter-option + .filter-option { border-top: 1px solid var(--border); }
 
 /* ─── Sidebar toggle (hamburger) ─────────────────────────────────────────────── */
 .sidebar-toggle {
