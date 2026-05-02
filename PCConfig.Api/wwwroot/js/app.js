@@ -27,6 +27,7 @@ const state = {
   cpuFilters:   { socket: '', series: '', cores: '' },
   mbFilters:    { socket: '', formFactor: '', ramType: '' },
   ramFilters:   { ramType: '', capacity: '' },
+  gpuFilters:   { vram: '', fans: '' },
   _cache:       {},
 };
 
@@ -71,6 +72,7 @@ async function navigateTo(stepId) {
   state.cpuFilters   = { socket: '', series: '', cores: '' };
   state.mbFilters    = { socket: '', formFactor: '', ramType: '' };
   state.ramFilters   = { ramType: '', capacity: '' };
+  state.gpuFilters   = { vram: '', fans: '' };
   document.getElementById('searchInput').value = '';
   resetSortDropdown();
   closeAllFilterDds();
@@ -151,6 +153,10 @@ async function getFiltered() {
   if (state.brandFilter) {
     list = list.filter(c => c.brand === state.brandFilter);
   }
+  if (state.currentStep === 'gpu') {
+    if (state.gpuFilters.vram) list = list.filter(c => gpuVram(c.specs) === state.gpuFilters.vram);
+    if (state.gpuFilters.fans) list = list.filter(c => gpuFans(c.specs) === state.gpuFilters.fans);
+  }
   if (state.currentStep === 'cpu') {
     if (state.cpuFilters.socket) list = list.filter(c => c.socket === state.cpuFilters.socket);
     if (state.cpuFilters.series) list = list.filter(c => cpuSeries(c.name) === state.cpuFilters.series);
@@ -198,6 +204,20 @@ function cpuCores(specs) {
 function ramCapacity(specs) {
   const m = specs[0] && specs[0].match(/^(\d+GB)/);
   return m ? m[1] : '';
+}
+
+function gpuVram(specs) {
+  const m = specs[0] && specs[0].match(/^(\d+GB)/);
+  return m ? m[1] : '';
+}
+
+function gpuFans(specs) {
+  const s = specs.find(x => /Triple|Dual|AIO|Liquid/i.test(x));
+  if (!s) return '';
+  if (/Triple/i.test(s)) return '3';
+  if (/Dual/i.test(s))   return '2';
+  if (/AIO|Liquid/i.test(s)) return 'AIO';
+  return '';
 }
 
 // ─── Filter dropdown builder ───────────────────────────────────────────────────
@@ -311,8 +331,15 @@ async function renderBrandChips() {
 
   } else if (state.currentStep === 'gpu') {
     const chips      = [...new Set(all.map(c => c.chipBrand).filter(Boolean))].sort();
-    const forPartner = state.chipFilter ? all.filter(c => c.chipBrand === state.chipFilter) : all;
-    const partners   = [...new Set(forPartner.map(c => c.brand))].sort();
+    const afterChip  = state.chipFilter ? all.filter(c => c.chipBrand === state.chipFilter) : all;
+    const partners   = [...new Set(afterChip.map(c => c.brand))].sort();
+    const afterPart  = state.brandFilter ? afterChip.filter(c => c.brand === state.brandFilter) : afterChip;
+    const vramList   = [...new Set(afterPart.map(c => gpuVram(c.specs)).filter(Boolean))]
+                        .sort((a, b) => parseInt(a) - parseInt(b));
+    const afterVram  = state.gpuFilters.vram ? afterPart.filter(c => gpuVram(c.specs) === state.gpuFilters.vram) : afterPart;
+    const fansList   = [...new Set(afterVram.map(c => gpuFans(c.specs)).filter(Boolean))].sort();
+
+    const fansLabel  = v => v === 'AIO' ? 'Жидкостное' : `${v} вентилятора`;
 
     bar.innerHTML = [
       buildFilterDd('chip', 'Чип', state.chipFilter, [
@@ -322,6 +349,14 @@ async function renderBrandChips() {
       buildFilterDd('partner', 'Производитель', state.brandFilter, [
         { val: '', label: 'Все', fn: "setBrand('')" },
         ...partners.map(b => ({ val: b, label: b, fn: `setBrand('${b.replace(/'/g, "\\'")}')` })),
+      ]),
+      buildFilterDd('gpu-vram', 'Память', state.gpuFilters.vram, [
+        { val: '', label: 'Все', fn: "setGpuFilter('vram','')" },
+        ...vramList.map(v => ({ val: v, label: v, fn: `setGpuFilter('vram','${v}')` })),
+      ]),
+      buildFilterDd('gpu-fans', 'Вентиляторы', state.gpuFilters.fans, [
+        { val: '', label: 'Все', fn: "setGpuFilter('fans','')" },
+        ...fansList.map(v => ({ val: v, label: fansLabel(v), fn: `setGpuFilter('fans','${v}')` })),
       ]),
     ].join('');
 
@@ -338,6 +373,14 @@ function setCpuFilter(key, value) {
   state.cpuFilters[key] = value;
   if (key === 'socket') { state.cpuFilters.series = ''; state.cpuFilters.cores = ''; }
   if (key === 'series') { state.cpuFilters.cores  = ''; }
+  closeAllFilterDds();
+  renderBrandChips();
+  renderComponentGrid();
+}
+
+function setGpuFilter(key, value) {
+  state.gpuFilters[key] = value;
+  if (key === 'vram') state.gpuFilters.fans = '';
   closeAllFilterDds();
   renderBrandChips();
   renderComponentGrid();
@@ -363,6 +406,7 @@ function setMbFilter(key, value) {
 function setChip(val) {
   state.chipFilter  = val;
   state.brandFilter = '';
+  state.gpuFilters  = { vram: '', fans: '' };
   closeAllFilterDds();
   renderBrandChips();
   renderComponentGrid();
@@ -371,6 +415,7 @@ function setChip(val) {
 function setBrand(brand) {
   state.brandFilter = brand;
   if (state.currentStep === 'cpu') state.cpuFilters = { socket: '', series: '', cores: '' };
+  if (state.currentStep === 'gpu') state.gpuFilters = { vram: '', fans: '' };
   closeAllFilterDds();
   renderBrandChips();
   renderComponentGrid();
