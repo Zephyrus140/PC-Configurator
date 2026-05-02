@@ -25,6 +25,7 @@ const state = {
   brandFilter:  '',
   chipFilter:   '',
   cpuFilters:   { socket: '', series: '', cores: '' },
+  mbFilters:    { socket: '', formFactor: '', ramType: '' },
   _cache:       {},
 };
 
@@ -67,6 +68,7 @@ async function navigateTo(stepId) {
   state.brandFilter  = '';
   state.chipFilter   = '';
   state.cpuFilters   = { socket: '', series: '', cores: '' };
+  state.mbFilters    = { socket: '', formFactor: '', ramType: '' };
   document.getElementById('searchInput').value = '';
   resetSortDropdown();
   closeAllFilterDds();
@@ -151,6 +153,11 @@ async function getFiltered() {
     if (state.cpuFilters.socket) list = list.filter(c => c.socket === state.cpuFilters.socket);
     if (state.cpuFilters.series) list = list.filter(c => cpuSeries(c.name) === state.cpuFilters.series);
     if (state.cpuFilters.cores)  list = list.filter(c => cpuCores(c.specs) === parseInt(state.cpuFilters.cores));
+  }
+  if (state.currentStep === 'motherboard') {
+    if (state.mbFilters.socket)     list = list.filter(c => c.socket     === state.mbFilters.socket);
+    if (state.mbFilters.formFactor) list = list.filter(c => c.formFactor === state.mbFilters.formFactor);
+    if (state.mbFilters.ramType)    list = list.filter(c => c.ramType    === state.mbFilters.ramType);
   }
 
   if (state.searchQuery) {
@@ -240,6 +247,34 @@ async function renderBrandChips() {
       ]),
     ].join('');
 
+  } else if (state.currentStep === 'motherboard') {
+    const brands     = [...new Set(all.map(c => c.brand))].sort();
+    const afterBrand = state.brandFilter ? all.filter(c => c.brand === state.brandFilter) : all;
+    const sockets    = [...new Set(afterBrand.map(c => c.socket).filter(Boolean))].sort();
+    const afterSock  = state.mbFilters.socket ? afterBrand.filter(c => c.socket === state.mbFilters.socket) : afterBrand;
+    const factors    = [...new Set(afterSock.map(c => c.formFactor).filter(Boolean))].sort();
+    const afterFact  = state.mbFilters.formFactor ? afterSock.filter(c => c.formFactor === state.mbFilters.formFactor) : afterSock;
+    const ramTypes   = [...new Set(afterFact.map(c => c.ramType).filter(Boolean))].sort();
+
+    bar.innerHTML = [
+      buildFilterDd('brand', 'Бренд', state.brandFilter, [
+        { val: '', label: 'Все', fn: "setBrand('')" },
+        ...brands.map(b => ({ val: b, label: b, fn: `setBrand('${b}')` })),
+      ]),
+      buildFilterDd('mb-socket', 'Сокет', state.mbFilters.socket, [
+        { val: '', label: 'Все', fn: "setMbFilter('socket','')" },
+        ...sockets.map(s => ({ val: s, label: s, fn: `setMbFilter('socket','${s}')` })),
+      ]),
+      buildFilterDd('mb-form', 'Форм-фактор', state.mbFilters.formFactor, [
+        { val: '', label: 'Все', fn: "setMbFilter('formFactor','')" },
+        ...factors.map(f => ({ val: f, label: f, fn: `setMbFilter('formFactor','${f}')` })),
+      ]),
+      buildFilterDd('mb-ram', 'Тип памяти', state.mbFilters.ramType, [
+        { val: '', label: 'Все', fn: "setMbFilter('ramType','')" },
+        ...ramTypes.map(r => ({ val: r, label: r, fn: `setMbFilter('ramType','${r}')` })),
+      ]),
+    ].join('');
+
   } else if (state.currentStep === 'gpu') {
     const chips      = [...new Set(all.map(c => c.chipBrand).filter(Boolean))].sort();
     const forPartner = state.chipFilter ? all.filter(c => c.chipBrand === state.chipFilter) : all;
@@ -269,6 +304,15 @@ function setCpuFilter(key, value) {
   state.cpuFilters[key] = value;
   if (key === 'socket') { state.cpuFilters.series = ''; state.cpuFilters.cores = ''; }
   if (key === 'series') { state.cpuFilters.cores  = ''; }
+  closeAllFilterDds();
+  renderBrandChips();
+  renderComponentGrid();
+}
+
+function setMbFilter(key, value) {
+  state.mbFilters[key] = value;
+  if (key === 'socket')     { state.mbFilters.formFactor = ''; state.mbFilters.ramType = ''; }
+  if (key === 'formFactor') { state.mbFilters.ramType = ''; }
   closeAllFilterDds();
   renderBrandChips();
   renderComponentGrid();
