@@ -184,6 +184,41 @@ const COMPONENTS = {
     { id: 'mb-23', brand: 'NZXT', name: 'N7 Z790', price: 279.99,
       specs: ['LGA1700 Socket', 'ATX', 'DDR5 до 6400MHz', 'PCIe 5.0', '4x M.2', 'WiFi 6E', 'Стальная крышка'],
       socket: 'LGA1700', formFactor: 'ATX', ramType: 'DDR5' },
+    // ── LGA1700 / DDR4 ───────────────────────────────────────────────────────
+    { id: 'mb-24', brand: 'MSI', name: 'PRO B660M-A DDR4', price: 129.99,
+      specs: ['LGA1700 Socket', 'mATX', 'DDR4 до 5200MHz', 'PCIe 4.0', '2x M.2', 'USB 3.2'],
+      socket: 'LGA1700', formFactor: 'mATX', ramType: 'DDR4' },
+    { id: 'mb-25', brand: 'ASUS', name: 'PRIME Z690-P DDR4', price: 169.99,
+      specs: ['LGA1700 Socket', 'ATX', 'DDR4 до 5333MHz', 'PCIe 5.0', '3x M.2', 'USB 3.2'],
+      socket: 'LGA1700', formFactor: 'ATX', ramType: 'DDR4' },
+    { id: 'mb-26', brand: 'Gigabyte', name: 'Z790 UD AX DDR4', price: 199.99,
+      specs: ['LGA1700 Socket', 'ATX', 'DDR4 до 5600MHz', 'PCIe 5.0', '4x M.2', 'WiFi 6E'],
+      socket: 'LGA1700', formFactor: 'ATX', ramType: 'DDR4' },
+    // ── AM4 / DDR4 — mATX ────────────────────────────────────────────────────
+    { id: 'mb-27', brand: 'MSI', name: 'B550M MORTAR WiFi', price: 149.99,
+      specs: ['AM4 Socket', 'mATX', 'DDR4 до 5100MHz', 'PCIe 4.0', '2x M.2', 'WiFi 6'],
+      socket: 'AM4', formFactor: 'mATX', ramType: 'DDR4' },
+    { id: 'mb-28', brand: 'ASRock', name: 'B550M Pro4', price: 109.99,
+      specs: ['AM4 Socket', 'mATX', 'DDR4 до 4733MHz', 'PCIe 4.0', '2x M.2', 'USB 3.2'],
+      socket: 'AM4', formFactor: 'mATX', ramType: 'DDR4' },
+    // ── AM5 / DDR5 — mATX + High-end ─────────────────────────────────────────
+    { id: 'mb-29', brand: 'ASRock', name: 'B650M Pro RS WiFi', price: 159.99,
+      specs: ['AM5 Socket', 'mATX', 'DDR5 до 6400MHz', 'PCIe 5.0', '2x M.2', 'WiFi 6E'],
+      socket: 'AM5', formFactor: 'mATX', ramType: 'DDR5' },
+    { id: 'mb-30', brand: 'ASUS', name: 'TUF Gaming X670E-Plus WiFi', price: 299.99,
+      specs: ['AM5 Socket', 'ATX', 'DDR5 до 7200MHz', 'PCIe 5.0', '4x M.2', 'WiFi 6E'],
+      socket: 'AM5', formFactor: 'ATX', ramType: 'DDR5' },
+    // ── LGA1700 / DDR5 — mATX ─────────────────────────────────────────────────
+    { id: 'mb-31', brand: 'Gigabyte', name: 'B760M AORUS Elite DDR5', price: 169.99,
+      specs: ['LGA1700 Socket', 'mATX', 'DDR5 до 7600MHz', 'PCIe 4.0', '3x M.2', '2.5G LAN'],
+      socket: 'LGA1700', formFactor: 'mATX', ramType: 'DDR5' },
+    // ── Mini-ITX (для компактных сборок) ──────────────────────────────────────
+    { id: 'mb-32', brand: 'ASUS', name: 'ROG Strix B550-I Gaming', price: 199.99,
+      specs: ['AM4 Socket', 'ITX', 'DDR4 до 5100MHz', 'PCIe 4.0', '2x M.2', 'WiFi 6'],
+      socket: 'AM4', formFactor: 'ITX', ramType: 'DDR4' },
+    { id: 'mb-33', brand: 'ASUS', name: 'ROG Strix B660-I Gaming WiFi', price: 229.99,
+      specs: ['LGA1700 Socket', 'ITX', 'DDR5 до 6000MHz', 'PCIe 5.0', '2x M.2', 'WiFi 6E'],
+      socket: 'LGA1700', formFactor: 'ITX', ramType: 'DDR5' },
   ],
 
   ram: [
