@@ -31,6 +31,7 @@ const state = {
   storageFilters: { capacity: '', formFactor: '', interface: '', readSpeed: '' },
   psuFilters:     { wattage: '', rating: '', modular: '' },
   coolerFilters:  { type: '', fanCount: '', fanSize: '', lighting: '' },
+  caseFilters:    { formFactor: '', style: '', fanCount: '' },
   _cache:       {},
 };
 
@@ -79,6 +80,7 @@ async function navigateTo(stepId) {
   state.storageFilters = { capacity: '', formFactor: '', interface: '', readSpeed: '' };
   state.psuFilters     = { wattage: '', rating: '', modular: '' };
   state.coolerFilters  = { type: '', fanCount: '', fanSize: '', lighting: '' };
+  state.caseFilters    = { formFactor: '', style: '', fanCount: '' };
   document.getElementById('searchInput').value = '';
   resetSortDropdown();
   closeAllFilterDds();
@@ -197,6 +199,12 @@ async function getFiltered() {
     if (cf.fanSize)  list = list.filter(c => coolerFanSize(c.specs)  === cf.fanSize);
     if (cf.lighting) list = list.filter(c => c.specs[3]              === cf.lighting);
   }
+  if (state.currentStep === 'case') {
+    const cf = state.caseFilters;
+    if (cf.formFactor)    list = list.filter(c => c.caseFormFactor === cf.formFactor);
+    if (cf.style)         list = list.filter(c => c.style          === cf.style);
+    if (cf.fanCount !== '') list = list.filter(c => caseFanCount(c.specs) === parseInt(cf.fanCount));
+  }
 
   if (state.searchQuery) {
     list = list.filter(c =>
@@ -313,6 +321,17 @@ function coolerFanSize(specs) {
   const s = specs.find(x => /^\d+×\s*\d+mm/.test(x));
   if (!s) return '';
   const m = s.match(/(\d+)mm/);
+  return m ? `${m[1]}mm` : '';
+}
+
+// ─── Case spec helpers ─────────────────────────────────────────────────────────
+function caseFanCount(specs) {
+  const m = specs[2] && specs[2].match(/^(\d+)/);
+  return m ? parseInt(m[1]) : 0;
+}
+
+function caseFanSize(specs) {
+  const m = specs[2] && specs[2].match(/(\d+)mm/);
   return m ? `${m[1]}mm` : '';
 }
 
@@ -552,6 +571,32 @@ async function renderBrandChips() {
       ]),
     ].join('');
 
+  } else if (state.currentStep === 'case') {
+    const cf          = state.caseFilters;
+    const brands      = [...new Set(all.map(c => c.brand))].sort();
+    const formFactors = ['Mini-ITX', 'mATX', 'ATX', 'EATX'];
+    const styles      = [...new Set(all.map(c => c.style).filter(Boolean))].sort();
+    const fanCounts   = [...new Set(all.map(c => caseFanCount(c.specs)))].sort((a, b) => a - b);
+
+    bar.innerHTML = [
+      buildFilterDd('brand', 'Бренд', state.brandFilter, [
+        { val: '', label: 'Все', fn: "setBrand('')" },
+        ...brands.map(b => ({ val: b, label: b, fn: `setBrand('${b.replace(/'/g, "\\'")}')` })),
+      ]),
+      buildFilterDd('case-ff', 'Форм-фактор', cf.formFactor, [
+        { val: '', label: 'Все', fn: "setCaseFilter('formFactor','')" },
+        ...formFactors.map(f => ({ val: f, label: f, fn: `setCaseFilter('formFactor','${f}')` })),
+      ]),
+      buildFilterDd('case-style', 'Стиль', cf.style, [
+        { val: '', label: 'Все', fn: "setCaseFilter('style','')" },
+        ...styles.map(s => ({ val: s, label: s, fn: `setCaseFilter('style','${s}')` })),
+      ]),
+      buildFilterDd('case-fans', 'Вентиляторов', cf.fanCount, [
+        { val: '', label: 'Все', fn: "setCaseFilter('fanCount','')" },
+        ...fanCounts.map(n => ({ val: String(n), label: `${n} шт.`, fn: `setCaseFilter('fanCount','${n}')` })),
+      ]),
+    ].join('');
+
   } else {
     const brands = [...new Set(all.map(c => c.brand))].sort();
     bar.innerHTML = buildFilterDd('brand', 'Бренд', state.brandFilter, [
@@ -611,6 +656,13 @@ function setPsuFilter(key, value) {
 
 function setCoolerFilter(key, value) {
   state.coolerFilters[key] = value;
+  closeAllFilterDds();
+  renderBrandChips();
+  renderComponentGrid();
+}
+
+function setCaseFilter(key, value) {
+  state.caseFilters[key] = value;
   closeAllFilterDds();
   renderBrandChips();
   renderComponentGrid();
@@ -759,6 +811,13 @@ function checkCompatibility() {
     warnings.push(
       `<i class="bi bi-exclamation-triangle-fill me-1"></i>` +
       `Охладитель рассчитан на <b>${s.cooler.maxTdp}W</b>, TDP процессора <b>${s.cpu.tdp}W</b>`);
+
+  if (s.motherboard && s.case) {
+    if (!s.case.supportedFormFactors.includes(s.motherboard.formFactor))
+      warnings.push(
+        `<i class="bi bi-x-circle-fill me-1"></i>` +
+        `Корпус не поддерживает форм-фактор материнской платы <b>${s.motherboard.formFactor}</b>`);
+  }
 
   if (s.cpu && s.gpu && s.psu) {
     const need = s.cpu.tdp + s.gpu.tdp + 150;
