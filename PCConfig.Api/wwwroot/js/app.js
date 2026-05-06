@@ -30,6 +30,7 @@ const state = {
   gpuFilters:     { vram: '', fans: '' },
   storageFilters: { capacity: '', formFactor: '', interface: '', readSpeed: '' },
   psuFilters:     { wattage: '', rating: '', modular: '' },
+  coolerFilters:  { type: '', fanCount: '', fanSize: '', lighting: '' },
   _cache:       {},
 };
 
@@ -77,6 +78,7 @@ async function navigateTo(stepId) {
   state.gpuFilters     = { vram: '', fans: '' };
   state.storageFilters = { capacity: '', formFactor: '', interface: '', readSpeed: '' };
   state.psuFilters     = { wattage: '', rating: '', modular: '' };
+  state.coolerFilters  = { type: '', fanCount: '', fanSize: '', lighting: '' };
   document.getElementById('searchInput').value = '';
   resetSortDropdown();
   closeAllFilterDds();
@@ -188,6 +190,13 @@ async function getFiltered() {
     if (pf.rating)  list = list.filter(c => psuRating(c.specs)  === pf.rating);
     if (pf.modular) list = list.filter(c => psuModular(c.specs) === pf.modular);
   }
+  if (state.currentStep === 'cooler') {
+    const cf = state.coolerFilters;
+    if (cf.type)     list = list.filter(c => coolerType(c.specs)     === cf.type);
+    if (cf.fanCount) list = list.filter(c => coolerFanCount(c.specs) === parseInt(cf.fanCount));
+    if (cf.fanSize)  list = list.filter(c => coolerFanSize(c.specs)  === cf.fanSize);
+    if (cf.lighting) list = list.filter(c => c.specs[3]              === cf.lighting);
+  }
 
   if (state.searchQuery) {
     list = list.filter(c =>
@@ -284,6 +293,27 @@ function psuModular(specs) {
   if (specs.some(x => /Semi-Modular/i.test(x)))  return 'Semi-Modular';
   if (specs.some(x => /Non-Modular/i.test(x)))   return 'Non-Modular';
   return '';
+}
+
+// ─── Cooler spec helpers ───────────────────────────────────────────────────────
+function coolerType(specs) {
+  if (/Башенное/i.test(specs[0]))    return 'air';
+  if (/AIO|Водяное/i.test(specs[0])) return 'aio';
+  return '';
+}
+
+function coolerFanCount(specs) {
+  const s = specs.find(x => /^\d+×/.test(x));
+  if (!s) return 0;
+  const m = s.match(/^(\d+)/);
+  return m ? parseInt(m[1]) : 0;
+}
+
+function coolerFanSize(specs) {
+  const s = specs.find(x => /^\d+×\s*\d+mm/.test(x));
+  if (!s) return '';
+  const m = s.match(/(\d+)mm/);
+  return m ? `${m[1]}mm` : '';
 }
 
 // ─── Filter dropdown builder ───────────────────────────────────────────────────
@@ -459,6 +489,39 @@ async function renderBrandChips() {
       ]),
     ].join('');
 
+  } else if (state.currentStep === 'cooler') {
+    const cf        = state.coolerFilters;
+    const brands    = [...new Set(all.map(c => c.brand))].sort();
+    const types     = ['air', 'aio'];
+    const fanCounts = [...new Set(all.map(c => coolerFanCount(c.specs)).filter(Boolean))].sort((a, b) => a - b);
+    const fanSizes  = [...new Set(all.map(c => coolerFanSize(c.specs)).filter(Boolean))].sort();
+    const lightings = [...new Set(all.map(c => c.specs[3]).filter(Boolean))].sort();
+
+    const typeLabel = v => v === 'air' ? 'Башенное' : 'AIO Водяное';
+
+    bar.innerHTML = [
+      buildFilterDd('brand', 'Бренд', state.brandFilter, [
+        { val: '', label: 'Все', fn: "setBrand('')" },
+        ...brands.map(b => ({ val: b, label: b, fn: `setBrand('${b.replace(/'/g, "\\'")}')` })),
+      ]),
+      buildFilterDd('cool-type', 'Тип', cf.type, [
+        { val: '', label: 'Все', fn: "setCoolerFilter('type','')" },
+        ...types.map(t => ({ val: t, label: typeLabel(t), fn: `setCoolerFilter('type','${t}')` })),
+      ]),
+      buildFilterDd('cool-fans', 'Вентиляторы', cf.fanCount, [
+        { val: '', label: 'Все', fn: "setCoolerFilter('fanCount','')" },
+        ...fanCounts.map(n => ({ val: String(n), label: `${n} шт.`, fn: `setCoolerFilter('fanCount','${n}')` })),
+      ]),
+      buildFilterDd('cool-size', 'Размер вент.', cf.fanSize, [
+        { val: '', label: 'Все', fn: "setCoolerFilter('fanSize','')" },
+        ...fanSizes.map(s => ({ val: s, label: s, fn: `setCoolerFilter('fanSize','${s}')` })),
+      ]),
+      buildFilterDd('cool-light', 'Подсветка', cf.lighting, [
+        { val: '', label: 'Все', fn: "setCoolerFilter('lighting','')" },
+        ...lightings.map(l => ({ val: l, label: l, fn: `setCoolerFilter('lighting','${l.replace(/'/g, "\\'")}')` })),
+      ]),
+    ].join('');
+
   } else if (state.currentStep === 'psu') {
     const pf       = state.psuFilters;
     const brands   = [...new Set(all.map(c => c.brand))].sort();
@@ -541,6 +604,13 @@ function setMbFilter(key, value) {
 
 function setPsuFilter(key, value) {
   state.psuFilters[key] = value;
+  closeAllFilterDds();
+  renderBrandChips();
+  renderComponentGrid();
+}
+
+function setCoolerFilter(key, value) {
+  state.coolerFilters[key] = value;
   closeAllFilterDds();
   renderBrandChips();
   renderComponentGrid();
