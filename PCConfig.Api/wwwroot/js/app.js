@@ -206,6 +206,21 @@ async function getFiltered() {
     if (cf.fanCount !== '') list = list.filter(c => caseFanCount(c.specs) === parseInt(cf.fanCount));
   }
 
+  // ─── Smart compat pre-filters based on selected components ───────────────────
+  const sel = state.selected;
+  if (state.currentStep === 'motherboard' && sel.cpu?.socket) {
+    list = list.filter(c => c.socket === sel.cpu.socket);
+  }
+  if (state.currentStep === 'cpu' && sel.motherboard?.socket) {
+    list = list.filter(c => c.socket === sel.motherboard.socket);
+  }
+  if (state.currentStep === 'ram' && sel.motherboard?.ramType) {
+    list = list.filter(c => c.ramType === sel.motherboard.ramType);
+  }
+  if (state.currentStep === 'case' && sel.motherboard?.formFactor) {
+    list = list.filter(c => c.supportedFormFactors?.includes(sel.motherboard.formFactor));
+  }
+
   if (state.searchQuery) {
     list = list.filter(c =>
       `${c.brand} ${c.name}`.toLowerCase().includes(state.searchQuery) ||
@@ -366,6 +381,7 @@ async function renderBrandChips() {
   const bar = document.getElementById('brandsBar');
 
   if (state.currentStep === 'cpu') {
+    const mbLock      = state.selected.motherboard;
     const brands      = [...new Set(all.map(c => c.brand))].sort();
     const afterBrand  = state.brandFilter ? all.filter(c => c.brand === state.brandFilter) : all;
     const sockets     = [...new Set(afterBrand.map(c => c.socket).filter(Boolean))].sort();
@@ -379,7 +395,7 @@ async function renderBrandChips() {
         { val: '', label: 'Все', fn: "setBrand('')" },
         ...brands.map(b => ({ val: b, label: b, fn: `setBrand('${b}')` })),
       ]),
-      buildFilterDd('socket', 'Сокет', state.cpuFilters.socket, [
+      !mbLock && buildFilterDd('socket', 'Сокет', state.cpuFilters.socket, [
         { val: '', label: 'Все', fn: "setCpuFilter('socket','')" },
         ...sockets.map(s => ({ val: s, label: s, fn: `setCpuFilter('socket','${s}')` })),
       ]),
@@ -391,7 +407,7 @@ async function renderBrandChips() {
         { val: '', label: 'Все', fn: "setCpuFilter('cores','')" },
         ...coresList.map(n => ({ val: String(n), label: `${n} ядер`, fn: `setCpuFilter('cores','${n}')` })),
       ]),
-    ].join('');
+    ].filter(Boolean).join('');
 
   } else if (state.currentStep === 'storage') {
     const sf      = state.storageFilters;
@@ -427,6 +443,7 @@ async function renderBrandChips() {
     ].join('');
 
   } else if (state.currentStep === 'ram') {
+    const mbLock       = state.selected.motherboard;
     const brands       = [...new Set(all.map(c => c.brand))].sort();
     const afterBrand   = state.brandFilter ? all.filter(c => c.brand === state.brandFilter) : all;
     const ramTypes     = [...new Set(afterBrand.map(c => c.ramType).filter(Boolean))].sort();
@@ -439,7 +456,7 @@ async function renderBrandChips() {
         { val: '', label: 'Все', fn: "setBrand('')" },
         ...brands.map(b => ({ val: b, label: b, fn: `setBrand('${b}')` })),
       ]),
-      buildFilterDd('ram-type', 'Тип', state.ramFilters.ramType, [
+      !mbLock && buildFilterDd('ram-type', 'Тип', state.ramFilters.ramType, [
         { val: '', label: 'Все', fn: "setRamFilter('ramType','')" },
         ...ramTypes.map(t => ({ val: t, label: t, fn: `setRamFilter('ramType','${t}')` })),
       ]),
@@ -447,9 +464,10 @@ async function renderBrandChips() {
         { val: '', label: 'Все', fn: "setRamFilter('capacity','')" },
         ...capacities.map(c => ({ val: c, label: c, fn: `setRamFilter('capacity','${c}')` })),
       ]),
-    ].join('');
+    ].filter(Boolean).join('');
 
   } else if (state.currentStep === 'motherboard') {
+    const cpuLock    = state.selected.cpu;
     const brands     = [...new Set(all.map(c => c.brand))].sort();
     const afterBrand = state.brandFilter ? all.filter(c => c.brand === state.brandFilter) : all;
     const sockets    = [...new Set(afterBrand.map(c => c.socket).filter(Boolean))].sort();
@@ -463,7 +481,7 @@ async function renderBrandChips() {
         { val: '', label: 'Все', fn: "setBrand('')" },
         ...brands.map(b => ({ val: b, label: b, fn: `setBrand('${b}')` })),
       ]),
-      buildFilterDd('mb-socket', 'Сокет', state.mbFilters.socket, [
+      !cpuLock && buildFilterDd('mb-socket', 'Сокет', state.mbFilters.socket, [
         { val: '', label: 'Все', fn: "setMbFilter('socket','')" },
         ...sockets.map(s => ({ val: s, label: s, fn: `setMbFilter('socket','${s}')` })),
       ]),
@@ -475,7 +493,7 @@ async function renderBrandChips() {
         { val: '', label: 'Все', fn: "setMbFilter('ramType','')" },
         ...ramTypes.map(r => ({ val: r, label: r, fn: `setMbFilter('ramType','${r}')` })),
       ]),
-    ].join('');
+    ].filter(Boolean).join('');
 
   } else if (state.currentStep === 'gpu') {
     const chips      = [...new Set(all.map(c => c.chipBrand).filter(Boolean))].sort();
@@ -603,6 +621,32 @@ async function renderBrandChips() {
       { val: '', label: 'Все', fn: "setBrand('')" },
       ...brands.map(b => ({ val: b, label: b, fn: `setBrand('${b.replace(/'/g, "\\'")}')` })),
     ]);
+  }
+
+  updateCompatHint();
+}
+
+function updateCompatHint() {
+  const el  = document.getElementById('compatHint');
+  if (!el) return;
+  const sel = state.selected;
+  let text  = '';
+
+  if (state.currentStep === 'motherboard' && sel.cpu?.socket) {
+    text = `<i class="bi bi-link-45deg me-1"></i>Сокет <b>${sel.cpu.socket}</b> — только платы совместимые с <b>${sel.cpu.brand} ${sel.cpu.name}</b>`;
+  } else if (state.currentStep === 'cpu' && sel.motherboard?.socket) {
+    text = `<i class="bi bi-link-45deg me-1"></i>Сокет <b>${sel.motherboard.socket}</b> — только процессоры совместимые с <b>${sel.motherboard.brand} ${sel.motherboard.name}</b>`;
+  } else if (state.currentStep === 'ram' && sel.motherboard?.ramType) {
+    text = `<i class="bi bi-link-45deg me-1"></i>Только <b>${sel.motherboard.ramType}</b> — совместимость с <b>${sel.motherboard.brand} ${sel.motherboard.name}</b>`;
+  } else if (state.currentStep === 'case' && sel.motherboard?.formFactor) {
+    text = `<i class="bi bi-link-45deg me-1"></i>Только корпуса поддерживающие <b>${sel.motherboard.formFactor}</b> — совместимость с <b>${sel.motherboard.brand} ${sel.motherboard.name}</b>`;
+  }
+
+  if (text) {
+    el.innerHTML = text;
+    el.classList.remove('d-none');
+  } else {
+    el.classList.add('d-none');
   }
 }
 

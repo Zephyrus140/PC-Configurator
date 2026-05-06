@@ -800,6 +800,21 @@ body {
 }
 .filter-option + .filter-option { border-top: 1px solid var(--border); }
 
+/* ─── Compat hint ────────────────────────────────────────────────────────────── */
+.compat-hint {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: var(--cyan);
+  padding: 0.4rem 0.85rem;
+  margin-bottom: 0.5rem;
+  background: rgba(0,212,255,0.05);
+  border-left: 2px solid rgba(0,212,255,0.5);
+  border-radius: 0 4px 4px 0;
+}
+.compat-hint b { color: #fff; }
+
 /* ─── Sidebar toggle (hamburger) ─────────────────────────────────────────────── */
 .sidebar-toggle {
   display: none;
