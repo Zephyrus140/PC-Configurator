@@ -292,6 +292,19 @@ const COMPONENTS = {
     { id: 'psu-10', brand: 'Seasonic', name: 'Prime TX-1000 1000W 80+ Titanium', price: 269.99,
       specs: ['1000W', '80+ Titanium', 'Fully Modular', '12 Year Warranty', 'Fanless Mode'],
       wattage: 1000 },
+    // ── Non-Modular / Semi-Modular ────────────────────────────────────────────
+    { id: 'psu-11', brand: 'Cooler Master', name: 'MWE 600W 80+ Bronze', price: 49.99,
+      specs: ['600W', '80+ Bronze', 'Non-Modular', '3 Year Warranty', 'DC-DC Design'],
+      wattage: 600 },
+    { id: 'psu-12', brand: 'be quiet!', name: 'System Power 10 700W 80+ Bronze', price: 64.99,
+      specs: ['700W', '80+ Bronze', 'Non-Modular', '3 Year Warranty', 'Silent Fan'],
+      wattage: 700 },
+    { id: 'psu-13', brand: 'Corsair', name: 'CX750M 750W 80+ Bronze', price: 79.99,
+      specs: ['750W', '80+ Bronze', 'Semi-Modular', '5 Year Warranty', 'DC-DC Design'],
+      wattage: 750 },
+    { id: 'psu-14', brand: 'EVGA', name: '850 BQ 850W 80+ Bronze', price: 99.99,
+      specs: ['850W', '80+ Bronze', 'Semi-Modular', '5 Year Warranty', 'ECO Mode'],
+      wattage: 850 },
   ],
 
   cooler: [

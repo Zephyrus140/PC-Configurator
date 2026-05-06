@@ -29,6 +29,7 @@ const state = {
   ramFilters:   { ramType: '', capacity: '' },
   gpuFilters:     { vram: '', fans: '' },
   storageFilters: { capacity: '', formFactor: '', interface: '', readSpeed: '' },
+  psuFilters:     { wattage: '', rating: '', modular: '' },
   _cache:       {},
 };
 
@@ -75,6 +76,7 @@ async function navigateTo(stepId) {
   state.ramFilters   = { ramType: '', capacity: '' };
   state.gpuFilters     = { vram: '', fans: '' };
   state.storageFilters = { capacity: '', formFactor: '', interface: '', readSpeed: '' };
+  state.psuFilters     = { wattage: '', rating: '', modular: '' };
   document.getElementById('searchInput').value = '';
   resetSortDropdown();
   closeAllFilterDds();
@@ -180,6 +182,12 @@ async function getFiltered() {
     if (state.mbFilters.formFactor) list = list.filter(c => c.formFactor === state.mbFilters.formFactor);
     if (state.mbFilters.ramType)    list = list.filter(c => c.ramType    === state.mbFilters.ramType);
   }
+  if (state.currentStep === 'psu') {
+    const pf = state.psuFilters;
+    if (pf.wattage) list = list.filter(c => psuWattage(c.specs) === pf.wattage);
+    if (pf.rating)  list = list.filter(c => psuRating(c.specs)  === pf.rating);
+    if (pf.modular) list = list.filter(c => psuModular(c.specs) === pf.modular);
+  }
 
   if (state.searchQuery) {
     list = list.filter(c =>
@@ -258,6 +266,24 @@ function fmtSpeed(n) {
   return n >= 1000
     ? `${Math.floor(n / 1000)} ${String(n % 1000).padStart(3, '0')} МБ/с`
     : `${n} МБ/с`;
+}
+
+// ─── PSU spec helpers ──────────────────────────────────────────────────────────
+function psuWattage(specs) {
+  const m = specs[0] && specs[0].match(/^(\d+W)$/);
+  return m ? m[1] : '';
+}
+
+function psuRating(specs) {
+  const s = specs.find(x => /80\+/i.test(x));
+  return s || '';
+}
+
+function psuModular(specs) {
+  if (specs.some(x => /Fully Modular/i.test(x))) return 'Fully Modular';
+  if (specs.some(x => /Semi-Modular/i.test(x)))  return 'Semi-Modular';
+  if (specs.some(x => /Non-Modular/i.test(x)))   return 'Non-Modular';
+  return '';
 }
 
 // ─── Filter dropdown builder ───────────────────────────────────────────────────
@@ -433,6 +459,36 @@ async function renderBrandChips() {
       ]),
     ].join('');
 
+  } else if (state.currentStep === 'psu') {
+    const pf       = state.psuFilters;
+    const brands   = [...new Set(all.map(c => c.brand))].sort();
+    const wattages = [...new Set(all.map(c => psuWattage(c.specs)).filter(Boolean))]
+                      .sort((a, b) => parseInt(a) - parseInt(b));
+    const ratings  = [...new Set(all.map(c => psuRating(c.specs)).filter(Boolean))].sort();
+    const modulars = [...new Set(all.map(c => psuModular(c.specs)).filter(Boolean))].sort();
+    const modularLabel = v =>
+      v === 'Fully Modular' ? 'Полностью модульный' :
+      v === 'Semi-Modular'  ? 'Частично модульный'  : 'Немодульный';
+
+    bar.innerHTML = [
+      buildFilterDd('brand', 'Бренд', state.brandFilter, [
+        { val: '', label: 'Все', fn: "setBrand('')" },
+        ...brands.map(b => ({ val: b, label: b, fn: `setBrand('${b.replace(/'/g, "\\'")}')` })),
+      ]),
+      buildFilterDd('psu-watt', 'Мощность', pf.wattage, [
+        { val: '', label: 'Все', fn: "setPsuFilter('wattage','')" },
+        ...wattages.map(w => ({ val: w, label: w, fn: `setPsuFilter('wattage','${w}')` })),
+      ]),
+      buildFilterDd('psu-rating', 'Стандарт', pf.rating, [
+        { val: '', label: 'Все', fn: "setPsuFilter('rating','')" },
+        ...ratings.map(r => ({ val: r, label: r, fn: `setPsuFilter('rating','${r}')` })),
+      ]),
+      buildFilterDd('psu-modular', 'Модульность', pf.modular, [
+        { val: '', label: 'Все', fn: "setPsuFilter('modular','')" },
+        ...modulars.map(m => ({ val: m, label: modularLabel(m), fn: `setPsuFilter('modular','${m}')` })),
+      ]),
+    ].join('');
+
   } else {
     const brands = [...new Set(all.map(c => c.brand))].sort();
     bar.innerHTML = buildFilterDd('brand', 'Бренд', state.brandFilter, [
@@ -478,6 +534,13 @@ function setMbFilter(key, value) {
   state.mbFilters[key] = value;
   if (key === 'socket')     { state.mbFilters.formFactor = ''; state.mbFilters.ramType = ''; }
   if (key === 'formFactor') { state.mbFilters.ramType = ''; }
+  closeAllFilterDds();
+  renderBrandChips();
+  renderComponentGrid();
+}
+
+function setPsuFilter(key, value) {
+  state.psuFilters[key] = value;
   closeAllFilterDds();
   renderBrandChips();
   renderComponentGrid();
