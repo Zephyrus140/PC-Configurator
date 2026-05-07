@@ -809,9 +809,15 @@ async function renderComponentGrid() {
     if (isRam) {
       kitCount = ramKits.filter(r => String(r.id) === String(comp.id)).length;
       isSel    = kitCount > 0;
-      btnText  = isSel
-        ? `<i class="bi bi-check-lg me-1"></i>Выбрано${kitCount > 1 ? ` (${kitCount})` : ''}`
-        : (isFull ? '<i class="bi bi-x-circle me-1"></i>Слоты заняты' : 'Добавить комплект');
+      if (kitCount === 0) {
+        btnText = isFull
+          ? '<i class="bi bi-x-circle me-1"></i>Слоты заняты'
+          : 'Добавить комплект';
+      } else if (!isFull) {
+        btnText = '<i class="bi bi-plus-lg me-1"></i>Добавить 2-й комплект';
+      } else {
+        btnText = `<i class="bi bi-check-lg me-1"></i>Выбрано ×${kitCount}`;
+      }
     } else {
       kitCount = 0;
       isSel    = String(comp.id) === String(state.selected[state.currentStep]?.id);
@@ -853,15 +859,16 @@ async function toggleComponent(compId) {
   const comp   = all.find(c => String(c.id) === String(compId));
 
   if (stepId === 'ram') {
-    const kits = state.selected.ram || [];
-    const idx  = kits.findIndex(r => String(r.id) === String(compId));
-    if (idx !== -1) {
+    const kits     = state.selected.ram || [];
+    const max      = getMaxRamKits();
+    const kitCount = kits.filter(r => String(r.id) === String(compId)).length;
+    if (kits.length < max) {
+      state.selected.ram = [...kits, comp];
+    } else if (kitCount > 0) {
+      const idx  = kits.findIndex(r => String(r.id) === String(compId));
       const next = kits.filter((_, i) => i !== idx);
       if (next.length) state.selected.ram = next;
       else             delete state.selected.ram;
-    } else {
-      const max = getMaxRamKits();
-      if (kits.length < max) state.selected.ram = [...kits, comp];
     }
   } else {
     if (String(state.selected[stepId]?.id) === String(compId)) {
