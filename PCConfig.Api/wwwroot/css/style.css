@@ -650,27 +650,42 @@ body {
 .summary-row:last-child { border-bottom: none; }
 .summary-cat {
   font-family: 'Rajdhani', sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  color: var(--text-muted);
+  color: var(--cyan);
+  text-shadow: 0 0 8px var(--cyan-glow), 0 0 16px rgba(0,212,255,0.2);
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  width: 130px;
+  letter-spacing: 2px;
+  width: 140px;
   flex-shrink: 0;
 }
 .summary-comp-name {
   flex: 1;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.88rem;
-  color: #cccce8;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #eeeeff;
+  line-height: 1.3;
 }
 .summary-comp-price {
   font-family: 'Orbitron', monospace;
-  font-size: 0.82rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--cyan);
   white-space: nowrap;
-  text-shadow: 0 0 8px var(--cyan-glow);
+  text-shadow: 0 0 10px var(--cyan-glow), 0 0 20px rgba(0,212,255,0.2);
+}
+
+#summaryModal .modal-footer #btnOrder {
+  font-size: 0.9rem;
+  padding: 0.5rem 1.4rem;
+  letter-spacing: 2px;
+}
+#summaryModal .modal-footer .btn-secondary {
+  font-size: 0.72rem;
+  padding: 0.25rem 0.65rem;
+  letter-spacing: 0.3px;
 }
 
 .summary-total-label {
