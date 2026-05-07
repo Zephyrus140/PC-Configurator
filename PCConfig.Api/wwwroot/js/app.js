@@ -239,7 +239,7 @@ async function getFiltered() {
 
 // ─── CPU spec helpers ──────────────────────────────────────────────────────────
 function cpuSeries(name) {
-  const m = name.match(/Ryzen\s+[3579]|Core\s+i[3579]/);
+  const m = name.match(/Ryzen\s+[3579]|Core\s+Ultra\s+[579]|Core\s+i[3579]/);
   return m ? m[0] : '';
 }
 

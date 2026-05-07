@@ -10,7 +10,9 @@
       "PowerShell(New-Item -ItemType Directory -Force \"h:\\\\PC-Config\\\\PCConfig.Api\\\\Properties\")",
       "Bash(dotnet restore *)",
       "Bash(dotnet build *)",
-      "PowerShell(winget --version)"
+      "PowerShell(winget --version)",
+      "WebSearch",
+      "WebFetch(domain:www.corsair.com)"
     ]
   }
 }
