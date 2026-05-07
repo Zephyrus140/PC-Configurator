@@ -103,20 +103,35 @@ async function navigateNext() {
 // ─── Sidebar ──────────────────────────────────────────────────────────────────
 function renderSidebar() {
   document.getElementById('sidebarSteps').innerHTML = STEPS.map(step => {
-    const sel      = state.selected[step.id];
+    const raw     = state.selected[step.id];
+    const isRam   = step.id === 'ram';
+    const ramKits = isRam && Array.isArray(raw) ? raw : null;
+    const sel     = isRam ? null : raw;
+    const hasSel  = isRam ? (ramKits && ramKits.length > 0) : !!sel;
     const isActive = step.id === state.currentStep;
-    const cls = ['step-item', isActive && 'active', sel && 'selected'].filter(Boolean).join(' ');
+    const cls = ['step-item', isActive && 'active', hasSel && 'selected'].filter(Boolean).join(' ');
+
+    let displayName = '', displayPrice = 0;
+    if (isRam && ramKits && ramKits.length > 0) {
+      displayName  = ramKits.length === 1
+        ? `${ramKits[0].brand} ${ramKits[0].name}`
+        : `${ramKits[0].name} ×${ramKits.length}`;
+      displayPrice = ramKits.reduce((s, r) => s + Number(r.price), 0);
+    } else if (sel) {
+      displayName  = `${sel.brand} ${sel.name}`;
+      displayPrice = Number(sel.price);
+    }
 
     return `
       <div class="${cls}" onclick="navigateTo('${step.id}')">
-        <div class="step-icon"><i class="bi ${sel ? 'bi-check-lg' : step.icon}"></i></div>
+        <div class="step-icon"><i class="bi ${hasSel ? 'bi-check-lg' : step.icon}"></i></div>
         <div class="step-info">
           <div class="step-name">${step.label}</div>
-          ${sel
-            ? `<div class="step-selected-name">${sel.brand} ${sel.name}</div>`
+          ${hasSel
+            ? `<div class="step-selected-name">${displayName}</div>`
             : `<div class="step-not-selected">Не выбрано</div>`}
         </div>
-        ${sel ? `<div class="step-price">$${sel.price.toFixed(2)}</div>` : ''}
+        ${hasSel ? `<div class="step-price">$${displayPrice.toFixed(2)}</div>` : ''}
       </div>`;
   }).join('');
 }
@@ -346,6 +361,13 @@ function mbRamSlots(specs) {
   if (!s) return 0;
   const m = s.match(/^(\d+)/);
   return m ? parseInt(m[1]) : 0;
+}
+
+function getMaxRamKits() {
+  const mb = state.selected.motherboard;
+  if (!mb) return 2;
+  const slots = mbRamSlots(mb.specs);
+  return slots >= 4 ? 2 : 1;
 }
 
 function caseFanCount(specs) {
@@ -650,8 +672,15 @@ function updateCompatHint() {
     text = `<i class="bi bi-link-45deg me-1"></i>Сокет <b>${sel.cpu.socket}</b> — только платы совместимые с <b>${sel.cpu.brand} ${sel.cpu.name}</b>`;
   } else if (state.currentStep === 'cpu' && sel.motherboard?.socket) {
     text = `<i class="bi bi-link-45deg me-1"></i>Сокет <b>${sel.motherboard.socket}</b> — только процессоры совместимые с <b>${sel.motherboard.brand} ${sel.motherboard.name}</b>`;
-  } else if (state.currentStep === 'ram' && sel.motherboard?.ramType) {
-    text = `<i class="bi bi-link-45deg me-1"></i>Только <b>${sel.motherboard.ramType}</b> — совместимость с <b>${sel.motherboard.brand} ${sel.motherboard.name}</b>`;
+  } else if (state.currentStep === 'ram') {
+    const kits = state.selected.ram || [];
+    const max  = getMaxRamKits();
+    const slot = `Слоты: <b>${kits.length}/${max}</b>`;
+    if (sel.motherboard?.ramType) {
+      text = `<i class="bi bi-link-45deg me-1"></i>Только <b>${sel.motherboard.ramType}</b> — <b>${sel.motherboard.brand} ${sel.motherboard.name}</b> · ${slot}`;
+    } else {
+      text = `<i class="bi bi-memory me-1"></i>${slot} комплект${max > 1 ? 'а' : ''} RAM`;
+    }
   } else if (state.currentStep === 'case' && sel.motherboard?.formFactor) {
     text = `<i class="bi bi-link-45deg me-1"></i>Только корпуса поддерживающие <b>${sel.motherboard.formFactor}</b> — совместимость с <b>${sel.motherboard.brand} ${sel.motherboard.name}</b>`;
   }
@@ -754,8 +783,11 @@ async function renderComponentGrid() {
       </div>
     </div>`;
 
-  const list       = await getFiltered();
-  const selectedId = state.selected[state.currentStep]?.id;
+  const list    = await getFiltered();
+  const isRam   = state.currentStep === 'ram';
+  const ramKits = isRam ? (state.selected.ram || []) : null;
+  const maxKits = isRam ? getMaxRamKits() : 1;
+  const isFull  = isRam && ramKits.length >= maxKits;
 
   document.getElementById('resultsCount').textContent =
     `${list.length} позиц${pluralRu(list.length, 'ия', 'ии', 'ий')}`;
@@ -773,11 +805,26 @@ async function renderComponentGrid() {
   }
 
   grid.innerHTML = list.map((comp, i) => {
-    const isSel = String(comp.id) === String(selectedId);
+    let isSel, kitCount, btnText;
+    if (isRam) {
+      kitCount = ramKits.filter(r => String(r.id) === String(comp.id)).length;
+      isSel    = kitCount > 0;
+      btnText  = isSel
+        ? `<i class="bi bi-check-lg me-1"></i>Выбрано${kitCount > 1 ? ` (${kitCount})` : ''}`
+        : (isFull ? '<i class="bi bi-x-circle me-1"></i>Слоты заняты' : 'Добавить комплект');
+    } else {
+      kitCount = 0;
+      isSel    = String(comp.id) === String(state.selected[state.currentStep]?.id);
+      btnText  = isSel ? '<i class="bi bi-check-lg me-1"></i>Выбрано' : 'Выбрать компонент';
+    }
+    const badge = (isRam && kitCount > 1)
+      ? `<div class="selected-badge">${kitCount}</div>`
+      : `<div class="selected-badge"><i class="bi bi-check-lg"></i></div>`;
+
     return `
       <div class="col component-col" style="animation-delay:${i * 40}ms">
         <div class="component-card${isSel ? ' selected' : ''}" onclick="toggleComponent('${comp.id}')">
-          <div class="selected-badge"><i class="bi bi-check-lg"></i></div>
+          ${badge}
           <div class="card-img-area">
             <i class="bi ${CATEGORY_ICONS[state.currentStep] ?? 'bi-box'}"
                style="font-size:3.75rem;color:rgba(155,48,255,0.35);"></i>
@@ -791,7 +838,7 @@ async function renderComponentGrid() {
             <div class="comp-price">$${Number(comp.price).toFixed(2)}</div>
             <button class="btn-select${isSel ? ' selected' : ''}"
                     onclick="event.stopPropagation();toggleComponent('${comp.id}')">
-              ${isSel ? '<i class="bi bi-check-lg me-1"></i>Выбрано' : 'Выбрать компонент'}
+              ${btnText}
             </button>
           </div>
         </div>
@@ -805,10 +852,23 @@ async function toggleComponent(compId) {
   const all    = await loadStep(stepId);
   const comp   = all.find(c => String(c.id) === String(compId));
 
-  if (String(state.selected[stepId]?.id) === String(compId)) {
-    delete state.selected[stepId];
+  if (stepId === 'ram') {
+    const kits = state.selected.ram || [];
+    const idx  = kits.findIndex(r => String(r.id) === String(compId));
+    if (idx !== -1) {
+      const next = kits.filter((_, i) => i !== idx);
+      if (next.length) state.selected.ram = next;
+      else             delete state.selected.ram;
+    } else {
+      const max = getMaxRamKits();
+      if (kits.length < max) state.selected.ram = [...kits, comp];
+    }
   } else {
-    state.selected[stepId] = comp;
+    if (String(state.selected[stepId]?.id) === String(compId)) {
+      delete state.selected[stepId];
+    } else {
+      state.selected[stepId] = comp;
+    }
   }
 
   persistBuild();
@@ -838,14 +898,20 @@ function persistBuild() {
 function loadPersistedBuild() {
   try {
     const raw = localStorage.getItem('cyberrig-build');
-    if (raw) state.selected = JSON.parse(raw);
+    if (raw) {
+      state.selected = JSON.parse(raw);
+      if (state.selected.ram && !Array.isArray(state.selected.ram))
+        state.selected.ram = [state.selected.ram];
+    }
   } catch {}
 }
 
 // ─── Price ────────────────────────────────────────────────────────────────────
 function updateTotalPrice() {
-  const total = Object.values(state.selected)
-    .reduce((s, c) => s + Number(c.price), 0);
+  const total = Object.entries(state.selected).reduce((sum, [, val]) => {
+    if (Array.isArray(val)) return sum + val.reduce((s, c) => s + Number(c.price), 0);
+    return sum + Number(val.price);
+  }, 0);
   document.getElementById('totalPriceSidebar').textContent = `$${total.toFixed(2)}`;
 }
 
@@ -859,11 +925,14 @@ function checkCompatibility() {
       `<i class="bi bi-x-circle-fill me-1"></i>` +
       `Несовместимый сокет: CPU <b>${s.cpu.socket}</b> ≠ плата <b>${s.motherboard.socket}</b>`);
 
-  if (s.ram && s.motherboard && s.ram.ramType && s.motherboard.ramType
-      && s.ram.ramType !== s.motherboard.ramType)
-    warnings.push(
-      `<i class="bi bi-x-circle-fill me-1"></i>` +
-      `Несовместимая память: ОЗУ <b>${s.ram.ramType}</b> ≠ плата <b>${s.motherboard.ramType}</b>`);
+  if (s.ram && s.motherboard && s.motherboard.ramType) {
+    (Array.isArray(s.ram) ? s.ram : [s.ram]).forEach(kit => {
+      if (kit.ramType && kit.ramType !== s.motherboard.ramType)
+        warnings.push(
+          `<i class="bi bi-x-circle-fill me-1"></i>` +
+          `Несовместимая память: ОЗУ <b>${kit.ramType}</b> ≠ плата <b>${s.motherboard.ramType}</b>`);
+    });
+  }
 
   if (s.cpu && s.cooler && s.cooler.maxTdp < s.cpu.tdp)
     warnings.push(
@@ -896,10 +965,27 @@ function checkCompatibility() {
 
 // ─── Summary modal ────────────────────────────────────────────────────────────
 function renderSummary() {
-  const total = Object.values(state.selected)
-    .reduce((s, c) => s + Number(c.price), 0);
+  const total = Object.entries(state.selected).reduce((sum, [, val]) => {
+    if (Array.isArray(val)) return sum + val.reduce((s, c) => s + Number(c.price), 0);
+    return sum + Number(val.price);
+  }, 0);
 
   document.getElementById('summaryBody').innerHTML = STEPS.map(step => {
+    if (step.id === 'ram') {
+      const kits = state.selected.ram;
+      if (!kits || !kits.length) return `
+        <div class="summary-row">
+          <div class="summary-cat">${step.label}</div>
+          <div class="summary-comp-name"><span class="text-muted fst-italic">Не выбрано</span></div>
+          <div class="summary-comp-price">—</div>
+        </div>`;
+      return kits.map((kit, i) => `
+        <div class="summary-row">
+          <div class="summary-cat">${step.label}${kits.length > 1 ? ` ${i + 1}` : ''}</div>
+          <div class="summary-comp-name">${kit.brand} ${kit.name}</div>
+          <div class="summary-comp-price">$${Number(kit.price).toFixed(2)}</div>
+        </div>`).join('');
+    }
     const comp = state.selected[step.id];
     return `
       <div class="summary-row">
@@ -918,10 +1004,11 @@ function renderSummary() {
 
 // ─── Order ────────────────────────────────────────────────────────────────────
 async function handleOrder() {
-  const items = Object.entries(state.selected).map(([categorySlug, comp]) => ({
-    categorySlug,
-    componentId: Number(comp.id),
-  }));
+  const items = [];
+  for (const [categorySlug, val] of Object.entries(state.selected)) {
+    if (Array.isArray(val)) val.forEach(c => items.push({ categorySlug, componentId: Number(c.id) }));
+    else items.push({ categorySlug, componentId: Number(val.id) });
+  }
 
   if (!items.length) {
     alert('Сборка пустая. Выберите хотя бы один компонент.');
