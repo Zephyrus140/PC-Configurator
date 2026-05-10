@@ -18,7 +18,7 @@ const CATEGORY_ICONS = {
 
 const SPEC_LABELS = {
   cpu:         ['Ядра / Потоки', 'Сокет', 'Частота', 'TDP', 'L3 Cache'],
-  motherboard: ['Сокет', 'Форм-фактор', 'Тип RAM', 'Слоты RAM', 'PCIe', 'M.2', 'USB'],
+  motherboard: ['Сокет', 'Форм-фактор', 'Тип RAM', 'Слоты RAM', 'Чипсет', 'PCIe', 'M.2', 'Задняя панель USB', 'Прочее'],
   ram:         ['Объём', 'Тип / Частота', 'Тайминги', 'XMP профиль', 'Особенности'],
   gpu:         ['VRAM', 'TDP', 'Интерфейс', 'DLSS / FSR', 'Вентиляторы', 'Буст частота'],
   storage:     ['Объём', 'Интерфейс', 'Чтение', 'Запись'],
@@ -36,7 +36,7 @@ const state = {
   brandFilter:  '',
   chipFilter:   '',
   cpuFilters:   { socket: '', series: '', cores: '' },
-  mbFilters:    { socket: '', formFactor: '', ramType: '', ramSlots: '' },
+  mbFilters:    { socket: '', formFactor: '', ramType: '', ramSlots: '', chipset: '' },
   ramFilters:   { ramType: '', capacity: '' },
   gpuFilters:     { vram: '', fans: '' },
   storageFilters: { capacity: '', formFactor: '', interface: '', readSpeed: '' },
@@ -86,7 +86,7 @@ async function navigateTo(stepId) {
   state.brandFilter  = '';
   state.chipFilter   = '';
   state.cpuFilters   = { socket: '', series: '', cores: '' };
-  state.mbFilters    = { socket: '', formFactor: '', ramType: '', ramSlots: '' };
+  state.mbFilters    = { socket: '', formFactor: '', ramType: '', ramSlots: '', chipset: '' };
   state.ramFilters   = { ramType: '', capacity: '' };
   state.gpuFilters     = { vram: '', fans: '' };
   state.storageFilters = { capacity: '', formFactor: '', interface: '', readSpeed: '' };
@@ -215,6 +215,7 @@ async function getFiltered() {
     if (state.mbFilters.formFactor) list = list.filter(c => c.formFactor === state.mbFilters.formFactor);
     if (state.mbFilters.ramType)    list = list.filter(c => c.ramType    === state.mbFilters.ramType);
     if (state.mbFilters.ramSlots)   list = list.filter(c => mbRamSlots(c.specs) === parseInt(state.mbFilters.ramSlots));
+    if (state.mbFilters.chipset)    list = list.filter(c => c.chipset === state.mbFilters.chipset);
   }
   if (state.currentStep === 'psu') {
     const pf = state.psuFilters;
@@ -521,6 +522,8 @@ async function renderBrandChips() {
     const ramTypes   = [...new Set(afterFact.map(c => c.ramType).filter(Boolean))].sort();
     const afterType  = state.mbFilters.ramType ? afterFact.filter(c => c.ramType === state.mbFilters.ramType) : afterFact;
     const slotCounts = [...new Set(afterType.map(c => mbRamSlots(c.specs)).filter(Boolean))].sort((a, b) => a - b);
+    const afterSlots  = state.mbFilters.ramSlots ? afterType.filter(c => mbRamSlots(c.specs) === parseInt(state.mbFilters.ramSlots)) : afterType;
+    const chipsets    = [...new Set(afterSlots.map(c => c.chipset).filter(Boolean))].sort();
 
     bar.innerHTML = [
       buildFilterDd('brand', 'Бренд', state.brandFilter, [
@@ -542,6 +545,10 @@ async function renderBrandChips() {
       buildFilterDd('mb-slots', 'Слоты RAM', state.mbFilters.ramSlots, [
         { val: '', label: 'Все', fn: "setMbFilter('ramSlots','')" },
         ...slotCounts.map(n => ({ val: String(n), label: `${n} слота`, fn: `setMbFilter('ramSlots','${n}')` })),
+      ]),
+      buildFilterDd('mb-chipset', 'Чипсет', state.mbFilters.chipset, [
+        { val: '', label: 'Все', fn: "setMbFilter('chipset','')" },
+        ...chipsets.map(c => ({ val: c, label: c, fn: `setMbFilter('chipset','${c}')` })),
       ]),
     ].filter(Boolean).join('');
 
@@ -741,8 +748,8 @@ function setRamFilter(key, value) {
 
 function setMbFilter(key, value) {
   state.mbFilters[key] = value;
-  if (key === 'socket')     { state.mbFilters.formFactor = ''; state.mbFilters.ramType = ''; }
-  if (key === 'formFactor') { state.mbFilters.ramType = ''; }
+  if (key === 'socket')     { state.mbFilters.formFactor = ''; state.mbFilters.ramType = ''; state.mbFilters.chipset = ''; }
+  if (key === 'formFactor') { state.mbFilters.ramType = ''; state.mbFilters.chipset = ''; }
   closeAllFilterDds();
   renderBrandChips();
   renderComponentGrid();
