@@ -16,6 +16,17 @@ const CATEGORY_ICONS = {
   gpu: 'bi-gpu-card', storage: 'bi-device-ssd', psu: 'bi-lightning-charge',
 };
 
+const SPEC_LABELS = {
+  cpu:         ['Сокет', 'Ядра/Потоки', 'Частота', 'TDP', 'Тех. процесс'],
+  motherboard: ['Сокет', 'Форм-фактор', 'Тип RAM', 'Слоты RAM', 'Чипсет'],
+  ram:         ['Объём', 'Тип', 'Комплект', 'Частота', 'Тайминги'],
+  gpu:         ['VRAM', 'Чип', 'Тип памяти', 'Тактовая', 'Вентиляторы'],
+  storage:     ['Объём', 'Интерфейс', 'Форм-фактор', 'Чтение', 'Запись'],
+  psu:         ['Мощность', 'Сертификат', 'Модульность', 'Вентилятор', 'Гарантия'],
+  cooler:      ['Тип', 'Вентиляторов', 'Размер', 'Подсветка', 'Max TDP'],
+  case:        ['Форм-фактор', 'Стиль', 'Вентиляторов', 'Материал', 'Панель'],
+};
+
 // ─── Build state ──────────────────────────────────────────────────────────────
 const state = {
   selected:     {},
@@ -32,6 +43,7 @@ const state = {
   psuFilters:     { wattage: '', rating: '', modular: '' },
   coolerFilters:  { type: '', fanCount: '', fanSize: '', lighting: '' },
   caseFilters:    { formFactor: '', style: '', fanCount: '' },
+  compareList:  [],
   _cache:       {},
 };
 
@@ -81,11 +93,13 @@ async function navigateTo(stepId) {
   state.psuFilters     = { wattage: '', rating: '', modular: '' };
   state.coolerFilters  = { type: '', fanCount: '', fanSize: '', lighting: '' };
   state.caseFilters    = { formFactor: '', style: '', fanCount: '' };
+  state.compareList    = [];
   document.getElementById('searchInput').value = '';
   resetSortDropdown();
   closeAllFilterDds();
   renderSidebar();
   await renderCurrentStep();
+  renderCompareBar();
   window.scrollTo({ top: 0, behavior: 'smooth' });
   closeSidebar();
 }
@@ -357,7 +371,7 @@ function coolerFanSize(specs) {
 
 // ─── Case spec helpers ─────────────────────────────────────────────────────────
 function mbRamSlots(specs) {
-  const s = specs.find(x => /× DDR\d слота/i.test(x));
+  const s = specs.find(x => /× DDR\d слот/i.test(x));
   if (!s) return 0;
   const m = s.match(/^(\d+)/);
   return m ? parseInt(m[1]) : 0;
@@ -367,7 +381,7 @@ function getMaxRamKits() {
   const mb = state.selected.motherboard;
   if (!mb) return 2;
   const slots = mbRamSlots(mb.specs);
-  return slots >= 4 ? 2 : 1;
+  return Math.max(1, Math.floor(slots / 2));
 }
 
 function caseFanCount(specs) {
@@ -826,11 +840,17 @@ async function renderComponentGrid() {
     const badge = (isRam && kitCount > 1)
       ? `<div class="selected-badge">${kitCount}</div>`
       : `<div class="selected-badge"><i class="bi bi-check-lg"></i></div>`;
+    const inCompare = state.compareList.some(c => String(c.id) === String(comp.id));
 
     return `
       <div class="col component-col" style="animation-delay:${i * 40}ms">
         <div class="component-card${isSel ? ' selected' : ''}" onclick="toggleComponent('${comp.id}')">
           ${badge}
+          <button class="btn-compare${inCompare ? ' in-compare' : ''}"
+                  onclick="event.stopPropagation();toggleCompare('${comp.id}')"
+                  title="${inCompare ? 'Убрать из сравнения' : 'Добавить в сравнение'}">
+            <i class="bi bi-bar-chart-line"></i>
+          </button>
           <div class="card-img-area">
             <i class="bi ${CATEGORY_ICONS[state.currentStep] ?? 'bi-box'}"
                style="font-size:3.75rem;color:rgba(155,48,255,0.35);"></i>
@@ -1028,6 +1048,99 @@ async function handleOrder() {
   } catch {
     alert('Ошибка сохранения. Убедитесь что бэкенд запущен (dotnet run).');
   }
+}
+
+// ─── Compare ──────────────────────────────────────────────────────────────────
+async function toggleCompare(compId) {
+  const all  = await loadStep(state.currentStep);
+  const comp = all.find(c => String(c.id) === String(compId));
+  const idx  = state.compareList.findIndex(c => String(c.id) === String(compId));
+
+  if (idx >= 0) {
+    state.compareList.splice(idx, 1);
+  } else if (state.compareList.length < 4) {
+    state.compareList.push(comp);
+  }
+
+  renderCompareBar();
+  renderComponentGrid();
+}
+
+function removeFromCompare(compId) {
+  state.compareList = state.compareList.filter(c => String(c.id) !== String(compId));
+  renderCompareBar();
+  renderComponentGrid();
+}
+
+function clearCompare() {
+  state.compareList = [];
+  renderCompareBar();
+  renderComponentGrid();
+}
+
+function renderCompareBar() {
+  const bar  = document.getElementById('compareBar');
+  const list = state.compareList;
+
+  if (!list.length) {
+    bar.classList.add('d-none');
+    return;
+  }
+  bar.classList.remove('d-none');
+
+  document.getElementById('compareBarSlots').innerHTML = Array.from({ length: 4 }, (_, i) => {
+    const comp = list[i];
+    return comp
+      ? `<div class="compare-slot filled">
+           <span>${comp.brand} ${comp.name}</span>
+           <button class="compare-slot-remove" onclick="removeFromCompare('${comp.id}')">
+             <i class="bi bi-x"></i>
+           </button>
+         </div>`
+      : `<div class="compare-slot"><i class="bi bi-plus" style="opacity:.35"></i></div>`;
+  }).join('');
+
+  document.getElementById('compareBarCount').textContent = `${list.length} / 4`;
+  document.getElementById('btnOpenCompare').disabled = list.length < 2;
+}
+
+function openCompareModal() {
+  const list = state.compareList;
+  if (list.length < 2) return;
+
+  const labels   = SPEC_LABELS[state.currentStep] || [];
+  const maxSpecs = Math.max(...list.map(c => c.specs.length));
+
+  const headerRow = `
+    <div class="compare-row compare-row-alt">
+      <div class="compare-label"></div>
+      ${list.map(c => `
+        <div class="compare-cell" style="flex-direction:column;align-items:flex-start">
+          <span class="compare-cell-brand">${c.brand}</span>
+          <span class="compare-cell-name">${c.name}</span>
+        </div>`).join('')}
+    </div>`;
+
+  const priceRow = `
+    <div class="compare-row">
+      <div class="compare-label">Цена</div>
+      ${list.map(c => `<div class="compare-cell compare-cell-price">$${Number(c.price).toFixed(2)}</div>`).join('')}
+    </div>`;
+
+  const specRows = Array.from({ length: maxSpecs }, (_, i) => {
+    const label  = labels[i] || `·`;
+    const values = list.map(c => c.specs[i] || '—');
+    return `
+      <div class="compare-row${i % 2 === 1 ? ' compare-row-alt' : ''}">
+        <div class="compare-label">${label}</div>
+        ${values.map(v => `<div class="compare-cell">${v}</div>`).join('')}
+      </div>`;
+  }).join('');
+
+  document.getElementById('compareBody').innerHTML =
+    `<div class="compare-table">${headerRow}${priceRow}${specRows}</div>`;
+
+  new bootstrap.Modal(document.getElementById('compareModal')).show();
 }
 
 // ─── Mobile sidebar ───────────────────────────────────────────────────────────
