@@ -1014,12 +1014,31 @@ function renderSummary() {
           <div class="summary-comp-name"><span class="text-muted fst-italic">Не выбрано</span></div>
           <div class="summary-comp-price">—</div>
         </div>`;
-      return kits.map((kit, i) => `
+      const groups = [];
+      for (const kit of kits) {
+        const key = String(kit.id);
+        const g = groups.find(g => g.key === key);
+        if (g) { g.count++; g.total += Number(kit.price); }
+        else groups.push({ key, label: `${kit.brand} ${kit.name}`, vol: kit.specs?.[0] ?? '', count: 1, total: Number(kit.price) });
+      }
+      const parseGB = v => {
+        const m = v.match(/(\d+)[×x×](\d+)\s*GB/i);
+        if (m) return parseInt(m[1]) * parseInt(m[2]);
+        const m2 = v.match(/(\d+)\s*GB/i);
+        return m2 ? parseInt(m2[1]) : 0;
+      };
+      const nameStr = groups.map(g => {
+        if (g.count === 1) return g.label;
+        const totalGB = parseGB(g.vol) * g.count;
+        return `${g.label} ×${g.count}${totalGB ? ` (итого ${totalGB}GB)` : ''}`;
+      }).join(' + ');
+      const totalPrice = groups.reduce((s, g) => s + g.total, 0);
+      return `
         <div class="summary-row">
-          <div class="summary-cat">${step.label}${kits.length > 1 ? ` ${i + 1}` : ''}</div>
-          <div class="summary-comp-name">${kit.brand} ${kit.name}</div>
-          <div class="summary-comp-price">$${Number(kit.price).toFixed(2)}</div>
-        </div>`).join('');
+          <div class="summary-cat">${step.label}</div>
+          <div class="summary-comp-name">${nameStr}</div>
+          <div class="summary-comp-price">$${totalPrice.toFixed(2)}</div>
+        </div>`;
     }
     const comp = state.selected[step.id];
     return `
