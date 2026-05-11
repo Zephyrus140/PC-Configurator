@@ -276,7 +276,7 @@ function cpuSeries(name) {
 }
 
 function cpuCores(specs) {
-  const s = specs.find(x => /Cores/i.test(x));
+  const s = specs.find(x => /ядер|Cores/i.test(x));
   if (!s) return 0;
   const m = s.match(/^(\d+)/);
   return m ? parseInt(m[1]) : 0;
