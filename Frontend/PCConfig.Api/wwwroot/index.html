@@ -108,7 +108,7 @@
     </div>
 
     <!-- Component grid -->
-    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4" id="componentsGrid"></div>
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3" id="componentsGrid"></div>
 
     <!-- Bottom nav -->
     <div class="bottom-nav d-flex justify-content-between">
@@ -121,6 +121,38 @@
     </div>
 
   </main>
+</div>
+
+<!-- ═══ COMPARE BAR ═══════════════════════════════════════════════════════════ -->
+<div class="compare-bar d-none" id="compareBar">
+  <div class="compare-bar-slots" id="compareBarSlots"></div>
+  <div class="compare-bar-actions">
+    <span class="compare-bar-count" id="compareBarCount">0 / 4</span>
+    <button class="btn btn-accent btn-sm" id="btnOpenCompare" onclick="openCompareModal()" disabled>
+      <i class="bi bi-bar-chart-line me-1"></i>Сравнить
+    </button>
+    <button class="btn btn-outline-secondary btn-sm" onclick="clearCompare()">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+</div>
+
+<!-- ═══ COMPARE MODAL ════════════════════════════════════════════════════════ -->
+<div class="modal fade" id="compareModal" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-bar-chart-line me-2" style="color:var(--cyan)"></i>Сравнение компонентов
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-0" id="compareBody"></div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ═══ BUILD SUMMARY MODAL ══════════════════════════════════════════════════ -->

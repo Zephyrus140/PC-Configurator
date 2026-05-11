@@ -860,7 +860,7 @@ async function renderComponentGrid() {
           </button>
           <div class="card-img-area">
             <i class="bi ${CATEGORY_ICONS[state.currentStep] ?? 'bi-box'}"
-               style="font-size:3.75rem;color:rgba(155,48,255,0.35);"></i>
+               style="font-size:2.75rem;color:rgba(155,48,255,0.35);"></i>
           </div>
           <div class="card-body d-flex flex-column">
             <div class="comp-brand">${comp.brand}</div>

@@ -475,7 +475,9 @@ body {
 
 /* Card image area */
 .card-img-area {
-  height: 160px;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  max-height: 180px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -874,6 +876,173 @@ body {
 .text-muted { color: var(--text-muted) !important; }
 .alert { border-radius: var(--radius); }
 .modal-title .logo-text { font-size: 0.95rem; }
+
+/* ─── Compare bar ────────────────────────────────────────────────────────────── */
+.compare-bar {
+  position: fixed;
+  bottom: 0;
+  left: var(--sidebar-w);
+  right: 0;
+  background: rgba(13,13,26,0.97);
+  border-top: 1px solid var(--cyan);
+  box-shadow: 0 -4px 30px rgba(0,212,255,0.15);
+  backdrop-filter: blur(12px);
+  padding: 0.65rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  z-index: 150;
+}
+.compare-bar-slots {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+}
+.compare-slot {
+  flex: 1;
+  max-width: 160px;
+  min-width: 80px;
+  height: 44px;
+  border: 1px dashed rgba(0,212,255,0.25);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.compare-slot.filled {
+  border-color: rgba(0,212,255,0.45);
+  background: rgba(0,212,255,0.06);
+  color: #ddddf8;
+  font-size: 0.65rem;
+  padding: 0.2rem 0.4rem;
+  text-align: center;
+  line-height: 1.2;
+  position: relative;
+  cursor: default;
+}
+.compare-slot-remove {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--purple);
+  color: #fff;
+  border: none;
+  font-size: 0.55rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.compare-slot-remove:hover { background: #c00; }
+.compare-bar-count {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.78rem;
+  color: var(--cyan);
+  white-space: nowrap;
+  text-shadow: 0 0 8px var(--cyan-glow);
+}
+.compare-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* ─── Compare button on card ─────────────────────────────────────────────────── */
+.btn-compare {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(155,48,255,0.1);
+  border: 1px solid rgba(155,48,255,0.25);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 1;
+}
+.btn-compare:hover {
+  background: rgba(0,212,255,0.12);
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+.btn-compare.in-compare {
+  background: rgba(0,212,255,0.18);
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 8px rgba(0,212,255,0.3);
+}
+
+/* ─── Compare table ──────────────────────────────────────────────────────────── */
+.compare-table { width: 100%; }
+.compare-row {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+.compare-row:last-child { border-bottom: none; }
+.compare-row-alt { background: rgba(255,255,255,0.02); }
+.compare-label {
+  width: 130px;
+  min-width: 130px;
+  padding: 0.55rem 0.75rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--cyan);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.compare-cell {
+  flex: 1;
+  padding: 0.55rem 0.85rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: #ddddf8;
+  border-right: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+}
+.compare-cell:last-child { border-right: none; }
+.compare-cell-price {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--cyan);
+  text-shadow: 0 0 8px var(--cyan-glow);
+}
+.compare-cell-brand {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--purple);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.compare-cell-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #eeeeff;
+}
 
 /* ─── Responsive ─────────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
