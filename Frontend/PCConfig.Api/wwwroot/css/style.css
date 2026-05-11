@@ -53,6 +53,27 @@ body {
   z-index: 200;
 }
 
+/* Language toggle */
+.lang-btn {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--cyan);
+  background: transparent;
+  border: 1px solid rgba(0, 212, 255, 0.4);
+  border-radius: var(--radius);
+  padding: 4px 11px;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, border-color 0.2s;
+  line-height: 1;
+}
+.lang-btn:hover {
+  background: var(--cyan-dim);
+  border-color: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan-glow);
+}
+
 /* Logo */
 .logo-text {
   font-family: 'Orbitron', monospace;

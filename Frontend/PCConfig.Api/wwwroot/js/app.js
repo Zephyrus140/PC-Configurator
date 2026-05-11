@@ -1,13 +1,13 @@
 // ─── Steps config ─────────────────────────────────────────────────────────────
 const STEPS = [
-  { id: 'cpu',         label: 'Процессор',           icon: 'bi-cpu',              desc: 'Выберите центральный процессор' },
-  { id: 'motherboard', label: 'Материнская плата',   icon: 'bi-motherboard',      desc: 'Выберите материнскую плату' },
-  { id: 'ram',         label: 'Оперативная память',  icon: 'bi-memory',           desc: 'Выберите оперативную память' },
-  { id: 'gpu',         label: 'Видеокарта',          icon: 'bi-gpu-card',         desc: 'Выберите графическую карту' },
-  { id: 'storage',     label: 'Накопитель',          icon: 'bi-device-ssd',       desc: 'Выберите накопитель для системы' },
-  { id: 'psu',         label: 'Блок питания',        icon: 'bi-lightning-charge', desc: 'Выберите блок питания' },
-  { id: 'cooler',      label: 'Охлаждение CPU',      icon: 'bi-wind',             desc: 'Выберите систему охлаждения процессора' },
-  { id: 'case',        label: 'Корпус',              icon: 'bi-pc-display',       desc: 'Выберите корпус для вашей сборки' },
+  { id: 'cpu',         icon: 'bi-cpu',              get label() { return t('step_cpu_label'); },         get desc() { return t('step_cpu_desc'); } },
+  { id: 'motherboard', icon: 'bi-motherboard',      get label() { return t('step_motherboard_label'); }, get desc() { return t('step_motherboard_desc'); } },
+  { id: 'ram',         icon: 'bi-memory',           get label() { return t('step_ram_label'); },         get desc() { return t('step_ram_desc'); } },
+  { id: 'gpu',         icon: 'bi-gpu-card',         get label() { return t('step_gpu_label'); },         get desc() { return t('step_gpu_desc'); } },
+  { id: 'storage',     icon: 'bi-device-ssd',       get label() { return t('step_storage_label'); },     get desc() { return t('step_storage_desc'); } },
+  { id: 'psu',         icon: 'bi-lightning-charge', get label() { return t('step_psu_label'); },         get desc() { return t('step_psu_desc'); } },
+  { id: 'cooler',      icon: 'bi-wind',             get label() { return t('step_cooler_label'); },      get desc() { return t('step_cooler_desc'); } },
+  { id: 'case',        icon: 'bi-pc-display',       get label() { return t('step_case_label'); },        get desc() { return t('step_case_desc'); } },
 ];
 
 const CATEGORY_ICONS = {
@@ -17,14 +17,14 @@ const CATEGORY_ICONS = {
 };
 
 const SPEC_LABELS = {
-  cpu:         ['Ядра / Потоки', 'Сокет', 'Частота', 'TDP', 'L3 Cache'],
-  motherboard: ['Сокет', 'Форм-фактор', 'Тип RAM', 'Слоты RAM', 'Чипсет', 'PCIe', 'M.2', 'Задняя панель USB', 'Прочее'],
-  ram:         ['Объём', 'Тип / Частота', 'Тайминги', 'XMP профиль', 'Особенности'],
-  gpu:         ['VRAM', 'TDP', 'Интерфейс', 'DLSS / FSR', 'Вентиляторы', 'Буст частота'],
-  storage:     ['Объём', 'Интерфейс', 'Чтение', 'Запись'],
-  psu:         ['Мощность', 'Сертификат', 'Модульность', 'Стандарт', 'Гарантия'],
-  cooler:      ['Тип', 'Вентиляторы', 'Тепловые трубки', 'Подсветка', 'Max TDP', 'Шум'],
-  case:        ['Форм-фактор', 'Поддержка плат', 'Вентиляторов', 'Боковая панель', 'USB порты', 'Накопители'],
+  get cpu()         { return tArr('spec_cpu'); },
+  get motherboard() { return tArr('spec_motherboard'); },
+  get ram()         { return tArr('spec_ram'); },
+  get gpu()         { return tArr('spec_gpu'); },
+  get storage()     { return tArr('spec_storage'); },
+  get psu()         { return tArr('spec_psu'); },
+  get cooler()      { return tArr('spec_cooler'); },
+  get case()        { return tArr('spec_case'); },
 };
 
 // ─── Build state ──────────────────────────────────────────────────────────────
@@ -50,6 +50,7 @@ const state = {
 // ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
   loadPersistedBuild();
+  applyStaticLang();
   renderSidebar();
   await renderCurrentStep();
   bindEvents();
@@ -143,7 +144,7 @@ function renderSidebar() {
           <div class="step-name">${step.label}</div>
           ${hasSel
             ? `<div class="step-selected-name">${displayName}</div>`
-            : `<div class="step-not-selected">Не выбрано</div>`}
+            : `<div class="step-not-selected">${t('not_selected')}</div>`}
         </div>
         ${hasSel ? `<div class="step-price">$${displayPrice.toFixed(2)}</div>` : ''}
       </div>`;
@@ -166,7 +167,7 @@ async function renderCurrentStep() {
   document.getElementById('stepProgress').style.width =
     `${((idx + 1) / STEPS.length) * 100}%`;
   document.getElementById('stepProgressLabel').textContent =
-    `Шаг ${idx + 1} / ${STEPS.length}`;
+    `${t('step_label')} ${idx + 1} ${t('step_of')} ${STEPS.length}`;
 
   await Promise.all([renderBrandChips(), renderComponentGrid()]);
   checkCompatibility();
@@ -326,9 +327,10 @@ function storageReadSpeed(specs) {
 }
 
 function fmtSpeed(n) {
+  const unit = t('speed_unit');
   return n >= 1000
-    ? `${Math.floor(n / 1000)} ${String(n % 1000).padStart(3, '0')} МБ/с`
-    : `${n} МБ/с`;
+    ? `${Math.floor(n / 1000)} ${String(n % 1000).padStart(3, '0')} ${unit}`
+    : `${n} ${unit}`;
 }
 
 // ─── PSU spec helpers ──────────────────────────────────────────────────────────
@@ -436,21 +438,21 @@ async function renderBrandChips() {
     const coresList   = [...new Set(afterSeries.map(c => cpuCores(c.specs)).filter(Boolean))].sort((a, b) => a - b);
 
     bar.innerHTML = [
-      buildFilterDd('brand', 'Бренд', state.brandFilter, [
-        { val: '', label: 'Все', fn: "setBrand('')" },
+      buildFilterDd('brand', t('f_brand'), state.brandFilter, [
+        { val: '', label: t('f_all'), fn: "setBrand('')" },
         ...brands.map(b => ({ val: b, label: b, fn: `setBrand('${b}')` })),
       ]),
-      !mbLock && buildFilterDd('socket', 'Сокет', state.cpuFilters.socket, [
-        { val: '', label: 'Все', fn: "setCpuFilter('socket','')" },
+      !mbLock && buildFilterDd('socket', t('f_socket'), state.cpuFilters.socket, [
+        { val: '', label: t('f_all'), fn: "setCpuFilter('socket','')" },
         ...sockets.map(s => ({ val: s, label: s, fn: `setCpuFilter('socket','${s}')` })),
       ]),
-      buildFilterDd('series', 'Серия', state.cpuFilters.series, [
-        { val: '', label: 'Все', fn: "setCpuFilter('series','')" },
+      buildFilterDd('series', t('f_series'), state.cpuFilters.series, [
+        { val: '', label: t('f_all'), fn: "setCpuFilter('series','')" },
         ...seriesList.map(s => ({ val: s, label: s, fn: `setCpuFilter('series','${s.replace(/'/g, "\\'")}')` })),
       ]),
-      buildFilterDd('cores', 'Ядра', state.cpuFilters.cores, [
-        { val: '', label: 'Все', fn: "setCpuFilter('cores','')" },
-        ...coresList.map(n => ({ val: String(n), label: `${n} ядер`, fn: `setCpuFilter('cores','${n}')` })),
+      buildFilterDd('cores', t('f_cores'), state.cpuFilters.cores, [
+        { val: '', label: t('f_all'), fn: "setCpuFilter('cores','')" },
+        ...coresList.map(n => ({ val: String(n), label: t('f_cores_n', {n}), fn: `setCpuFilter('cores','${n}')` })),
       ]),
     ].filter(Boolean).join('');
 
@@ -465,24 +467,24 @@ async function renderBrandChips() {
                      .sort((a, b) => a - b);
 
     bar.innerHTML = [
-      buildFilterDd('brand', 'Бренд', state.brandFilter, [
-        { val: '', label: 'Все', fn: "setBrand('')" },
+      buildFilterDd('brand', t('f_brand'), state.brandFilter, [
+        { val: '', label: t('f_all'), fn: "setBrand('')" },
         ...brands.map(b => ({ val: b, label: b, fn: `setBrand('${b}')` })),
       ]),
-      buildFilterDd('st-cap', 'Ёмкость', sf.capacity, [
-        { val: '', label: 'Все', fn: "setStorageFilter('capacity','')" },
+      buildFilterDd('st-cap', t('f_capacity'), sf.capacity, [
+        { val: '', label: t('f_all'), fn: "setStorageFilter('capacity','')" },
         ...caps.map(c => ({ val: c, label: c, fn: `setStorageFilter('capacity','${c}')` })),
       ]),
-      buildFilterDd('st-form', 'Формат', sf.formFactor, [
-        { val: '', label: 'Все', fn: "setStorageFilter('formFactor','')" },
+      buildFilterDd('st-form', t('f_format'), sf.formFactor, [
+        { val: '', label: t('f_all'), fn: "setStorageFilter('formFactor','')" },
         ...forms.map(f => ({ val: f, label: f, fn: `setStorageFilter('formFactor','${f}')` })),
       ]),
-      buildFilterDd('st-iface', 'Тип', sf.interface, [
-        { val: '', label: 'Все', fn: "setStorageFilter('interface','')" },
+      buildFilterDd('st-iface', t('f_type'), sf.interface, [
+        { val: '', label: t('f_all'), fn: "setStorageFilter('interface','')" },
         ...ifaces.map(i => ({ val: i, label: i, fn: `setStorageFilter('interface','${i}')` })),
       ]),
-      buildFilterDd('st-speed', 'Скорость чтения', sf.readSpeed, [
-        { val: '', label: 'Все', fn: "setStorageFilter('readSpeed','')" },
+      buildFilterDd('st-speed', t('f_read_speed'), sf.readSpeed, [
+        { val: '', label: t('f_all'), fn: "setStorageFilter('readSpeed','')" },
         ...speeds.map(n => ({ val: String(n), label: fmtSpeed(n), fn: `setStorageFilter('readSpeed','${n}')` })),
       ]),
     ].join('');
@@ -497,16 +499,16 @@ async function renderBrandChips() {
                           .sort((a, b) => parseInt(a) - parseInt(b));
 
     bar.innerHTML = [
-      buildFilterDd('brand', 'Бренд', state.brandFilter, [
-        { val: '', label: 'Все', fn: "setBrand('')" },
+      buildFilterDd('brand', t('f_brand'), state.brandFilter, [
+        { val: '', label: t('f_all'), fn: "setBrand('')" },
         ...brands.map(b => ({ val: b, label: b, fn: `setBrand('${b}')` })),
       ]),
-      !mbLock && buildFilterDd('ram-type', 'Тип', state.ramFilters.ramType, [
-        { val: '', label: 'Все', fn: "setRamFilter('ramType','')" },
-        ...ramTypes.map(t => ({ val: t, label: t, fn: `setRamFilter('ramType','${t}')` })),
+      !mbLock && buildFilterDd('ram-type', t('f_type'), state.ramFilters.ramType, [
+        { val: '', label: t('f_all'), fn: "setRamFilter('ramType','')" },
+        ...ramTypes.map(rt => ({ val: rt, label: rt, fn: `setRamFilter('ramType','${rt}')` })),
       ]),
-      buildFilterDd('ram-cap', 'Объём', state.ramFilters.capacity, [
-        { val: '', label: 'Все', fn: "setRamFilter('capacity','')" },
+      buildFilterDd('ram-cap', t('f_ram_volume'), state.ramFilters.capacity, [
+        { val: '', label: t('f_all'), fn: "setRamFilter('capacity','')" },
         ...capacities.map(c => ({ val: c, label: c, fn: `setRamFilter('capacity','${c}')` })),
       ]),
     ].filter(Boolean).join('');
@@ -526,28 +528,28 @@ async function renderBrandChips() {
     const chipsets    = [...new Set(afterSlots.map(c => c.chipset).filter(Boolean))].sort();
 
     bar.innerHTML = [
-      buildFilterDd('brand', 'Бренд', state.brandFilter, [
-        { val: '', label: 'Все', fn: "setBrand('')" },
+      buildFilterDd('brand', t('f_brand'), state.brandFilter, [
+        { val: '', label: t('f_all'), fn: "setBrand('')" },
         ...brands.map(b => ({ val: b, label: b, fn: `setBrand('${b}')` })),
       ]),
-      !cpuLock && buildFilterDd('mb-socket', 'Сокет', state.mbFilters.socket, [
-        { val: '', label: 'Все', fn: "setMbFilter('socket','')" },
+      !cpuLock && buildFilterDd('mb-socket', t('f_socket'), state.mbFilters.socket, [
+        { val: '', label: t('f_all'), fn: "setMbFilter('socket','')" },
         ...sockets.map(s => ({ val: s, label: s, fn: `setMbFilter('socket','${s}')` })),
       ]),
-      buildFilterDd('mb-form', 'Форм-фактор', state.mbFilters.formFactor, [
-        { val: '', label: 'Все', fn: "setMbFilter('formFactor','')" },
+      buildFilterDd('mb-form', t('f_form_factor'), state.mbFilters.formFactor, [
+        { val: '', label: t('f_all'), fn: "setMbFilter('formFactor','')" },
         ...factors.map(f => ({ val: f, label: f, fn: `setMbFilter('formFactor','${f}')` })),
       ]),
-      buildFilterDd('mb-ram', 'Тип памяти', state.mbFilters.ramType, [
-        { val: '', label: 'Все', fn: "setMbFilter('ramType','')" },
+      buildFilterDd('mb-ram', t('f_memory_type'), state.mbFilters.ramType, [
+        { val: '', label: t('f_all'), fn: "setMbFilter('ramType','')" },
         ...ramTypes.map(r => ({ val: r, label: r, fn: `setMbFilter('ramType','${r}')` })),
       ]),
-      buildFilterDd('mb-slots', 'Слоты RAM', state.mbFilters.ramSlots, [
-        { val: '', label: 'Все', fn: "setMbFilter('ramSlots','')" },
-        ...slotCounts.map(n => ({ val: String(n), label: `${n} слота`, fn: `setMbFilter('ramSlots','${n}')` })),
+      buildFilterDd('mb-slots', t('f_ram_slots'), state.mbFilters.ramSlots, [
+        { val: '', label: t('f_all'), fn: "setMbFilter('ramSlots','')" },
+        ...slotCounts.map(n => ({ val: String(n), label: t('f_ram_slots_n', {n}), fn: `setMbFilter('ramSlots','${n}')` })),
       ]),
-      buildFilterDd('mb-chipset', 'Чипсет', state.mbFilters.chipset, [
-        { val: '', label: 'Все', fn: "setMbFilter('chipset','')" },
+      buildFilterDd('mb-chipset', t('f_chipset'), state.mbFilters.chipset, [
+        { val: '', label: t('f_all'), fn: "setMbFilter('chipset','')" },
         ...chipsets.map(c => ({ val: c, label: c, fn: `setMbFilter('chipset','${c}')` })),
       ]),
     ].filter(Boolean).join('');
@@ -562,23 +564,23 @@ async function renderBrandChips() {
     const afterVram  = state.gpuFilters.vram ? afterPart.filter(c => gpuVram(c.specs) === state.gpuFilters.vram) : afterPart;
     const fansList   = [...new Set(afterVram.map(c => gpuFans(c.specs)).filter(Boolean))].sort();
 
-    const fansLabel  = v => v === 'AIO' ? 'Жидкостное' : `${v} вентилятора`;
+    const fansLabel  = v => v === 'AIO' ? t('fv_liquid') : `${v} ${t('f_fans').toLowerCase()}`;
 
     bar.innerHTML = [
-      buildFilterDd('chip', 'Чип', state.chipFilter, [
-        { val: '', label: 'Все', fn: "setChip('')" },
+      buildFilterDd('chip', t('f_chip'), state.chipFilter, [
+        { val: '', label: t('f_all'), fn: "setChip('')" },
         ...chips.map(b => ({ val: b, label: b, fn: `setChip('${b}')` })),
       ]),
-      buildFilterDd('partner', 'Производитель', state.brandFilter, [
-        { val: '', label: 'Все', fn: "setBrand('')" },
+      buildFilterDd('partner', t('f_mfr'), state.brandFilter, [
+        { val: '', label: t('f_all'), fn: "setBrand('')" },
         ...partners.map(b => ({ val: b, label: b, fn: `setBrand('${b.replace(/'/g, "\\'")}')` })),
       ]),
-      buildFilterDd('gpu-vram', 'Память', state.gpuFilters.vram, [
-        { val: '', label: 'Все', fn: "setGpuFilter('vram','')" },
+      buildFilterDd('gpu-vram', t('f_memory'), state.gpuFilters.vram, [
+        { val: '', label: t('f_all'), fn: "setGpuFilter('vram','')" },
         ...vramList.map(v => ({ val: v, label: v, fn: `setGpuFilter('vram','${v}')` })),
       ]),
-      buildFilterDd('gpu-fans', 'Вентиляторы', state.gpuFilters.fans, [
-        { val: '', label: 'Все', fn: "setGpuFilter('fans','')" },
+      buildFilterDd('gpu-fans', t('f_fans'), state.gpuFilters.fans, [
+        { val: '', label: t('f_all'), fn: "setGpuFilter('fans','')" },
         ...fansList.map(v => ({ val: v, label: fansLabel(v), fn: `setGpuFilter('fans','${v}')` })),
       ]),
     ].join('');
@@ -591,27 +593,27 @@ async function renderBrandChips() {
     const fanSizes  = [...new Set(all.map(c => coolerFanSize(c.specs)).filter(Boolean))].sort();
     const lightings = [...new Set(all.map(c => c.specs[3]).filter(Boolean))].sort();
 
-    const typeLabel = v => v === 'air' ? 'Башенное' : 'AIO Водяное';
+    const typeLabel = v => v === 'air' ? t('fv_tower') : t('fv_aio');
 
     bar.innerHTML = [
-      buildFilterDd('brand', 'Бренд', state.brandFilter, [
-        { val: '', label: 'Все', fn: "setBrand('')" },
+      buildFilterDd('brand', t('f_brand'), state.brandFilter, [
+        { val: '', label: t('f_all'), fn: "setBrand('')" },
         ...brands.map(b => ({ val: b, label: b, fn: `setBrand('${b.replace(/'/g, "\\'")}')` })),
       ]),
-      buildFilterDd('cool-type', 'Тип', cf.type, [
-        { val: '', label: 'Все', fn: "setCoolerFilter('type','')" },
-        ...types.map(t => ({ val: t, label: typeLabel(t), fn: `setCoolerFilter('type','${t}')` })),
+      buildFilterDd('cool-type', t('f_type'), cf.type, [
+        { val: '', label: t('f_all'), fn: "setCoolerFilter('type','')" },
+        ...types.map(tp => ({ val: tp, label: typeLabel(tp), fn: `setCoolerFilter('type','${tp}')` })),
       ]),
-      buildFilterDd('cool-fans', 'Вентиляторы', cf.fanCount, [
-        { val: '', label: 'Все', fn: "setCoolerFilter('fanCount','')" },
-        ...fanCounts.map(n => ({ val: String(n), label: `${n} шт.`, fn: `setCoolerFilter('fanCount','${n}')` })),
+      buildFilterDd('cool-fans', t('f_fans'), cf.fanCount, [
+        { val: '', label: t('f_all'), fn: "setCoolerFilter('fanCount','')" },
+        ...fanCounts.map(n => ({ val: String(n), label: t('f_pieces_n', {n}), fn: `setCoolerFilter('fanCount','${n}')` })),
       ]),
-      buildFilterDd('cool-size', 'Размер вент.', cf.fanSize, [
-        { val: '', label: 'Все', fn: "setCoolerFilter('fanSize','')" },
+      buildFilterDd('cool-size', t('f_fan_size'), cf.fanSize, [
+        { val: '', label: t('f_all'), fn: "setCoolerFilter('fanSize','')" },
         ...fanSizes.map(s => ({ val: s, label: s, fn: `setCoolerFilter('fanSize','${s}')` })),
       ]),
-      buildFilterDd('cool-light', 'Подсветка', cf.lighting, [
-        { val: '', label: 'Все', fn: "setCoolerFilter('lighting','')" },
+      buildFilterDd('cool-light', t('f_lighting'), cf.lighting, [
+        { val: '', label: t('f_all'), fn: "setCoolerFilter('lighting','')" },
         ...lightings.map(l => ({ val: l, label: l, fn: `setCoolerFilter('lighting','${l.replace(/'/g, "\\'")}')` })),
       ]),
     ].join('');
@@ -624,24 +626,24 @@ async function renderBrandChips() {
     const ratings  = [...new Set(all.map(c => psuRating(c.specs)).filter(Boolean))].sort();
     const modulars = [...new Set(all.map(c => psuModular(c.specs)).filter(Boolean))].sort();
     const modularLabel = v =>
-      v === 'Fully Modular' ? 'Полностью модульный' :
-      v === 'Semi-Modular'  ? 'Частично модульный'  : 'Немодульный';
+      v === 'Fully Modular' ? t('fv_fully_modular') :
+      v === 'Semi-Modular'  ? t('fv_semi_modular')  : t('fv_non_modular');
 
     bar.innerHTML = [
-      buildFilterDd('brand', 'Бренд', state.brandFilter, [
-        { val: '', label: 'Все', fn: "setBrand('')" },
+      buildFilterDd('brand', t('f_brand'), state.brandFilter, [
+        { val: '', label: t('f_all'), fn: "setBrand('')" },
         ...brands.map(b => ({ val: b, label: b, fn: `setBrand('${b.replace(/'/g, "\\'")}')` })),
       ]),
-      buildFilterDd('psu-watt', 'Мощность', pf.wattage, [
-        { val: '', label: 'Все', fn: "setPsuFilter('wattage','')" },
+      buildFilterDd('psu-watt', t('f_wattage'), pf.wattage, [
+        { val: '', label: t('f_all'), fn: "setPsuFilter('wattage','')" },
         ...wattages.map(w => ({ val: w, label: w, fn: `setPsuFilter('wattage','${w}')` })),
       ]),
-      buildFilterDd('psu-rating', 'Стандарт', pf.rating, [
-        { val: '', label: 'Все', fn: "setPsuFilter('rating','')" },
+      buildFilterDd('psu-rating', t('f_standard'), pf.rating, [
+        { val: '', label: t('f_all'), fn: "setPsuFilter('rating','')" },
         ...ratings.map(r => ({ val: r, label: r, fn: `setPsuFilter('rating','${r}')` })),
       ]),
-      buildFilterDd('psu-modular', 'Модульность', pf.modular, [
-        { val: '', label: 'Все', fn: "setPsuFilter('modular','')" },
+      buildFilterDd('psu-modular', t('f_modular'), pf.modular, [
+        { val: '', label: t('f_all'), fn: "setPsuFilter('modular','')" },
         ...modulars.map(m => ({ val: m, label: modularLabel(m), fn: `setPsuFilter('modular','${m}')` })),
       ]),
     ].join('');
@@ -654,28 +656,28 @@ async function renderBrandChips() {
     const fanCounts   = [...new Set(all.map(c => caseFanCount(c.specs)))].sort((a, b) => a - b);
 
     bar.innerHTML = [
-      buildFilterDd('brand', 'Бренд', state.brandFilter, [
-        { val: '', label: 'Все', fn: "setBrand('')" },
+      buildFilterDd('brand', t('f_brand'), state.brandFilter, [
+        { val: '', label: t('f_all'), fn: "setBrand('')" },
         ...brands.map(b => ({ val: b, label: b, fn: `setBrand('${b.replace(/'/g, "\\'")}')` })),
       ]),
-      buildFilterDd('case-ff', 'Форм-фактор', cf.formFactor, [
-        { val: '', label: 'Все', fn: "setCaseFilter('formFactor','')" },
+      buildFilterDd('case-ff', t('f_form_factor'), cf.formFactor, [
+        { val: '', label: t('f_all'), fn: "setCaseFilter('formFactor','')" },
         ...formFactors.map(f => ({ val: f, label: f, fn: `setCaseFilter('formFactor','${f}')` })),
       ]),
-      buildFilterDd('case-style', 'Стиль', cf.style, [
-        { val: '', label: 'Все', fn: "setCaseFilter('style','')" },
+      buildFilterDd('case-style', t('f_style'), cf.style, [
+        { val: '', label: t('f_all'), fn: "setCaseFilter('style','')" },
         ...styles.map(s => ({ val: s, label: s, fn: `setCaseFilter('style','${s}')` })),
       ]),
-      buildFilterDd('case-fans', 'Вентиляторов', cf.fanCount, [
-        { val: '', label: 'Все', fn: "setCaseFilter('fanCount','')" },
-        ...fanCounts.map(n => ({ val: String(n), label: `${n} шт.`, fn: `setCaseFilter('fanCount','${n}')` })),
+      buildFilterDd('case-fans', t('f_fan_count'), cf.fanCount, [
+        { val: '', label: t('f_all'), fn: "setCaseFilter('fanCount','')" },
+        ...fanCounts.map(n => ({ val: String(n), label: t('f_pieces_n', {n}), fn: `setCaseFilter('fanCount','${n}')` })),
       ]),
     ].join('');
 
   } else {
     const brands = [...new Set(all.map(c => c.brand))].sort();
-    bar.innerHTML = buildFilterDd('brand', 'Бренд', state.brandFilter, [
-      { val: '', label: 'Все', fn: "setBrand('')" },
+    bar.innerHTML = buildFilterDd('brand', t('f_brand'), state.brandFilter, [
+      { val: '', label: t('f_all'), fn: "setBrand('')" },
       ...brands.map(b => ({ val: b, label: b, fn: `setBrand('${b.replace(/'/g, "\\'")}')` })),
     ]);
   }
@@ -690,20 +692,20 @@ function updateCompatHint() {
   let text  = '';
 
   if (state.currentStep === 'motherboard' && sel.cpu?.socket) {
-    text = `<i class="bi bi-link-45deg me-1"></i>Сокет <b>${sel.cpu.socket}</b> — только платы совместимые с <b>${sel.cpu.brand} ${sel.cpu.name}</b>`;
+    text = `<i class="bi bi-link-45deg me-1"></i>${t('compat_mb', { socket: sel.cpu.socket, name: `${sel.cpu.brand} ${sel.cpu.name}` })}`;
   } else if (state.currentStep === 'cpu' && sel.motherboard?.socket) {
-    text = `<i class="bi bi-link-45deg me-1"></i>Сокет <b>${sel.motherboard.socket}</b> — только процессоры совместимые с <b>${sel.motherboard.brand} ${sel.motherboard.name}</b>`;
+    text = `<i class="bi bi-link-45deg me-1"></i>${t('compat_cpu', { socket: sel.motherboard.socket, name: `${sel.motherboard.brand} ${sel.motherboard.name}` })}`;
   } else if (state.currentStep === 'ram') {
     const kits = state.selected.ram || [];
     const max  = getMaxRamKits();
-    const slot = `Слоты: <b>${kits.length}/${max}</b>`;
     if (sel.motherboard?.ramType) {
-      text = `<i class="bi bi-link-45deg me-1"></i>Только <b>${sel.motherboard.ramType}</b> — <b>${sel.motherboard.brand} ${sel.motherboard.name}</b> · ${slot}`;
+      text = `<i class="bi bi-link-45deg me-1"></i>${t('compat_ram_locked', { type: sel.motherboard.ramType, name: `${sel.motherboard.brand} ${sel.motherboard.name}`, used: kits.length, max })}`;
     } else {
-      text = `<i class="bi bi-memory me-1"></i>${slot} комплект${max > 1 ? 'а' : ''} RAM`;
+      const suffix = currentLang === 'ru' ? pluralRu(max, 'а', 'а', 'ов') : (max !== 1 ? 's' : '');
+      text = `<i class="bi bi-memory me-1"></i>${t('compat_ram_slots', { used: kits.length, max, suffix })}`;
     }
   } else if (state.currentStep === 'case' && sel.motherboard?.formFactor) {
-    text = `<i class="bi bi-link-45deg me-1"></i>Только корпуса поддерживающие <b>${sel.motherboard.formFactor}</b> — совместимость с <b>${sel.motherboard.brand} ${sel.motherboard.name}</b>`;
+    text = `<i class="bi bi-link-45deg me-1"></i>${t('compat_case', { ff: sel.motherboard.formFactor, name: `${sel.motherboard.brand} ${sel.motherboard.name}` })}`;
   }
 
   if (text) {
@@ -800,7 +802,7 @@ async function renderComponentGrid() {
   grid.innerHTML = `
     <div class="col-12 text-center py-5">
       <div class="spinner-border" style="color:var(--cyan)" role="status">
-        <span class="visually-hidden">Загрузка...</span>
+        <span class="visually-hidden">${t('loading')}</span>
       </div>
     </div>`;
 
@@ -810,16 +812,17 @@ async function renderComponentGrid() {
   const maxKits = isRam ? getMaxRamKits() : 1;
   const isFull  = isRam && ramKits.length >= maxKits;
 
-  document.getElementById('resultsCount').textContent =
-    `${list.length} позиц${pluralRu(list.length, 'ия', 'ии', 'ий')}`;
+  document.getElementById('resultsCount').textContent = currentLang === 'ru'
+    ? `${list.length} позиц${pluralRu(list.length, 'ия', 'ии', 'ий')}`
+    : `${list.length} item${list.length !== 1 ? 's' : ''}`;
 
   if (!list.length) {
     grid.innerHTML = `
       <div class="col-12">
         <div class="empty-state">
           <i class="bi bi-search"></i>
-          <h5>Ничего не найдено</h5>
-          <p class="text-muted">Попробуйте изменить параметры поиска</p>
+          <h5>${t('nothing_found')}</h5>
+          <p class="text-muted">${t('try_search')}</p>
         </div>
       </div>`;
     return;
@@ -832,17 +835,17 @@ async function renderComponentGrid() {
       isSel    = kitCount > 0;
       if (kitCount === 0) {
         btnText = isFull
-          ? '<i class="bi bi-x-circle me-1"></i>Слоты заняты'
-          : 'Добавить комплект';
+          ? `<i class="bi bi-x-circle me-1"></i>${t('slots_full')}`
+          : t('add_kit');
       } else if (!isFull) {
-        btnText = '<i class="bi bi-plus-lg me-1"></i>Добавить 2-й комплект';
+        btnText = `<i class="bi bi-plus-lg me-1"></i>${t('add_2nd_kit')}`;
       } else {
-        btnText = `<i class="bi bi-check-lg me-1"></i>Выбрано ×${kitCount}`;
+        btnText = `<i class="bi bi-check-lg me-1"></i>${t('selected')} ×${kitCount}`;
       }
     } else {
       kitCount = 0;
       isSel    = String(comp.id) === String(state.selected[state.currentStep]?.id);
-      btnText  = isSel ? '<i class="bi bi-check-lg me-1"></i>Выбрано' : 'Выбрать компонент';
+      btnText  = isSel ? `<i class="bi bi-check-lg me-1"></i>${t('selected')}` : t('select_component');
     }
     const badge = (isRam && kitCount > 1)
       ? `<div class="selected-badge">${kitCount}</div>`
@@ -855,7 +858,7 @@ async function renderComponentGrid() {
           ${badge}
           <button class="btn-compare${inCompare ? ' in-compare' : ''}"
                   onclick="event.stopPropagation();toggleCompare('${comp.id}')"
-                  title="${inCompare ? 'Убрать из сравнения' : 'Добавить в сравнение'}">
+                  title="${inCompare ? t('remove_from_compare') : t('add_to_compare')}">
             <i class="bi bi-bar-chart-line"></i>
           </button>
           <div class="card-img-area">
@@ -916,7 +919,7 @@ async function toggleComponent(compId) {
 // ─── Reset build ──────────────────────────────────────────────────────────────
 function resetBuild() {
   if (!Object.keys(state.selected).length) return;
-  if (!confirm('Сбросить всю сборку? Все выбранные компоненты будут удалены.')) return;
+  if (!confirm(t('reset_confirm'))) return;
   state.selected = {};
   persistBuild();
   renderSidebar();
@@ -956,37 +959,27 @@ function checkCompatibility() {
   const warnings = [];
 
   if (s.cpu && s.motherboard && s.cpu.socket !== s.motherboard.socket)
-    warnings.push(
-      `<i class="bi bi-x-circle-fill me-1"></i>` +
-      `Несовместимый сокет: CPU <b>${s.cpu.socket}</b> ≠ плата <b>${s.motherboard.socket}</b>`);
+    warnings.push(`<i class="bi bi-x-circle-fill me-1"></i>${t('warn_socket', { cpu: s.cpu.socket, mb: s.motherboard.socket })}`);
 
   if (s.ram && s.motherboard && s.motherboard.ramType) {
     (Array.isArray(s.ram) ? s.ram : [s.ram]).forEach(kit => {
       if (kit.ramType && kit.ramType !== s.motherboard.ramType)
-        warnings.push(
-          `<i class="bi bi-x-circle-fill me-1"></i>` +
-          `Несовместимая память: ОЗУ <b>${kit.ramType}</b> ≠ плата <b>${s.motherboard.ramType}</b>`);
+        warnings.push(`<i class="bi bi-x-circle-fill me-1"></i>${t('warn_ram', { ram: kit.ramType, mb: s.motherboard.ramType })}`);
     });
   }
 
   if (s.cpu && s.cooler && s.cooler.maxTdp < s.cpu.tdp)
-    warnings.push(
-      `<i class="bi bi-exclamation-triangle-fill me-1"></i>` +
-      `Охладитель рассчитан на <b>${s.cooler.maxTdp}W</b>, TDP процессора <b>${s.cpu.tdp}W</b>`);
+    warnings.push(`<i class="bi bi-exclamation-triangle-fill me-1"></i>${t('warn_cooler', { coolerTdp: s.cooler.maxTdp, cpuTdp: s.cpu.tdp })}`);
 
   if (s.motherboard && s.case) {
     if (!s.case.supportedFormFactors.includes(s.motherboard.formFactor))
-      warnings.push(
-        `<i class="bi bi-x-circle-fill me-1"></i>` +
-        `Корпус не поддерживает форм-фактор материнской платы <b>${s.motherboard.formFactor}</b>`);
+      warnings.push(`<i class="bi bi-x-circle-fill me-1"></i>${t('warn_case', { ff: s.motherboard.formFactor })}`);
   }
 
   if (s.cpu && s.gpu && s.psu) {
     const need = s.cpu.tdp + s.gpu.tdp + 150;
     if (need > s.psu.wattage)
-      warnings.push(
-        `<i class="bi bi-lightning-fill me-1"></i>` +
-        `Мощность БП <b>${s.psu.wattage}W</b> может быть недостаточной (нужно ~<b>${need}W</b>)`);
+      warnings.push(`<i class="bi bi-lightning-fill me-1"></i>${t('warn_psu', { psu: s.psu.wattage, need })}`);
   }
 
   const el = document.getElementById('compatWarning');
@@ -1011,7 +1004,7 @@ function renderSummary() {
       if (!kits || !kits.length) return `
         <div class="summary-row">
           <div class="summary-cat">${step.label}</div>
-          <div class="summary-comp-name"><span class="text-muted fst-italic">Не выбрано</span></div>
+          <div class="summary-comp-name"><span class="text-muted fst-italic">${t('not_selected')}</span></div>
           <div class="summary-comp-price">—</div>
         </div>`;
       const groups = [];
@@ -1030,7 +1023,7 @@ function renderSummary() {
       const nameStr = groups.map(g => {
         if (g.count === 1) return g.label;
         const totalGB = parseGB(g.vol) * g.count;
-        return `${g.label} ×${g.count}${totalGB ? ` (итого ${totalGB}GB)` : ''}`;
+        return `${g.label} ×${g.count}${totalGB ? ` (${t('total_gb')} ${totalGB}GB)` : ''}`;
       }).join(' + ');
       const totalPrice = groups.reduce((s, g) => s + g.total, 0);
       return `
@@ -1047,7 +1040,7 @@ function renderSummary() {
         <div class="summary-comp-name">
           ${comp
             ? `${comp.brand} ${comp.name}`
-            : `<span class="text-muted fst-italic">Не выбрано</span>`}
+            : `<span class="text-muted fst-italic">${t('not_selected')}</span>`}
         </div>
         <div class="summary-comp-price">${comp ? `$${Number(comp.price).toFixed(2)}` : '—'}</div>
       </div>`;
@@ -1065,15 +1058,15 @@ async function handleOrder() {
   }
 
   if (!items.length) {
-    alert('Сборка пустая. Выберите хотя бы один компонент.');
+    alert(t('build_empty'));
     return;
   }
 
   try {
-    const saved = await Api.createBuild({ name: 'Моя сборка', items });
-    alert(`Сборка #${saved.id} сохранена в базе данных!`);
+    const saved = await Api.createBuild({ name: t('build_name'), items });
+    alert(t('build_saved', { id: saved.id }));
   } catch {
-    alert('Ошибка сохранения. Убедитесь что бэкенд запущен (dotnet run).');
+    alert(t('build_error'));
   }
 }
 
@@ -1150,7 +1143,7 @@ function openCompareModal() {
 
   const priceRow = `
     <div class="compare-row">
-      <div class="compare-label">Цена</div>
+      <div class="compare-label">${t('price_label')}</div>
       ${list.map(c => `<div class="compare-cell compare-cell-price">$${Number(c.price).toFixed(2)}</div>`).join('')}
     </div>`;
 
@@ -1192,15 +1185,16 @@ function closeSortDropdown() {
 
 function resetSortDropdown() {
   closeSortDropdown();
-  document.getElementById('sortLabel').textContent = 'По умолчанию';
+  document.getElementById('sortLabel').textContent = t('sort_default');
   document.querySelectorAll('.sort-option').forEach(el => {
     el.classList.toggle('active', el.dataset.value === 'default');
   });
 }
 
-function setSortOption(value, label) {
+function setSortOption(value) {
+  const labels = { default: t('sort_default'), 'price-asc': t('sort_price_asc'), 'price-desc': t('sort_price_desc'), 'name-asc': t('sort_name_asc') };
   state.sortBy = value;
-  document.getElementById('sortLabel').textContent = label;
+  document.getElementById('sortLabel').textContent = labels[value] ?? value;
   document.querySelectorAll('.sort-option').forEach(el => {
     el.classList.toggle('active', el.dataset.value === value);
   });

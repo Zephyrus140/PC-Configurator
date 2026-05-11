@@ -21,6 +21,7 @@
     </button>
     <div class="logo-text">CYBER<span class="accent">RIG</span></div>
   </div>
+  <button class="lang-btn" id="langBtn" onclick="toggleLang()">EN</button>
 </nav>
 
 <!-- ═══ SIDEBAR OVERLAY (mobile) ══════════════════════════════════════════════ -->
@@ -31,17 +32,17 @@
 
   <!-- ─── SIDEBAR ─────────────────────────────────────────────────────────── -->
   <aside class="configurator-sidebar">
-    <div class="sidebar-heading">Шаги конфигурации</div>
+    <div class="sidebar-heading" data-i18n="sidebar_heading">Шаги конфигурации</div>
     <div id="sidebarSteps"></div>
     <div class="sidebar-footer">
       <div class="total-box">
-        <div class="total-box-label">Итоговая стоимость</div>
+        <div class="total-box-label" data-i18n="total_price">Итоговая стоимость</div>
         <div class="total-box-value" id="totalPriceSidebar">$0.00</div>
         <button class="btn btn-accent btn-sm w-100" id="btnSaveConfig">
-          <i class="bi bi-card-checklist me-1"></i>Просмотр сборки
+          <i class="bi bi-card-checklist me-1"></i><span data-i18n="view_build">Просмотр сборки</span>
         </button>
         <button class="btn btn-outline-secondary btn-sm w-100 mt-2" onclick="resetBuild()">
-          <i class="bi bi-arrow-counterclockwise me-1"></i>Сбросить сборку
+          <i class="bi bi-arrow-counterclockwise me-1"></i><span data-i18n="reset_build">Сбросить сборку</span>
         </button>
       </div>
     </div>
@@ -75,28 +76,28 @@
         <div class="col-12 col-md-5">
           <div class="input-group input-group-sm">
             <span class="input-group-text"><i class="bi bi-search"></i></span>
-            <input type="text" class="form-control" id="searchInput" placeholder="Поиск...">
+            <input type="text" class="form-control" id="searchInput" data-i18n="search_placeholder" placeholder="Поиск...">
           </div>
         </div>
         <div class="col-8 col-md-4">
           <div class="sort-dropdown" id="sortDropdown">
             <button class="sort-trigger" id="sortTrigger" onclick="toggleSortDropdown()">
               <i class="bi bi-funnel sort-trigger-icon"></i>
-              <span id="sortLabel">По умолчанию</span>
+              <span id="sortLabel" data-i18n="sort_default">По умолчанию</span>
               <i class="bi bi-chevron-down sort-arrow" id="sortArrow"></i>
             </button>
             <div class="sort-menu" id="sortMenu">
-              <div class="sort-option active" data-value="default" onclick="setSortOption('default','По умолчанию')">
-                <i class="bi bi-grid-3x3-gap"></i>По умолчанию
+              <div class="sort-option active" data-value="default" onclick="setSortOption('default')">
+                <i class="bi bi-grid-3x3-gap"></i><span data-i18n="sort_default">По умолчанию</span>
               </div>
-              <div class="sort-option" data-value="price-asc" onclick="setSortOption('price-asc','Цена: дешевле')">
-                <i class="bi bi-sort-up-alt"></i>Цена: дешевле
+              <div class="sort-option" data-value="price-asc" onclick="setSortOption('price-asc')">
+                <i class="bi bi-sort-up-alt"></i><span data-i18n="sort_price_asc">Цена: дешевле</span>
               </div>
-              <div class="sort-option" data-value="price-desc" onclick="setSortOption('price-desc','Цена: дороже')">
-                <i class="bi bi-sort-down"></i>Цена: дороже
+              <div class="sort-option" data-value="price-desc" onclick="setSortOption('price-desc')">
+                <i class="bi bi-sort-down"></i><span data-i18n="sort_price_desc">Цена: дороже</span>
               </div>
-              <div class="sort-option" data-value="name-asc" onclick="setSortOption('name-asc','Название: А–Я')">
-                <i class="bi bi-sort-alpha-down"></i>Название: А–Я
+              <div class="sort-option" data-value="name-asc" onclick="setSortOption('name-asc')">
+                <i class="bi bi-sort-alpha-down"></i><span data-i18n="sort_name_asc">Название: А–Я</span>
               </div>
             </div>
           </div>
@@ -113,10 +114,10 @@
     <!-- Bottom nav -->
     <div class="bottom-nav d-flex justify-content-between">
       <button class="btn btn-outline-secondary" id="btnPrevBottom" disabled>
-        <i class="bi bi-chevron-left me-1"></i>Предыдущий
+        <i class="bi bi-chevron-left me-1"></i><span data-i18n="btn_prev">Предыдущий</span>
       </button>
       <button class="btn btn-outline-light" id="btnNextBottom">
-        Следующий<i class="bi bi-chevron-right ms-1"></i>
+        <span data-i18n="btn_next">Следующий</span><i class="bi bi-chevron-right ms-1"></i>
       </button>
     </div>
 
@@ -129,7 +130,7 @@
   <div class="compare-bar-actions">
     <span class="compare-bar-count" id="compareBarCount">0 / 4</span>
     <button class="btn btn-accent btn-sm" id="btnOpenCompare" onclick="openCompareModal()" disabled>
-      <i class="bi bi-bar-chart-line me-1"></i>Сравнить
+      <i class="bi bi-bar-chart-line me-1"></i><span data-i18n="compare_btn">Сравнить</span>
     </button>
     <button class="btn btn-outline-secondary btn-sm" onclick="clearCompare()">
       <i class="bi bi-x-lg"></i>
@@ -143,13 +144,13 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">
-          <i class="bi bi-bar-chart-line me-2" style="color:var(--cyan)"></i>Сравнение компонентов
+          <i class="bi bi-bar-chart-line me-2" style="color:var(--cyan)"></i><span data-i18n="compare_title">Сравнение компонентов</span>
         </h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body p-0" id="compareBody"></div>
       <div class="modal-footer">
-        <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Закрыть</button>
+        <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal" data-i18n="close">Закрыть</button>
       </div>
     </div>
   </div>
@@ -162,19 +163,19 @@
       <div class="modal-header">
         <h5 class="modal-title">
           <span class="logo-text" style="font-size:1rem">CYBER<span class="accent">RIG</span></span>
-          &nbsp;— Ваша сборка
+          &nbsp;— <span data-i18n="your_build">Ваша сборка</span>
         </h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body" id="summaryBody"></div>
       <div class="modal-footer">
         <div class="me-auto d-flex align-items-baseline gap-2">
-          <span class="summary-total-label">Итого:</span>
+          <span class="summary-total-label" data-i18n="total_label">Итого:</span>
           <span class="summary-total-value" id="summaryTotal">$0.00</span>
         </div>
-        <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Закрыть</button>
+        <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal" data-i18n="close">Закрыть</button>
         <button class="btn btn-accent btn-sm" id="btnOrder">
-          <i class="bi bi-cart-check me-1"></i>Оформить заказ
+          <i class="bi bi-cart-check me-1"></i><span data-i18n="place_order">Оформить заказ</span>
         </button>
       </div>
     </div>
@@ -183,6 +184,7 @@
 
 <!-- ═══ SCRIPTS ═══════════════════════════════════════════════════════════════ -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/lang.js"></script>
 <script src="js/data.js"></script>
 <script src="js/api.js"></script>
 <script src="js/app.js"></script>
