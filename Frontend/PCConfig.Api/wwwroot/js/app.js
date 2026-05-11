@@ -321,9 +321,10 @@ function storageInterface(specs) {
 }
 
 function storageReadSpeed(specs) {
-  const s = specs.find(x => /Read/i.test(x));
+  const s = specs[2];
   if (!s) return 0;
-  return parseInt(s.replace(/\s/g, ''));
+  const m = s.replace(/\s/g, '').match(/(\d+)/);
+  return m ? parseInt(m[1]) : 0;
 }
 
 function fmtSpeed(n) {
@@ -345,9 +346,9 @@ function psuRating(specs) {
 }
 
 function psuModular(specs) {
-  if (specs.some(x => /Fully Modular/i.test(x))) return 'Fully Modular';
-  if (specs.some(x => /Semi-Modular/i.test(x)))  return 'Semi-Modular';
-  if (specs.some(x => /Non-Modular/i.test(x)))   return 'Non-Modular';
+  if (specs.some(x => /Полностью модульный/i.test(x))) return 'Полностью модульный';
+  if (specs.some(x => /Частично модульный/i.test(x)))  return 'Частично модульный';
+  if (specs.some(x => /Немодульный/i.test(x)))         return 'Немодульный';
   return '';
 }
 
@@ -626,8 +627,8 @@ async function renderBrandChips() {
     const ratings  = [...new Set(all.map(c => psuRating(c.specs)).filter(Boolean))].sort();
     const modulars = [...new Set(all.map(c => psuModular(c.specs)).filter(Boolean))].sort();
     const modularLabel = v =>
-      v === 'Fully Modular' ? t('fv_fully_modular') :
-      v === 'Semi-Modular'  ? t('fv_semi_modular')  : t('fv_non_modular');
+      v === 'Полностью модульный' ? t('fv_fully_modular') :
+      v === 'Частично модульный'  ? t('fv_semi_modular')  : t('fv_non_modular');
 
     bar.innerHTML = [
       buildFilterDd('brand', t('f_brand'), state.brandFilter, [
