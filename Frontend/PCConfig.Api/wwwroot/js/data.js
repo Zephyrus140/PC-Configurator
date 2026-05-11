@@ -441,30 +441,30 @@
   storage: [
     // ── Budget PCIe 3.0 ───────────────────────────────────────────────────────
     { id: 'storage-1', brand: 'Crucial', name: 'P3 1TB NVMe M.2 PCIe 3.0', price: 59.99,
-      specs: ['1TB', 'PCIe 3.0 NVMe M.2', '3 500 МБ/с', '3 000 МБ/с'] },
+      specs: ['1TB', 'PCIe 3.0 NVMe M.2', 'Чтение: 3 500 МБ/с', 'Запись: 3 000 МБ/с'] },
     { id: 'storage-2', brand: 'Kingston', name: 'NV3 2TB NVMe M.2 PCIe 4.0', price: 79.99,
-      specs: ['2TB', 'PCIe 4.0 NVMe M.2', '6 000 МБ/с', '4 000 МБ/с'] },
+      specs: ['2TB', 'PCIe 4.0 NVMe M.2', 'Чтение: 6 000 МБ/с', 'Запись: 4 000 МБ/с'] },
     // ── SATA SSD ──────────────────────────────────────────────────────────────
     { id: 'storage-3', brand: 'Samsung', name: '870 EVO 1TB SATA', price: 89.99,
-      specs: ['1TB', 'SATA III 2.5"', '560 МБ/с', '530 МБ/с'] },
+      specs: ['1TB', 'SATA III 2.5"', 'Чтение: 560 МБ/с', 'Запись: 530 МБ/с'] },
     { id: 'storage-4', brand: 'Crucial', name: 'MX500 2TB SATA', price: 99.99,
-      specs: ['2TB', 'SATA III 2.5"', '560 МБ/с', '510 МБ/с'] },
+      specs: ['2TB', 'SATA III 2.5"', 'Чтение: 560 МБ/с', 'Запись: 510 МБ/с'] },
     // ── PCIe 4.0 Mid ──────────────────────────────────────────────────────────
     { id: 'storage-5', brand: 'Crucial', name: 'P3 Plus 2TB NVMe M.2', price: 89.99,
-      specs: ['2TB', 'PCIe 4.0 NVMe M.2', '5 000 МБ/с', '4 200 МБ/с'] },
+      specs: ['2TB', 'PCIe 4.0 NVMe M.2', 'Чтение: 5 000 МБ/с', 'Запись: 4 200 МБ/с'] },
     { id: 'storage-6', brand: 'WD', name: 'Black SN850X 1TB NVMe M.2', price: 99.99,
-      specs: ['1TB', 'PCIe 4.0 NVMe M.2', '7 300 МБ/с', '6 600 МБ/с'] },
+      specs: ['1TB', 'PCIe 4.0 NVMe M.2', 'Чтение: 7 300 МБ/с', 'Запись: 6 600 МБ/с'] },
     { id: 'storage-7', brand: 'Samsung', name: '990 Pro 1TB NVMe M.2', price: 109.99,
-      specs: ['1TB', 'PCIe 4.0 NVMe M.2', '7 450 МБ/с', '6 900 МБ/с'] },
+      specs: ['1TB', 'PCIe 4.0 NVMe M.2', 'Чтение: 7 450 МБ/с', 'Запись: 6 900 МБ/с'] },
     { id: 'storage-8', brand: 'Seagate', name: 'FireCuda 530 2TB NVMe M.2', price: 149.99,
-      specs: ['2TB', 'PCIe 4.0 NVMe M.2', '7 300 МБ/с', '6 900 МБ/с'] },
+      specs: ['2TB', 'PCIe 4.0 NVMe M.2', 'Чтение: 7 300 МБ/с', 'Запись: 6 900 МБ/с'] },
     { id: 'storage-9', brand: 'Samsung', name: '990 Pro 2TB NVMe M.2', price: 199.99,
-      specs: ['2TB', 'PCIe 4.0 NVMe M.2', '7 450 МБ/с', '6 900 МБ/с'] },
+      specs: ['2TB', 'PCIe 4.0 NVMe M.2', 'Чтение: 7 450 МБ/с', 'Запись: 6 900 МБ/с'] },
     // ── High Capacity ─────────────────────────────────────────────────────────
     { id: 'storage-10', brand: 'WD', name: 'Black SN850X 4TB NVMe M.2', price: 329.99,
-      specs: ['4TB', 'PCIe 4.0 NVMe M.2', '7 300 МБ/с', '6 600 МБ/с'] },
+      specs: ['4TB', 'PCIe 4.0 NVMe M.2', 'Чтение: 7 300 МБ/с', 'Запись: 6 600 МБ/с'] },
     { id: 'storage-11', brand: 'Samsung', name: '990 Pro 4TB NVMe M.2', price: 349.99,
-      specs: ['4TB', 'PCIe 4.0 NVMe M.2', '7 450 МБ/с', '6 900 МБ/с'] },
+      specs: ['4TB', 'PCIe 4.0 NVMe M.2', 'Чтение: 7 450 МБ/с', 'Запись: 6 900 МБ/с'] },
   ],
 
   psu: [
