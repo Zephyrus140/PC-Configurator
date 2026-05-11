@@ -871,7 +871,7 @@ async function renderComponentGrid() {
             <div class="comp-brand">${comp.brand}</div>
             <div class="comp-name">${comp.name}</div>
             <div class="comp-specs flex-grow-1">
-              ${comp.specs.map(s => `<span class="spec-tag">${s}</span>`).join('')}
+              ${comp.specs.map(s => `<span class="spec-tag">${translateSpec(s)}</span>`).join('')}
             </div>
             <div class="comp-price">$${Number(comp.price).toFixed(2)}</div>
             <button class="btn-select${isSel ? ' selected' : ''}"
@@ -1150,7 +1150,7 @@ function openCompareModal() {
 
   const specRows = Array.from({ length: maxSpecs }, (_, i) => {
     const label  = labels[i] || `·`;
-    const values = list.map(c => c.specs[i] || '—');
+    const values = list.map(c => translateSpec(c.specs[i] || '—'));
     return `
       <div class="compare-row${i % 2 === 1 ? ' compare-row-alt' : ''}">
         <div class="compare-label">${label}</div>

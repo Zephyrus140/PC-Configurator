@@ -259,6 +259,34 @@ function tArr(key) {
   return LANG[currentLang]?.[key] ?? LANG.ru[key] ?? [];
 }
 
+// ─── Spec value translator (RU data → EN display) ────────────────────────────
+function translateSpec(s) {
+  if (currentLang === 'ru') return s;
+  return s
+    // CPU
+    .replace(/(\d+) ядер \/ (\d+) потоков/, '$1 Cores / $2 Threads')
+    // PSU
+    .replace('Полностью модульный', 'Fully Modular')
+    .replace('Частично модульный', 'Semi-Modular')
+    .replace('Немодульный',        'Non-Modular')
+    .replace(/Гарантия (\d+) лет/, '$1 Year Warranty')
+    // Storage
+    .replace(/Чтение: (.+) МБ\/с/, 'Read: $1 MB/s')
+    .replace(/Запись: (.+) МБ\/с/,  'Write: $1 MB/s')
+    // Cooler
+    .replace('Башенное',    'Tower')
+    .replace('AIO Водяное', 'AIO Liquid')
+    .replace(/(\d+) тепловые трубки/, '$1 Heat Pipes')
+    .replace(/(\d+) тепловых трубок/, '$1 Heat Pipes')
+    .replace('Без подсветки', 'No Lighting')
+    .replace(' дБ', ' dB')
+    // Motherboard
+    .replace(/(\d+)× DDR(\d) слота/, '$1× DDR$2 Slots')
+    .replace(/DDR(\d) до (\d+MHz)/, 'DDR$1 up to $2')
+    .replace('Бюджет',        'Budget')
+    .replace('Стальная крышка', 'Steel Shield');
+}
+
 // ─── Apply static labels (data-i18n elements) ─────────────────────────────────
 function applyStaticLang() {
   document.querySelectorAll('[data-i18n]').forEach(el => {
