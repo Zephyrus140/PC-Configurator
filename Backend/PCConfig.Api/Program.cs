@@ -24,12 +24,10 @@ builder.Services.AddCors(opt =>
 // ── App ───────────────────────────────────────────────────────────────────────
 var app = builder.Build();
 
-// Create DB and seed on startup.
-// Switch to db.Database.MigrateAsync() after running: dotnet ef migrations add InitialCreate
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    await db.Database.EnsureCreatedAsync();
+    await db.Database.MigrateAsync();
     await DataSeeder.SeedAsync(db);
 }
 
