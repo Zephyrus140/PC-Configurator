@@ -32,62 +32,62 @@ public static class DataSeeder
 
             // Budget AM4
             new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 5 5600",    Price = 109.99m,
-                SpecsJson = S("6 Cores / 12 Threads","AM4 Socket","3.5 / 4.4 GHz","65W TDP","32MB L3 Cache"),
+                SpecsJson = S("6 ядер / 12 потоков","AM4 Socket","3.5 / 4.4 GHz","65W TDP","32MB L3 Cache"),
                 Socket = "AM4",     Tdp = 65,  Image = "img/cpu/cpu-1.png" },
             new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 5 5600X",   Price = 129.99m,
-                SpecsJson = S("6 Cores / 12 Threads","AM4 Socket","3.7 / 4.6 GHz","65W TDP","32MB L3 Cache"),
+                SpecsJson = S("6 ядер / 12 потоков","AM4 Socket","3.7 / 4.6 GHz","65W TDP","32MB L3 Cache"),
                 Socket = "AM4",     Tdp = 65,  Image = "img/cpu/cpu-2.png" },
             new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 7 5700X",   Price = 149.99m,
-                SpecsJson = S("8 Cores / 16 Threads","AM4 Socket","3.4 / 4.6 GHz","65W TDP","32MB L3 Cache"),
+                SpecsJson = S("8 ядер / 16 потоков","AM4 Socket","3.4 / 4.6 GHz","65W TDP","32MB L3 Cache"),
                 Socket = "AM4",     Tdp = 65,  Image = "img/cpu/cpu-3.png" },
 
             // Budget Intel LGA1700
             new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i3-14100F",  Price = 109.99m,
-                SpecsJson = S("4 Cores / 8 Threads","LGA1700 Socket","3.5 / 4.7 GHz","58W TDP","No iGPU"),
+                SpecsJson = S("4 ядра / 8 потоков","LGA1700 Socket","3.5 / 4.7 GHz","58W TDP","No iGPU"),
                 Socket = "LGA1700", Tdp = 58,  Image = "img/cpu/cpu-4.png" },
             new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i5-13400F",  Price = 159.99m,
-                SpecsJson = S("10 Cores / 16 Threads","LGA1700 Socket","2.5 / 4.6 GHz","65W TDP","No iGPU"),
+                SpecsJson = S("10 ядер / 16 потоков","LGA1700 Socket","2.5 / 4.6 GHz","65W TDP","No iGPU"),
                 Socket = "LGA1700", Tdp = 65,  Image = "img/cpu/cpu-5.png" },
 
             // Budget AM5
             new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 5 7500F",   Price = 149.99m,
-                SpecsJson = S("6 Cores / 12 Threads","AM5 Socket","3.7 / 5.0 GHz","65W TDP","No iGPU"),
+                SpecsJson = S("6 ядер / 12 потоков","AM5 Socket","3.7 / 5.0 GHz","65W TDP","No iGPU"),
                 Socket = "AM5",     Tdp = 65,  Image = "img/cpu/cpu-6.png" },
             new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 5 7600",    Price = 179.99m,
-                SpecsJson = S("6 Cores / 12 Threads","AM5 Socket","3.8 / 5.1 GHz","65W TDP","32MB L3 Cache"),
+                SpecsJson = S("6 ядер / 12 потоков","AM5 Socket","3.8 / 5.1 GHz","65W TDP","32MB L3 Cache"),
                 Socket = "AM5",     Tdp = 65,  Image = "img/cpu/cpu-7.png" },
 
             // Mid-range
             new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 5 7600X",   Price = 229.99m,
-                SpecsJson = S("6 Cores / 12 Threads","AM5 Socket","4.7 / 5.3 GHz","105W TDP","32MB L3 Cache"),
+                SpecsJson = S("6 ядер / 12 потоков","AM5 Socket","4.7 / 5.3 GHz","105W TDP","32MB L3 Cache"),
                 Socket = "AM5",     Tdp = 105, Image = "img/cpu/cpu-8.png" },
             new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i5-14600K",  Price = 289.99m,
-                SpecsJson = S("14 Cores / 20 Threads","LGA1700 Socket","3.5 / 5.3 GHz","125W TDP","24MB L3 Cache"),
+                SpecsJson = S("14 ядер / 20 потоков","LGA1700 Socket","3.5 / 5.3 GHz","125W TDP","24MB L3 Cache"),
                 Socket = "LGA1700", Tdp = 125, Image = "img/cpu/cpu-9.png" },
             new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 7 7700X",   Price = 299.99m,
-                SpecsJson = S("8 Cores / 16 Threads","AM5 Socket","4.5 / 5.4 GHz","105W TDP","32MB L3 Cache"),
+                SpecsJson = S("8 ядер / 16 потоков","AM5 Socket","4.5 / 5.4 GHz","105W TDP","32MB L3 Cache"),
                 Socket = "AM5",     Tdp = 105, Image = "img/cpu/cpu-10.png" },
 
             // High-end gaming
             new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 7 7800X3D", Price = 389.99m,
-                SpecsJson = S("8 Cores / 16 Threads","AM5 Socket","4.5 / 5.0 GHz","120W TDP","96MB 3D V-Cache"),
+                SpecsJson = S("8 ядер / 16 потоков","AM5 Socket","4.5 / 5.0 GHz","120W TDP","96MB 3D V-Cache"),
                 Socket = "AM5",     Tdp = 120, Image = "img/cpu/cpu-11.png" },
             new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i7-14700K",  Price = 409.99m,
-                SpecsJson = S("20 Cores / 28 Threads","LGA1700 Socket","3.4 / 5.6 GHz","125W TDP","33MB L3 Cache"),
+                SpecsJson = S("20 ядер / 28 потоков","LGA1700 Socket","3.4 / 5.6 GHz","125W TDP","33MB L3 Cache"),
                 Socket = "LGA1700", Tdp = 125, Image = "img/cpu/cpu-12.png" },
             new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 9 7900X",   Price = 449.99m,
-                SpecsJson = S("12 Cores / 24 Threads","AM5 Socket","4.7 / 5.6 GHz","170W TDP","64MB L3 Cache"),
+                SpecsJson = S("12 ядер / 24 потока","AM5 Socket","4.7 / 5.6 GHz","170W TDP","64MB L3 Cache"),
                 Socket = "AM5",     Tdp = 170, Image = "img/cpu/cpu-13.png" },
 
             // Extreme
             new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i9-14900K",  Price = 549.99m,
-                SpecsJson = S("24 Cores / 32 Threads","LGA1700 Socket","3.2 / 6.0 GHz","125W TDP","36MB L3 Cache"),
+                SpecsJson = S("24 ядра / 32 потока","LGA1700 Socket","3.2 / 6.0 GHz","125W TDP","36MB L3 Cache"),
                 Socket = "LGA1700", Tdp = 125, Image = "img/cpu/cpu-14.png" },
             new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 9 7950X",   Price = 549.99m,
-                SpecsJson = S("16 Cores / 32 Threads","AM5 Socket","4.5 / 5.7 GHz","170W TDP","64MB L3 Cache"),
+                SpecsJson = S("16 ядер / 32 потока","AM5 Socket","4.5 / 5.7 GHz","170W TDP","64MB L3 Cache"),
                 Socket = "AM5",     Tdp = 170, Image = "img/cpu/cpu-15.png" },
             new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 9 7950X3D", Price = 699.99m,
-                SpecsJson = S("16 Cores / 32 Threads","AM5 Socket","4.2 / 5.7 GHz","120W TDP","128MB 3D V-Cache"),
+                SpecsJson = S("16 ядер / 32 потока","AM5 Socket","4.2 / 5.7 GHz","120W TDP","128MB 3D V-Cache"),
                 Socket = "AM5",     Tdp = 120, Image = "img/cpu/cpu-16.png" },
 
             // ── Motherboards ───────────────────────────────────────────────────
@@ -277,89 +277,89 @@ public static class DataSeeder
 
             // Budget PCIe 3.0
             new() { CategoryId = cat["storage"], Brand = "Crucial", Name = "P3 1TB NVMe M.2 PCIe 3.0",    Price = 59.99m,
-                SpecsJson = S("1TB","PCIe 3.0 NVMe M.2","3 500 MB/s Read","3 000 MB/s Write","Бюджет") },
+                SpecsJson = S("1TB","PCIe 3.0 NVMe M.2","Чтение: 3500 МБ/с","Запись: 3000 МБ/с","Бюджет") },
             new() { CategoryId = cat["storage"], Brand = "Kingston", Name = "NV3 2TB NVMe M.2 PCIe 4.0", Price = 79.99m,
-                SpecsJson = S("2TB","PCIe 4.0 NVMe M.2","6 000 MB/s Read","4 000 MB/s Write","Бюджет") },
+                SpecsJson = S("2TB","PCIe 4.0 NVMe M.2","Чтение: 6000 МБ/с","Запись: 4000 МБ/с","Бюджет") },
 
             // SATA
             new() { CategoryId = cat["storage"], Brand = "Samsung", Name = "870 EVO 1TB SATA",           Price = 89.99m,
-                SpecsJson = S("1TB","SATA III 2.5\"","560 MB/s Read","530 MB/s Write","MLC NAND") },
+                SpecsJson = S("1TB","SATA III 2.5\"","Чтение: 560 МБ/с","Запись: 530 МБ/с","MLC NAND") },
             new() { CategoryId = cat["storage"], Brand = "Crucial", Name = "MX500 2TB SATA",             Price = 99.99m,
-                SpecsJson = S("2TB","SATA III 2.5\"","560 MB/s Read","510 MB/s Write","5 Year Warranty") },
+                SpecsJson = S("2TB","SATA III 2.5\"","Чтение: 560 МБ/с","Запись: 510 МБ/с","Гарантия 5 лет") },
 
             // PCIe 4.0 Mid
             new() { CategoryId = cat["storage"], Brand = "Crucial", Name = "P3 Plus 2TB NVMe M.2",       Price = 89.99m,
-                SpecsJson = S("2TB","PCIe 4.0 NVMe M.2","5 000 MB/s Read","4 200 MB/s Write") },
+                SpecsJson = S("2TB","PCIe 4.0 NVMe M.2","Чтение: 5000 МБ/с","Запись: 4200 МБ/с") },
             new() { CategoryId = cat["storage"], Brand = "WD",      Name = "Black SN850X 1TB NVMe M.2",  Price = 99.99m,
-                SpecsJson = S("1TB","PCIe 4.0 NVMe M.2","7 300 MB/s Read","6 600 MB/s Write","GameMode 2.0") },
+                SpecsJson = S("1TB","PCIe 4.0 NVMe M.2","Чтение: 7300 МБ/с","Запись: 6600 МБ/с","GameMode 2.0") },
             new() { CategoryId = cat["storage"], Brand = "Samsung", Name = "990 Pro 1TB NVMe M.2",       Price = 109.99m,
-                SpecsJson = S("1TB","PCIe 4.0 NVMe M.2","7 450 MB/s Read","6 900 MB/s Write","V-NAND") },
+                SpecsJson = S("1TB","PCIe 4.0 NVMe M.2","Чтение: 7450 МБ/с","Запись: 6900 МБ/с","V-NAND") },
             new() { CategoryId = cat["storage"], Brand = "Seagate", Name = "FireCuda 530 2TB NVMe M.2",  Price = 149.99m,
-                SpecsJson = S("2TB","PCIe 4.0 NVMe M.2","7 300 MB/s Read","6 900 MB/s Write","Heatsink") },
+                SpecsJson = S("2TB","PCIe 4.0 NVMe M.2","Чтение: 7300 МБ/с","Запись: 6900 МБ/с","Heatsink") },
             new() { CategoryId = cat["storage"], Brand = "Samsung", Name = "990 Pro 2TB NVMe M.2",       Price = 199.99m,
-                SpecsJson = S("2TB","PCIe 4.0 NVMe M.2","7 450 MB/s Read","6 900 MB/s Write","V-NAND") },
+                SpecsJson = S("2TB","PCIe 4.0 NVMe M.2","Чтение: 7450 МБ/с","Запись: 6900 МБ/с","V-NAND") },
 
             // High Capacity
             new() { CategoryId = cat["storage"], Brand = "WD",      Name = "Black SN850X 4TB NVMe M.2",  Price = 329.99m,
-                SpecsJson = S("4TB","PCIe 4.0 NVMe M.2","7 300 MB/s Read","6 600 MB/s Write","GameMode 2.0") },
+                SpecsJson = S("4TB","PCIe 4.0 NVMe M.2","Чтение: 7300 МБ/с","Запись: 6600 МБ/с","GameMode 2.0") },
             new() { CategoryId = cat["storage"], Brand = "Samsung", Name = "990 Pro 4TB NVMe M.2",       Price = 349.99m,
-                SpecsJson = S("4TB","PCIe 4.0 NVMe M.2","7 450 MB/s Read","6 900 MB/s Write","V-NAND") },
+                SpecsJson = S("4TB","PCIe 4.0 NVMe M.2","Чтение: 7450 МБ/с","Запись: 6900 МБ/с","V-NAND") },
 
             // ── PSUs ───────────────────────────────────────────────────────────
 
             // Budget
             new() { CategoryId = cat["psu"], Brand = "Corsair",  Name = "CX650F 650W 80+ Bronze",          Price = 79.99m,
-                SpecsJson = S("650W","80+ Bronze","Fully Modular","ATX 3.0","5 Year Warranty"), Wattage = 650 },
+                SpecsJson = S("650W","80+ Bronze","Полностью модульный","ATX 3.0","Гарантия 5 лет"), Wattage = 650 },
             new() { CategoryId = cat["psu"], Brand = "Seasonic", Name = "Focus GX-550 550W 80+ Gold",      Price = 89.99m,
-                SpecsJson = S("550W","80+ Gold","Fully Modular","10 Year Warranty","Hybrid Fan"), Wattage = 550 },
+                SpecsJson = S("550W","80+ Gold","Полностью модульный","Гарантия 10 лет","Hybrid Fan"), Wattage = 550 },
 
             // Mid
             new() { CategoryId = cat["psu"], Brand = "Corsair",  Name = "RM750e 750W 80+ Gold",            Price = 99.99m,
-                SpecsJson = S("750W","80+ Gold","Fully Modular","ATX 3.0","Zero RPM Mode"), Wattage = 750 },
+                SpecsJson = S("750W","80+ Gold","Полностью модульный","ATX 3.0","Zero RPM Mode"), Wattage = 750 },
             new() { CategoryId = cat["psu"], Brand = "Seasonic", Name = "Focus GX-750 750W 80+ Gold",      Price = 109.99m,
-                SpecsJson = S("750W","80+ Gold","Fully Modular","10 Year Warranty","Hybrid Fan"), Wattage = 750 },
+                SpecsJson = S("750W","80+ Gold","Полностью модульный","Гарантия 10 лет","Hybrid Fan"), Wattage = 750 },
             new() { CategoryId = cat["psu"], Brand = "Corsair",  Name = "RM850e 850W 80+ Gold",            Price = 119.99m,
-                SpecsJson = S("850W","80+ Gold","Fully Modular","ATX 3.0","Zero RPM Mode"), Wattage = 850 },
+                SpecsJson = S("850W","80+ Gold","Полностью модульный","ATX 3.0","Zero RPM Mode"), Wattage = 850 },
             new() { CategoryId = cat["psu"], Brand = "EVGA",     Name = "SuperNOVA 850 G6 80+ Gold",       Price = 129.99m,
-                SpecsJson = S("850W","80+ Gold","Fully Modular","10 Year Warranty","ECO Mode"), Wattage = 850 },
+                SpecsJson = S("850W","80+ Gold","Полностью модульный","Гарантия 10 лет","ECO Mode"), Wattage = 850 },
             new() { CategoryId = cat["psu"], Brand = "be quiet!", Name = "Straight Power 11 1000W Platinum", Price = 179.99m,
-                SpecsJson = S("1000W","80+ Platinum","Fully Modular","Silent Wings Fan","5 Year Warranty"), Wattage = 1000 },
+                SpecsJson = S("1000W","80+ Platinum","Полностью модульный","Silent Wings Fan","Гарантия 5 лет"), Wattage = 1000 },
 
             // High-end
             new() { CategoryId = cat["psu"], Brand = "Corsair",  Name = "HX1000 1000W 80+ Platinum",       Price = 199.99m,
-                SpecsJson = S("1000W","80+ Platinum","Fully Modular","Zero RPM Mode","10 Year Warranty"), Wattage = 1000 },
+                SpecsJson = S("1000W","80+ Platinum","Полностью модульный","Zero RPM Mode","Гарантия 10 лет"), Wattage = 1000 },
             new() { CategoryId = cat["psu"], Brand = "be quiet!", Name = "Dark Power 13 1000W 80+ Titanium", Price = 229.99m,
-                SpecsJson = S("1000W","80+ Titanium","Fully Modular","Silent Wings 4","OC Key"), Wattage = 1000 },
+                SpecsJson = S("1000W","80+ Titanium","Полностью модульный","Silent Wings 4","OC Key"), Wattage = 1000 },
             new() { CategoryId = cat["psu"], Brand = "Seasonic", Name = "Prime TX-1000 1000W 80+ Titanium", Price = 269.99m,
-                SpecsJson = S("1000W","80+ Titanium","Fully Modular","12 Year Warranty","Fanless Mode"), Wattage = 1000 },
+                SpecsJson = S("1000W","80+ Titanium","Полностью модульный","Гарантия 12 лет","Fanless Mode"), Wattage = 1000 },
 
             // ── Coolers ────────────────────────────────────────────────────────
 
             // Budget Air
             new() { CategoryId = cat["cooler"], Brand = "ID-Cooling",   Name = "SE-224-XT",              Price = 29.99m,
-                SpecsJson = S("Single Tower Air","1x 120mm Fan","Up to 180W TDP","Бюджет"), MaxTdp = 180 },
+                SpecsJson = S("Башенное","1x 120mm Fan","Up to 180W TDP","Бюджет"), MaxTdp = 180 },
             new() { CategoryId = cat["cooler"], Brand = "Cooler Master", Name = "Hyper 212 Halo",         Price = 34.99m,
-                SpecsJson = S("Single Tower Air","1x 120mm ARGB Fan","Up to 150W TDP","4 тепловые трубки"), MaxTdp = 150 },
+                SpecsJson = S("Башенное","1x 120mm ARGB Fan","Up to 150W TDP","4 тепловые трубки"), MaxTdp = 150 },
             new() { CategoryId = cat["cooler"], Brand = "be quiet!",    Name = "Pure Rock 2",             Price = 39.99m,
-                SpecsJson = S("Single Tower Air","1x 120mm PWM Fan","Up to 150W TDP","Silent"), MaxTdp = 150 },
+                SpecsJson = S("Башенное","1x 120mm PWM Fan","Up to 150W TDP","Silent"), MaxTdp = 150 },
 
             // Mid Air
             new() { CategoryId = cat["cooler"], Brand = "DeepCool",     Name = "AK620",                  Price = 54.99m,
-                SpecsJson = S("Dual Tower Air","2x 120mm Fans","Up to 260W TDP","Отличное цена/качество"), MaxTdp = 260 },
+                SpecsJson = S("Башенное","2x 120mm Fans","Up to 260W TDP","Отличное цена/качество"), MaxTdp = 260 },
             new() { CategoryId = cat["cooler"], Brand = "be quiet!",    Name = "Dark Rock Pro 4",         Price = 89.99m,
-                SpecsJson = S("Dual Tower Air","3x 120mm Silent Wings","Up to 250W TDP"), MaxTdp = 250 },
+                SpecsJson = S("Башенное","3x 120mm Silent Wings","Up to 250W TDP"), MaxTdp = 250 },
             new() { CategoryId = cat["cooler"], Brand = "Noctua",       Name = "NH-D15",                  Price = 99.99m,
-                SpecsJson = S("Dual Tower Air","2x 140mm NF-A15 Fan","Up to 250W TDP","Лучший воздушник"), MaxTdp = 250 },
+                SpecsJson = S("Башенное","2x 140mm NF-A15 Fan","Up to 250W TDP","Лучший воздушник"), MaxTdp = 250 },
 
             // AIO
             new() { CategoryId = cat["cooler"], Brand = "Corsair",      Name = "H100i Elite Capellix 240mm", Price = 149.99m,
-                SpecsJson = S("240mm AIO","2x 120mm ARGB","Up to 300W TDP","LCD Pump Head"), MaxTdp = 300 },
+                SpecsJson = S("AIO Водяное 240mm","2x 120mm ARGB","Up to 300W TDP","LCD Pump Head"), MaxTdp = 300 },
             new() { CategoryId = cat["cooler"], Brand = "NZXT",         Name = "Kraken Z63 280mm",        Price = 179.99m,
-                SpecsJson = S("280mm AIO","2x 140mm Fan","Up to 300W TDP","LCD Pump Head"), MaxTdp = 300 },
+                SpecsJson = S("AIO Водяное 280mm","2x 140mm Fan","Up to 300W TDP","LCD Pump Head"), MaxTdp = 300 },
             new() { CategoryId = cat["cooler"], Brand = "Corsair",      Name = "H150i Elite Capellix 360mm", Price = 179.99m,
-                SpecsJson = S("360mm AIO","3x 120mm ARGB","Up to 350W TDP","LCD Pump Head"), MaxTdp = 350 },
+                SpecsJson = S("AIO Водяное 360mm","3x 120mm ARGB","Up to 350W TDP","LCD Pump Head"), MaxTdp = 350 },
             new() { CategoryId = cat["cooler"], Brand = "Corsair",      Name = "H170i Elite LCD 420mm",   Price = 229.99m,
-                SpecsJson = S("420mm AIO","3x 140mm ARGB","Up to 400W TDP","LCD Pump Head","Флагман"), MaxTdp = 400 },
+                SpecsJson = S("AIO Водяное 420mm","3x 140mm ARGB","Up to 400W TDP","LCD Pump Head","Флагман"), MaxTdp = 400 },
 
             // ── Cases ──────────────────────────────────────────────────────────
 
