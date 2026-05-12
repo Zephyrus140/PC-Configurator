@@ -46,5 +46,9 @@ const Api = (() => {
         return [];
       }
     },
+
+    async deleteBuild(id) {
+      await fetch(`${BASE}/builds/${id}`, { method: 'DELETE' });
+    },
   };
 })();

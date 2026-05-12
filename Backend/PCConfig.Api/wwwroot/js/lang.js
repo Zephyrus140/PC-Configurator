@@ -62,6 +62,15 @@ const LANG = {
     build_saved:   'Сборка #{id} сохранена в базе данных!',
     build_error:   'Ошибка сохранения. Убедитесь что бэкенд запущен (dotnet run).',
 
+    my_builds:          'Мои сборки',
+    my_builds_empty:    'Нет сохранённых сборок.',
+    my_builds_error:    'Не удалось загрузить сборки. Убедитесь что бэкенд запущен.',
+    build_date:         'Дата',
+    build_total:        'Итого',
+    build_delete:       'Удалить',
+    build_delete_confirm: 'Удалить сборку "{name}"?',
+    build_components:   'Компоненты',
+
     f_brand:       'Бренд',
     f_all:         'Все',
     f_socket:      'Сокет',
@@ -183,6 +192,15 @@ const LANG = {
     build_name:    'My Build',
     build_saved:   'Build #{id} saved to database!',
     build_error:   'Save error. Make sure the backend is running (dotnet run).',
+
+    my_builds:          'My Builds',
+    my_builds_empty:    'No saved builds.',
+    my_builds_error:    'Could not load builds. Make sure the backend is running.',
+    build_date:         'Date',
+    build_total:        'Total',
+    build_delete:       'Delete',
+    build_delete_confirm: 'Delete build "{name}"?',
+    build_components:   'Components',
 
     f_brand:       'Brand',
     f_all:         'All',

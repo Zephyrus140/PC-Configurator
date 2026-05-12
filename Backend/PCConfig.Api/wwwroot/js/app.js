@@ -1075,6 +1075,64 @@ async function handleOrder() {
   }
 }
 
+// ─── My Builds ───────────────────────────────────────────────────────────────
+async function openMyBuildsModal() {
+  const modal = new bootstrap.Modal(document.getElementById('myBuildsModal'));
+  modal.show();
+  await renderMyBuilds();
+}
+
+async function renderMyBuilds() {
+  const body = document.getElementById('myBuildsBody');
+  body.innerHTML = '<div class="text-center py-4"><div class="spinner-border text-info"></div></div>';
+
+  let builds;
+  try {
+    builds = await Api.getBuilds();
+  } catch {
+    body.innerHTML = `<p class="text-danger text-center py-3">${t('my_builds_error')}</p>`;
+    return;
+  }
+
+  if (!builds.length) {
+    body.innerHTML = `<p class="text-muted text-center py-4">${t('my_builds_empty')}</p>`;
+    return;
+  }
+
+  body.innerHTML = builds.map(b => {
+    const date = new Date(b.createdAt).toLocaleDateString(
+      currentLang === 'ru' ? 'ru-RU' : 'en-US',
+      { day: '2-digit', month: 'short', year: 'numeric' }
+    );
+    const items = b.items.map(i =>
+      `<li class="text-muted small">${i.componentName} <span class="text-info">$${i.price.toFixed(2)}</span></li>`
+    ).join('');
+
+    return `
+      <div class="build-card mb-3 p-3" data-build-id="${b.id}">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div>
+            <div class="build-card-name">${b.name}</div>
+            <div class="text-muted small">${t('build_date')}: ${date}</div>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <span class="build-card-total">$${b.totalPrice.toFixed(2)}</span>
+            <button class="btn btn-outline-danger btn-sm" onclick="deleteBuild(${b.id}, '${b.name.replace(/'/g, "\\'")}')">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+        <ul class="mb-0 ps-3">${items}</ul>
+      </div>`;
+  }).join('');
+}
+
+async function deleteBuild(id, name) {
+  if (!confirm(t('build_delete_confirm', { name }))) return;
+  await Api.deleteBuild(id);
+  await renderMyBuilds();
+}
+
 // ─── Compare ──────────────────────────────────────────────────────────────────
 async function toggleCompare(compId) {
   const all  = await loadStep(state.currentStep);

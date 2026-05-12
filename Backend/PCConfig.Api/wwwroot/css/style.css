@@ -54,6 +54,36 @@ body {
 }
 
 /* Language toggle */
+.my-builds-btn {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  line-height: 1;
+}
+.my-builds-btn:hover {
+  background: var(--surface-2);
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+.build-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color 0.2s;
+}
+.build-card:hover { border-color: rgba(0, 212, 255, 0.3); }
+.build-card-name  { font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text); }
+.build-card-total { font-family: 'Orbitron', monospace; font-size: 0.85rem; color: var(--cyan); white-space: nowrap; }
+
 .lang-btn {
   font-family: 'Orbitron', monospace;
   font-size: 0.65rem;

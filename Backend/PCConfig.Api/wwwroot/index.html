@@ -21,7 +21,10 @@
     </button>
     <div class="logo-text">CYBER<span class="accent">RIG</span></div>
   </div>
-  <button class="lang-btn" id="langBtn" onclick="toggleLang()">EN</button>
+  <div class="d-flex align-items-center gap-2">
+    <button class="my-builds-btn" onclick="openMyBuildsModal()" data-i18n="my_builds">Мои сборки</button>
+    <button class="lang-btn" id="langBtn" onclick="toggleLang()">EN</button>
+  </div>
 </nav>
 
 <!-- ═══ SIDEBAR OVERLAY (mobile) ══════════════════════════════════════════════ -->
@@ -177,6 +180,25 @@
         <button class="btn btn-accent btn-sm" id="btnOrder">
           <i class="bi bi-cart-check me-1"></i><span data-i18n="place_order">Оформить заказ</span>
         </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MY BUILDS MODAL ══════════════════════════════════════════════════════ -->
+<div class="modal fade" id="myBuildsModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-collection me-2" style="color:var(--cyan)"></i>
+          <span data-i18n="my_builds">Мои сборки</span>
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="myBuildsBody"></div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal" data-i18n="close">Закрыть</button>
       </div>
     </div>
   </div>
