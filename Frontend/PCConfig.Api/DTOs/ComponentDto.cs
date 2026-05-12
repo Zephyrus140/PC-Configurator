@@ -17,4 +17,5 @@ public class ComponentDto
     public string? RamType { get; set; }
     public List<string>? SupportedFormFactors { get; set; }
     public string? ChipBrand { get; set; }
+    public string? Image { get; set; }
 }

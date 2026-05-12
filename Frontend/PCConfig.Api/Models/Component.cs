@@ -18,6 +18,7 @@ public class Component
     public string? RamType { get; set; }                    // MB / RAM: "DDR5"
     public string? SupportedFormFactorsJson { get; set; }   // Case: JSON string[]
     public string? ChipBrand { get; set; }                   // GPU: "NVIDIA" | "AMD" | "Intel"
+    public string? Image { get; set; }                       // relative path: "img/cpu/cpu-1.png"
 
     public Category Category { get; set; } = null!;
     public ICollection<BuildItem> BuildItems { get; set; } = [];

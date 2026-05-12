@@ -51,5 +51,6 @@ public class ComponentService(AppDbContext db) : IComponentService
             ? JsonSerializer.Deserialize<List<string>>(c.SupportedFormFactorsJson)
             : null,
         ChipBrand = c.ChipBrand,
+        Image     = c.Image,
     };
 }
