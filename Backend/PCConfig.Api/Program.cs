@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PCConfig.Api.Data;
+using PCConfig.Api.Middleware;
 using PCConfig.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,6 +31,8 @@ using (var scope = app.Services.CreateScope())
     await db.Database.MigrateAsync();
     await DataSeeder.SeedAsync(db);
 }
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
