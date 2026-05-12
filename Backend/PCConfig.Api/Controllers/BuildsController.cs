@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using PCConfig.Api.DTOs;
 using PCConfig.Api.Services;
@@ -22,8 +23,15 @@ public class BuildsController(IBuildService service) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CreateBuildRequest request)
     {
-        var build = await service.CreateAsync(request);
-        return CreatedAtAction(nameof(GetById), new { id = build.Id }, build);
+        try
+        {
+            var build = await service.CreateAsync(request);
+            return CreatedAtAction(nameof(GetById), new { id = build.Id }, build);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
     }
 
     [HttpDelete("{id:int}")]

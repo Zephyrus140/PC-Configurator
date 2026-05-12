@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using PCConfig.Api.Data;
 using PCConfig.Api.DTOs;
@@ -32,6 +33,22 @@ public class BuildService(AppDbContext db) : IBuildService
         var componentMap = await db.Components
             .Where(c => componentIds.Contains(c.Id))
             .ToDictionaryAsync(c => c.Id);
+
+        // Проверяем что все компоненты существуют
+        var missing = componentIds.Except(componentMap.Keys).ToList();
+        if (missing.Count > 0)
+            throw new ValidationException($"Компоненты не найдены: {string.Join(", ", missing)}");
+
+        // Проверяем дубли категорий (RAM разрешён несколько раз)
+        var duplicates = request.Items
+            .Where(i => i.CategorySlug != "ram")
+            .GroupBy(i => i.CategorySlug)
+            .Where(g => g.Count() > 1)
+            .Select(g => g.Key)
+            .ToList();
+
+        if (duplicates.Count > 0)
+            throw new ValidationException($"Дублирующиеся категории: {string.Join(", ", duplicates)}");
 
         var build = new Build
         {
