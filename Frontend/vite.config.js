@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  root: 'PCConfig.Api/wwwroot',
+  root: '../Backend/PCConfig.Api/wwwroot',
 
   server: {
     port: 3000,
