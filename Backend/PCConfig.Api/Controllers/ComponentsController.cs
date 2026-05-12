@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PCConfig.Api.DTOs;
 using PCConfig.Api.Services;
 
 namespace PCConfig.Api.Controllers;
@@ -7,12 +8,10 @@ namespace PCConfig.Api.Controllers;
 [Route("api/[controller]")]
 public class ComponentsController(IComponentService service) : ControllerBase
 {
-    /// <summary>Returns all components, optionally filtered by category slug (e.g. "cpu", "gpu").</summary>
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] string? category)
-        => Ok(await service.GetAllAsync(category));
+    public async Task<IActionResult> GetAll([FromQuery] ComponentFilterDto filter)
+        => Ok(await service.GetAllAsync(filter));
 
-    /// <summary>Returns a single component by ID.</summary>
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {

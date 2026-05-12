@@ -8,21 +8,47 @@ namespace PCConfig.Api.Services;
 
 public class ComponentService(AppDbContext db) : IComponentService
 {
-    public async Task<IEnumerable<ComponentDto>> GetAllAsync(string? categorySlug = null)
+    public async Task<IEnumerable<ComponentDto>> GetAllAsync(ComponentFilterDto filter)
     {
         var query = db.Components
             .Include(c => c.Category)
             .AsQueryable();
 
-        if (!string.IsNullOrWhiteSpace(categorySlug))
-            query = query.Where(c => c.Category.Slug == categorySlug);
+        if (!string.IsNullOrWhiteSpace(filter.Category))
+            query = query.Where(c => c.Category.Slug == filter.Category);
 
-        var list = await query
-            .OrderBy(c => c.Brand)
-            .ThenBy(c => c.Name)
-            .ToListAsync();
+        if (!string.IsNullOrWhiteSpace(filter.Search))
+        {
+            var s = filter.Search.ToLower();
+            query = query.Where(c => c.Name.ToLower().Contains(s) || c.Brand.ToLower().Contains(s));
+        }
 
-        return list.Select(MapToDto);
+        if (!string.IsNullOrWhiteSpace(filter.Socket))
+            query = query.Where(c => c.Socket == filter.Socket);
+
+        if (!string.IsNullOrWhiteSpace(filter.FormFactor))
+            query = query.Where(c => c.FormFactor == filter.FormFactor);
+
+        if (!string.IsNullOrWhiteSpace(filter.RamType))
+            query = query.Where(c => c.RamType == filter.RamType);
+
+        if (!string.IsNullOrWhiteSpace(filter.ChipBrand))
+            query = query.Where(c => c.ChipBrand == filter.ChipBrand);
+
+        if (filter.MinPrice.HasValue)
+            query = query.Where(c => c.Price >= filter.MinPrice.Value);
+
+        if (filter.MaxPrice.HasValue)
+            query = query.Where(c => c.Price <= filter.MaxPrice.Value);
+
+        query = filter.SortBy switch
+        {
+            "price-asc"  => query.OrderBy(c => c.Price),
+            "price-desc" => query.OrderByDescending(c => c.Price),
+            _            => query.OrderBy(c => c.Brand).ThenBy(c => c.Name),
+        };
+
+        return (await query.ToListAsync()).Select(MapToDto);
     }
 
     public async Task<ComponentDto?> GetByIdAsync(int id)
