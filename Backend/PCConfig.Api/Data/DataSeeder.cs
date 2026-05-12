@@ -90,6 +90,130 @@ public static class DataSeeder
                 SpecsJson = S("16 ядер / 32 потока","AM5 Socket","4.2 / 5.7 GHz","120W TDP","128MB 3D V-Cache"),
                 Socket = "AM5",     Tdp = 120, Image = "img/cpu/cpu-16.png" },
 
+            // Additional AM4
+            new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 5 5500",       Price = 79.99m,
+                SpecsJson = S("6 ядер / 12 потоков","AM4 Socket","3.6 / 4.2 GHz","65W TDP","16MB L3 Cache"),
+                Socket = "AM4",     Tdp = 65,  Image = "img/cpu/cpu-17.png" },
+            new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 7 5800X3D",    Price = 249.99m,
+                SpecsJson = S("8 ядер / 16 потоков","AM4 Socket","3.4 / 4.5 GHz","105W TDP","96MB 3D V-Cache"),
+                Socket = "AM4",     Tdp = 105, Image = "img/cpu/cpu-18.png" },
+
+            // Additional Intel LGA1700
+            new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i3-12100F",     Price = 79.99m,
+                SpecsJson = S("4 ядра / 8 потоков","LGA1700 Socket","3.3 / 4.3 GHz","58W TDP","12MB L3 Cache"),
+                Socket = "LGA1700", Tdp = 58,  Image = "img/cpu/cpu-19.png" },
+            new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i5-12400F",     Price = 129.99m,
+                SpecsJson = S("6 ядер / 12 потоков","LGA1700 Socket","2.5 / 4.4 GHz","65W TDP","18MB L3 Cache"),
+                Socket = "LGA1700", Tdp = 65,  Image = "img/cpu/cpu-20.png" },
+            new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i5-14400F",     Price = 169.99m,
+                SpecsJson = S("10 ядер / 16 потоков","LGA1700 Socket","2.5 / 4.7 GHz","65W TDP","20MB L3 Cache"),
+                Socket = "LGA1700", Tdp = 65,  Image = "img/cpu/cpu-21.png" },
+            new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i7-13700KF",    Price = 339.99m,
+                SpecsJson = S("16 ядер / 24 потока","LGA1700 Socket","3.4 / 5.4 GHz","125W TDP","30MB L3 Cache"),
+                Socket = "LGA1700", Tdp = 125, Image = "img/cpu/cpu-22.png" },
+            new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i9-13900K",     Price = 449.99m,
+                SpecsJson = S("24 ядра / 32 потока","LGA1700 Socket","3.0 / 5.8 GHz","125W TDP","36MB L3 Cache"),
+                Socket = "LGA1700", Tdp = 125, Image = "img/cpu/cpu-23.png" },
+            new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i9-14900KS",    Price = 589.99m,
+                SpecsJson = S("24 ядра / 32 потока","LGA1700 Socket","3.2 / 6.2 GHz","150W TDP","36MB L3 Cache"),
+                Socket = "LGA1700", Tdp = 150, Image = "img/cpu/cpu-24.png" },
+
+            // Additional AM5 Ryzen 7000
+            new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 7 7700",       Price = 269.99m,
+                SpecsJson = S("8 ядер / 16 потоков","AM5 Socket","3.8 / 5.3 GHz","65W TDP","32MB L3 Cache"),
+                Socket = "AM5",     Tdp = 65,  Image = "img/cpu/cpu-25.png" },
+            new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 9 7900",       Price = 349.99m,
+                SpecsJson = S("12 ядер / 24 потока","AM5 Socket","3.7 / 5.4 GHz","65W TDP","64MB L3 Cache"),
+                Socket = "AM5",     Tdp = 65,  Image = "img/cpu/cpu-26.png" },
+
+            // Ryzen 9000 (Zen 5, AM5)
+            new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 5 9600X",      Price = 249.99m,
+                SpecsJson = S("6 ядер / 12 потоков","AM5 Socket","3.9 / 5.4 GHz","65W TDP","32MB L3 Cache"),
+                Socket = "AM5",     Tdp = 65,  Image = "img/cpu/cpu-27.png" },
+            new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 7 9700X",      Price = 319.99m,
+                SpecsJson = S("8 ядер / 16 потоков","AM5 Socket","3.8 / 5.5 GHz","65W TDP","32MB L3 Cache"),
+                Socket = "AM5",     Tdp = 65,  Image = "img/cpu/cpu-28.png" },
+            new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 7 9800X3D",    Price = 449.99m,
+                SpecsJson = S("8 ядер / 16 потоков","AM5 Socket","4.7 / 5.2 GHz","120W TDP","96MB 3D V-Cache"),
+                Socket = "AM5",     Tdp = 120, Image = "img/cpu/cpu-29.png" },
+            new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 9 9900X",      Price = 399.99m,
+                SpecsJson = S("12 ядер / 24 потока","AM5 Socket","4.4 / 5.6 GHz","120W TDP","64MB L3 Cache"),
+                Socket = "AM5",     Tdp = 120, Image = "img/cpu/cpu-30.png" },
+            new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 9 9950X",      Price = 549.99m,
+                SpecsJson = S("16 ядер / 32 потока","AM5 Socket","4.3 / 5.7 GHz","170W TDP","64MB L3 Cache"),
+                Socket = "AM5",     Tdp = 170, Image = "img/cpu/cpu-31.png" },
+
+            // LGA1151 (Coffee Lake Refresh)
+            new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i3-9100F",      Price = 69.99m,
+                SpecsJson = S("4 ядра / 4 потока","LGA1151 Socket","3.6 / 4.2 GHz","65W TDP","6MB L3 Cache"),
+                Socket = "LGA1151", Tdp = 65,  Image = "img/cpu/cpu-32.png" },
+            new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i5-9400F",      Price = 99.99m,
+                SpecsJson = S("6 ядер / 6 потоков","LGA1151 Socket","2.9 / 4.1 GHz","65W TDP","9MB L3 Cache"),
+                Socket = "LGA1151", Tdp = 65,  Image = "img/cpu/cpu-33.png" },
+            new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i5-9600K",      Price = 139.99m,
+                SpecsJson = S("6 ядер / 6 потоков","LGA1151 Socket","3.7 / 4.6 GHz","95W TDP","9MB L3 Cache"),
+                Socket = "LGA1151", Tdp = 95,  Image = "img/cpu/cpu-34.png" },
+            new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i7-9700K",      Price = 219.99m,
+                SpecsJson = S("8 ядер / 8 потоков","LGA1151 Socket","3.6 / 4.9 GHz","95W TDP","12MB L3 Cache"),
+                Socket = "LGA1151", Tdp = 95,  Image = "img/cpu/cpu-35.png" },
+            new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i9-9900K",      Price = 289.99m,
+                SpecsJson = S("8 ядер / 16 потоков","LGA1151 Socket","3.6 / 5.0 GHz","95W TDP","16MB L3 Cache"),
+                Socket = "LGA1151", Tdp = 95,  Image = "img/cpu/cpu-36.png" },
+
+            // LGA1851 (Arrow Lake, Core Ultra 200)
+            new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core Ultra 5 245K",  Price = 309.99m,
+                SpecsJson = S("14 ядер / 14 потоков","LGA1851 Socket","3.6 / 5.2 GHz","125W TDP","24MB L3 Cache"),
+                Socket = "LGA1851", Tdp = 125, Image = "img/cpu/cpu-37.png" },
+            new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core Ultra 7 265K",  Price = 394.99m,
+                SpecsJson = S("20 ядер / 20 потоков","LGA1851 Socket","3.9 / 5.5 GHz","125W TDP","30MB L3 Cache"),
+                Socket = "LGA1851", Tdp = 125, Image = "img/cpu/cpu-38.png" },
+            new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core Ultra 9 285K",  Price = 589.99m,
+                SpecsJson = S("24 ядра / 24 потока","LGA1851 Socket","3.7 / 5.7 GHz","125W TDP","36MB L3 Cache"),
+                Socket = "LGA1851", Tdp = 125, Image = "img/cpu/cpu-39.png" },
+
+            // Additional AM4
+            new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 3 3300X",      Price = 74.99m,
+                SpecsJson = S("4 ядра / 8 потоков","AM4 Socket","3.8 / 4.3 GHz","65W TDP","16MB L3 Cache"),
+                Socket = "AM4",     Tdp = 65,  Image = "img/cpu/cpu-40.png" },
+            new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 5 3600",       Price = 94.99m,
+                SpecsJson = S("6 ядер / 12 потоков","AM4 Socket","3.6 / 4.2 GHz","65W TDP","32MB L3 Cache"),
+                Socket = "AM4",     Tdp = 65,  Image = "img/cpu/cpu-41.png" },
+            new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 9 5900X",      Price = 264.99m,
+                SpecsJson = S("12 ядер / 24 потока","AM4 Socket","3.7 / 4.8 GHz","105W TDP","64MB L3 Cache"),
+                Socket = "AM4",     Tdp = 105, Image = "img/cpu/cpu-42.png" },
+
+            // Additional LGA1700
+            new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i5-13600K",     Price = 259.99m,
+                SpecsJson = S("14 ядер / 20 потоков","LGA1700 Socket","3.5 / 5.1 GHz","125W TDP","24MB L3 Cache"),
+                Socket = "LGA1700", Tdp = 125, Image = "img/cpu/cpu-43.png" },
+            new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i7-12700K",     Price = 299.99m,
+                SpecsJson = S("12 ядер / 20 потоков","LGA1700 Socket","3.6 / 5.0 GHz","125W TDP","25MB L3 Cache"),
+                Socket = "LGA1700", Tdp = 125, Image = "img/cpu/cpu-44.png" },
+
+            // Additional AM5
+            new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 5 9600",       Price = 219.99m,
+                SpecsJson = S("6 ядер / 12 потоков","AM5 Socket","3.9 / 5.3 GHz","65W TDP","32MB L3 Cache"),
+                Socket = "AM5",     Tdp = 65,  Image = "img/cpu/cpu-45.png" },
+            new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 9 9950X3D",    Price = 699.99m,
+                SpecsJson = S("16 ядер / 32 потока","AM5 Socket","4.3 / 5.7 GHz","170W TDP","128MB 3D V-Cache"),
+                Socket = "AM5",     Tdp = 170, Image = "img/cpu/cpu-46.png" },
+
+            // Intel LGA2066 (HEDT)
+            new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i9-9900X",      Price = 499.99m,
+                SpecsJson = S("10 ядер / 20 потоков","LGA2066 Socket","3.5 / 4.4 GHz","165W TDP","19.25MB L3 Cache"),
+                Socket = "LGA2066", Tdp = 165, Image = "img/cpu/cpu-47.png" },
+            new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i9-10980XE",    Price = 849.99m,
+                SpecsJson = S("18 ядер / 36 потоков","LGA2066 Socket","3.0 / 4.6 GHz","165W TDP","24.75MB L3 Cache"),
+                Socket = "LGA2066", Tdp = 165, Image = "img/cpu/cpu-48.png" },
+
+            // AMD TRX40 (Threadripper, HEDT)
+            new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Threadripper 3960X", Price = 1149.99m,
+                SpecsJson = S("24 ядра / 48 потоков","TRX40 Socket","3.8 / 4.5 GHz","280W TDP","128MB L3 Cache"),
+                Socket = "TRX40",   Tdp = 280, Image = "img/cpu/cpu-49.png" },
+            new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Threadripper 3970X", Price = 1549.99m,
+                SpecsJson = S("32 ядра / 64 потока","TRX40 Socket","3.7 / 4.5 GHz","280W TDP","128MB L3 Cache"),
+                Socket = "TRX40",   Tdp = 280, Image = "img/cpu/cpu-50.png" },
+
             // ── Motherboards ───────────────────────────────────────────────────
 
             // AM4 / DDR4
@@ -178,6 +302,114 @@ public static class DataSeeder
             new() { CategoryId = cat["motherboard"], Brand = "NZXT",    Name = "N7 Z790",                  Price = 279.99m,
                 SpecsJson = S("LGA1700 Socket","ATX","DDR5 до 6400MHz","PCIe 5.0","4x M.2","WiFi 6E","Стальная крышка"),
                 Socket = "LGA1700", FormFactor = "ATX",  RamType = "DDR5", Image = "img/motherboard/mb-23.png" },
+
+            // ── LGA1700 / DDR4
+            new() { CategoryId = cat["motherboard"], Brand = "MSI",      Name = "PRO B660M-A DDR4",          Price = 129.99m,
+                SpecsJson = S("LGA1700 Socket","mATX","DDR4 до 5200MHz","B660","PCIe 4.0","2x M.2","USB 3.2"),
+                Socket = "LGA1700", FormFactor = "mATX", RamType = "DDR4", Image = "img/motherboard/mb-24.png" },
+            new() { CategoryId = cat["motherboard"], Brand = "ASUS",     Name = "PRIME Z690-P DDR4",         Price = 169.99m,
+                SpecsJson = S("LGA1700 Socket","ATX","DDR4 до 5333MHz","Z690","PCIe 5.0","3x M.2","USB 3.2"),
+                Socket = "LGA1700", FormFactor = "ATX",  RamType = "DDR4", Image = "img/motherboard/mb-25.png" },
+            new() { CategoryId = cat["motherboard"], Brand = "Gigabyte", Name = "Z790 UD AX DDR4",           Price = 199.99m,
+                SpecsJson = S("LGA1700 Socket","ATX","DDR4 до 5600MHz","Z790","PCIe 5.0","4x M.2","WiFi 6E"),
+                Socket = "LGA1700", FormFactor = "ATX",  RamType = "DDR4", Image = "img/motherboard/mb-26.png" },
+
+            // ── AM4 / DDR4 — mATX
+            new() { CategoryId = cat["motherboard"], Brand = "MSI",      Name = "B550M MORTAR WiFi",         Price = 149.99m,
+                SpecsJson = S("AM4 Socket","mATX","DDR4 до 5100MHz","B550","PCIe 4.0","2x M.2","WiFi 6"),
+                Socket = "AM4",     FormFactor = "mATX", RamType = "DDR4", Image = "img/motherboard/mb-27.png" },
+            new() { CategoryId = cat["motherboard"], Brand = "ASRock",   Name = "B550M Pro4",                Price = 109.99m,
+                SpecsJson = S("AM4 Socket","mATX","DDR4 до 4733MHz","B550","PCIe 4.0","2x M.2","USB 3.2"),
+                Socket = "AM4",     FormFactor = "mATX", RamType = "DDR4", Image = "img/motherboard/mb-28.png" },
+
+            // ── AM5 / DDR5 — mATX + High-end
+            new() { CategoryId = cat["motherboard"], Brand = "ASRock",   Name = "B650M Pro RS WiFi",         Price = 159.99m,
+                SpecsJson = S("AM5 Socket","mATX","DDR5 до 6400MHz","B650","PCIe 5.0","2x M.2","WiFi 6E"),
+                Socket = "AM5",     FormFactor = "mATX", RamType = "DDR5", Image = "img/motherboard/mb-29.png" },
+            new() { CategoryId = cat["motherboard"], Brand = "ASUS",     Name = "TUF Gaming X670E-Plus WiFi", Price = 299.99m,
+                SpecsJson = S("AM5 Socket","ATX","DDR5 до 7200MHz","X670E","PCIe 5.0","4x M.2","WiFi 6E"),
+                Socket = "AM5",     FormFactor = "ATX",  RamType = "DDR5", Image = "img/motherboard/mb-30.png" },
+
+            // ── LGA1700 / DDR5 — mATX
+            new() { CategoryId = cat["motherboard"], Brand = "Gigabyte", Name = "B760M AORUS Elite DDR5",    Price = 169.99m,
+                SpecsJson = S("LGA1700 Socket","mATX","DDR5 до 7600MHz","B760","PCIe 4.0","3x M.2","2.5G LAN"),
+                Socket = "LGA1700", FormFactor = "mATX", RamType = "DDR5", Image = "img/motherboard/mb-31.png" },
+
+            // ── Mini-ITX
+            new() { CategoryId = cat["motherboard"], Brand = "ASUS",     Name = "ROG Strix B550-I Gaming",   Price = 199.99m,
+                SpecsJson = S("AM4 Socket","ITX","DDR4 до 5100MHz","B550","PCIe 4.0","2x M.2","WiFi 6"),
+                Socket = "AM4",     FormFactor = "ITX",  RamType = "DDR4", Image = "img/motherboard/mb-32.png" },
+            new() { CategoryId = cat["motherboard"], Brand = "ASUS",     Name = "ROG Strix B660-I Gaming WiFi", Price = 229.99m,
+                SpecsJson = S("LGA1700 Socket","ITX","DDR5 до 6000MHz","B660","PCIe 5.0","2x M.2","WiFi 6E"),
+                Socket = "LGA1700", FormFactor = "ITX",  RamType = "DDR5", Image = "img/motherboard/mb-33.png" },
+
+            // ── LGA1151 / EATX
+            new() { CategoryId = cat["motherboard"], Brand = "ASUS",     Name = "ROG Maximus XI Extreme",    Price = 549.99m,
+                SpecsJson = S("LGA1151 Socket","EATX","DDR4 до 4266MHz","Z390","PCIe 3.0","3x M.2","WiFi 5"),
+                Socket = "LGA1151", FormFactor = "EATX", RamType = "DDR4", Image = "img/motherboard/mb-34.png" },
+            new() { CategoryId = cat["motherboard"], Brand = "MSI",      Name = "MEG Z390 GODLIKE",          Price = 499.99m,
+                SpecsJson = S("LGA1151 Socket","EATX","DDR4 до 4400MHz","Z390","PCIe 3.0","3x M.2","WiFi 5","Thunderbolt 3"),
+                Socket = "LGA1151", FormFactor = "EATX", RamType = "DDR4", Image = "img/motherboard/mb-35.png" },
+
+            // ── AM4 / EATX
+            new() { CategoryId = cat["motherboard"], Brand = "ASUS",     Name = "ROG Crosshair VIII Extreme", Price = 629.99m,
+                SpecsJson = S("AM4 Socket","EATX","DDR4 до 5100MHz","X570","PCIe 4.0","4x M.2","WiFi 6E","Thunderbolt 4"),
+                Socket = "AM4",     FormFactor = "EATX", RamType = "DDR4", Image = "img/motherboard/mb-36.png" },
+            new() { CategoryId = cat["motherboard"], Brand = "Gigabyte", Name = "X570 AORUS Xtreme",         Price = 499.99m,
+                SpecsJson = S("AM4 Socket","EATX","DDR4 до 5400MHz","X570","PCIe 4.0","3x M.2","WiFi 6","10G LAN"),
+                Socket = "AM4",     FormFactor = "EATX", RamType = "DDR4", Image = "img/motherboard/mb-37.png" },
+
+            // ── AM5 / EATX
+            new() { CategoryId = cat["motherboard"], Brand = "ASUS",     Name = "ROG Crosshair X670E Extreme", Price = 749.99m,
+                SpecsJson = S("AM5 Socket","EATX","DDR5 до 8000MHz","X670E","PCIe 5.0 x2","5x M.2","WiFi 6E","Thunderbolt 4"),
+                Socket = "AM5",     FormFactor = "EATX", RamType = "DDR5", Image = "img/motherboard/mb-38.png" },
+            new() { CategoryId = cat["motherboard"], Brand = "Gigabyte", Name = "X670E AORUS Xtreme",        Price = 849.99m,
+                SpecsJson = S("AM5 Socket","EATX","DDR5 до 8400MHz","X670E","PCIe 5.0 x2","5x M.2","WiFi 6E","10G LAN"),
+                Socket = "AM5",     FormFactor = "EATX", RamType = "DDR5", Image = "img/motherboard/mb-39.png" },
+
+            // ── LGA1700 / EATX
+            new() { CategoryId = cat["motherboard"], Brand = "ASUS",     Name = "ROG Maximus Z790 Extreme",  Price = 799.99m,
+                SpecsJson = S("LGA1700 Socket","EATX","DDR5 до 8000MHz","Z790","PCIe 5.0","5x M.2","WiFi 6E","Thunderbolt 4"),
+                Socket = "LGA1700", FormFactor = "EATX", RamType = "DDR5", Image = "img/motherboard/mb-40.png" },
+            new() { CategoryId = cat["motherboard"], Brand = "MSI",      Name = "MEG Z790 GODLIKE",          Price = 999.99m,
+                SpecsJson = S("LGA1700 Socket","EATX","DDR5 до 8400MHz","Z790","PCIe 5.0","6x M.2","WiFi 6E","10G LAN"),
+                Socket = "LGA1700", FormFactor = "EATX", RamType = "DDR5", Image = "img/motherboard/mb-41.png" },
+
+            // ── LGA1851 / EATX
+            new() { CategoryId = cat["motherboard"], Brand = "ASUS",     Name = "ROG Maximus Z890 Extreme",  Price = 849.99m,
+                SpecsJson = S("LGA1851 Socket","EATX","DDR5 до 9000MHz","Z890","PCIe 5.0","5x M.2","WiFi 7","Thunderbolt 5"),
+                Socket = "LGA1851", FormFactor = "EATX", RamType = "DDR5", Image = "img/motherboard/mb-42.png" },
+            new() { CategoryId = cat["motherboard"], Brand = "MSI",      Name = "MEG Z890 GODLIKE",          Price = 1099.99m,
+                SpecsJson = S("LGA1851 Socket","EATX","DDR5 до 9200MHz","Z890","PCIe 5.0","6x M.2","WiFi 7","10G LAN"),
+                Socket = "LGA1851", FormFactor = "EATX", RamType = "DDR5", Image = "img/motherboard/mb-43.png" },
+
+            // ── LGA2066 / X299 — HEDT
+            new() { CategoryId = cat["motherboard"], Brand = "ASUS",     Name = "ROG Rampage VI Extreme Encore", Price = 749.99m,
+                SpecsJson = S("LGA2066 Socket","EATX","DDR4 до 4266MHz","X299","PCIe 3.0","3x M.2","WiFi 6","Thunderbolt 3","10G LAN"),
+                Socket = "LGA2066", FormFactor = "EATX", RamType = "DDR4", Image = "img/motherboard/mb-44.png" },
+            new() { CategoryId = cat["motherboard"], Brand = "ASUS",     Name = "ROG Strix X299-E Gaming II", Price = 399.99m,
+                SpecsJson = S("LGA2066 Socket","ATX","DDR4 до 4266MHz","X299","PCIe 3.0","3x M.2","WiFi 5","2.5G LAN"),
+                Socket = "LGA2066", FormFactor = "ATX",  RamType = "DDR4", Image = "img/motherboard/mb-45.png" },
+            new() { CategoryId = cat["motherboard"], Brand = "Gigabyte", Name = "X299X AORUS Master",        Price = 599.99m,
+                SpecsJson = S("LGA2066 Socket","EATX","DDR4 до 4400MHz","X299","PCIe 3.0","3x M.2","WiFi 6","Thunderbolt 3","10G LAN"),
+                Socket = "LGA2066", FormFactor = "EATX", RamType = "DDR4", Image = "img/motherboard/mb-46.png" },
+            new() { CategoryId = cat["motherboard"], Brand = "MSI",      Name = "MEG X299 CREATION",         Price = 549.99m,
+                SpecsJson = S("LGA2066 Socket","EATX","DDR4 до 4500MHz","X299","PCIe 3.0","3x M.2","WiFi 5","Thunderbolt 3","10G LAN"),
+                Socket = "LGA2066", FormFactor = "EATX", RamType = "DDR4", Image = "img/motherboard/mb-47.png" },
+            new() { CategoryId = cat["motherboard"], Brand = "ASRock",   Name = "X299 XE Gaming",            Price = 379.99m,
+                SpecsJson = S("LGA2066 Socket","EATX","DDR4 до 4266MHz","X299","PCIe 3.0","3x M.2","10G LAN"),
+                Socket = "LGA2066", FormFactor = "EATX", RamType = "DDR4", Image = "img/motherboard/mb-48.png" },
+
+            // ── TRX40 (Threadripper 3000) — HEDT
+            new() { CategoryId = cat["motherboard"], Brand = "ASUS",     Name = "ROG Zenith II Extreme Alpha", Price = 949.99m,
+                SpecsJson = S("TRX40 Socket","EATX","DDR4 до 4666MHz","TRX40","PCIe 4.0","4x M.2","WiFi 6","Thunderbolt 3","10G LAN"),
+                Socket = "TRX40",   FormFactor = "EATX", RamType = "DDR4", Image = "img/motherboard/mb-49.png" },
+            new() { CategoryId = cat["motherboard"], Brand = "Gigabyte", Name = "TRX40 AORUS Xtreme",        Price = 799.99m,
+                SpecsJson = S("TRX40 Socket","EATX","DDR4 до 4400MHz","TRX40","PCIe 4.0","3x M.2","WiFi 6","Thunderbolt 3","10G LAN"),
+                Socket = "TRX40",   FormFactor = "EATX", RamType = "DDR4", Image = "img/motherboard/mb-50.png" },
+            new() { CategoryId = cat["motherboard"], Brand = "MSI",      Name = "TRX40 PRO WIFI",            Price = 399.99m,
+                SpecsJson = S("TRX40 Socket","EATX","DDR4 до 4400MHz","TRX40","PCIe 4.0","3x M.2","WiFi 6","2.5G LAN"),
+                Socket = "TRX40",   FormFactor = "EATX", RamType = "DDR4", Image = "img/motherboard/mb-51.png" },
 
             // ── RAM ────────────────────────────────────────────────────────────
 
