@@ -12,10 +12,11 @@ const Api = (() => {
   }
 
   return {
-    async getComponents(categorySlug) {
+    async getComponents(categorySlug, filters = {}) {
       try {
-        const data = await json(`${BASE}/components?category=${encodeURIComponent(categorySlug)}`);
-        // Normalise id to string to match mock data format
+        const params = new URLSearchParams({ category: categorySlug });
+        Object.entries(filters).forEach(([k, v]) => { if (v) params.set(k, v); });
+        const data = await json(`${BASE}/components?${params}`);
         return data.map(c => ({ ...c, id: String(c.id) }));
       } catch {
         return COMPONENTS[categorySlug] ?? [];

@@ -175,90 +175,94 @@ async function renderCurrentStep() {
 }
 
 // ─── Component data ───────────────────────────────────────────────────────────
-async function loadStep(stepId) {
-  if (!state._cache[stepId]) {
-    state._cache[stepId] = await Api.getComponents(stepId);
-  }
+async function loadStep(stepId, serverFilters = {}) {
+  const hasFilters = Object.values(serverFilters).some(Boolean);
+  if (hasFilters) return await Api.getComponents(stepId, serverFilters);
+  if (!state._cache[stepId]) state._cache[stepId] = await Api.getComponents(stepId);
   return state._cache[stepId];
 }
 
 async function getFiltered() {
-  let list = [...await loadStep(state.currentStep)];
+  const step = state.currentStep;
+  const sel  = state.selected;
 
-  if (state.currentStep === 'gpu' && state.chipFilter) {
-    list = list.filter(c => c.chipBrand === state.chipFilter);
+  // ─── Build server-side filters (DB columns only) ─────────────────────────────
+  const sf = {};
+  if (state.searchQuery)            sf.search  = state.searchQuery;
+  if (state.sortBy !== 'default')   sf.sortBy  = state.sortBy;
+
+  if (step === 'cpu') {
+    const socket = state.cpuFilters.socket || sel.motherboard?.socket;
+    if (socket) sf.socket = socket;
   }
-  if (state.brandFilter) {
-    list = list.filter(c => c.brand === state.brandFilter);
+  if (step === 'motherboard') {
+    const socket = state.mbFilters.socket || sel.cpu?.socket;
+    if (socket) sf.socket = socket;
+    if (state.mbFilters.formFactor) sf.formFactor = state.mbFilters.formFactor;
+    if (state.mbFilters.ramType)    sf.ramType    = state.mbFilters.ramType;
   }
-  if (state.currentStep === 'gpu') {
-    if (state.gpuFilters.vram) list = list.filter(c => gpuVram(c.specs) === state.gpuFilters.vram);
-    if (state.gpuFilters.fans) list = list.filter(c => gpuFans(c.specs) === state.gpuFilters.fans);
+  if (step === 'ram') {
+    const ramType = state.ramFilters.ramType || sel.motherboard?.ramType;
+    if (ramType) sf.ramType = ramType;
   }
-  if (state.currentStep === 'cpu') {
-    if (state.cpuFilters.socket) list = list.filter(c => c.socket === state.cpuFilters.socket);
+  if (step === 'gpu' && state.chipFilter) sf.chipBrand = state.chipFilter;
+
+  let list = await loadStep(step, sf);
+
+  // ─── Client-side filters (spec-based, not in DB) ─────────────────────────────
+  if (state.brandFilter) list = list.filter(c => c.brand === state.brandFilter);
+
+  if (step === 'cpu') {
     if (state.cpuFilters.series) list = list.filter(c => cpuSeries(c.name) === state.cpuFilters.series);
     if (state.cpuFilters.cores)  list = list.filter(c => cpuCores(c.specs) === parseInt(state.cpuFilters.cores));
   }
-  if (state.currentStep === 'storage') {
-    const sf = state.storageFilters;
-    if (sf.capacity)   list = list.filter(c => storageCapacity(c.specs)   === sf.capacity);
-    if (sf.formFactor) list = list.filter(c => storageFormFactor(c.specs) === sf.formFactor);
-    if (sf.interface)  list = list.filter(c => storageInterface(c.specs)  === sf.interface);
-    if (sf.readSpeed)  list = list.filter(c => storageReadSpeed(c.specs)  === parseInt(sf.readSpeed));
+  if (step === 'gpu') {
+    if (state.gpuFilters.vram) list = list.filter(c => gpuVram(c.specs) === state.gpuFilters.vram);
+    if (state.gpuFilters.fans) list = list.filter(c => gpuFans(c.specs) === state.gpuFilters.fans);
   }
-  if (state.currentStep === 'ram') {
-    if (state.ramFilters.ramType)  list = list.filter(c => c.ramType === state.ramFilters.ramType);
+  if (step === 'storage') {
+    const stf = state.storageFilters;
+    if (stf.capacity)   list = list.filter(c => storageCapacity(c.specs)   === stf.capacity);
+    if (stf.formFactor) list = list.filter(c => storageFormFactor(c.specs) === stf.formFactor);
+    if (stf.interface)  list = list.filter(c => storageInterface(c.specs)  === stf.interface);
+    if (stf.readSpeed)  list = list.filter(c => storageReadSpeed(c.specs)  === parseInt(stf.readSpeed));
+  }
+  if (step === 'ram') {
     if (state.ramFilters.capacity) list = list.filter(c => ramCapacity(c.specs) === state.ramFilters.capacity);
   }
-  if (state.currentStep === 'motherboard') {
-    if (state.mbFilters.socket)     list = list.filter(c => c.socket     === state.mbFilters.socket);
-    if (state.mbFilters.formFactor) list = list.filter(c => c.formFactor === state.mbFilters.formFactor);
-    if (state.mbFilters.ramType)    list = list.filter(c => c.ramType    === state.mbFilters.ramType);
-    if (state.mbFilters.ramSlots)   list = list.filter(c => mbRamSlots(c.specs) === parseInt(state.mbFilters.ramSlots));
-    if (state.mbFilters.chipset)    list = list.filter(c => c.chipset === state.mbFilters.chipset);
+  if (step === 'motherboard') {
+    if (state.mbFilters.ramSlots) list = list.filter(c => mbRamSlots(c.specs) === parseInt(state.mbFilters.ramSlots));
+    if (state.mbFilters.chipset)  list = list.filter(c => c.chipset === state.mbFilters.chipset);
   }
-  if (state.currentStep === 'psu') {
+  if (step === 'psu') {
     const pf = state.psuFilters;
     if (pf.wattage) list = list.filter(c => psuWattage(c.specs) === pf.wattage);
     if (pf.rating)  list = list.filter(c => psuRating(c.specs)  === pf.rating);
     if (pf.modular) list = list.filter(c => psuModular(c.specs) === pf.modular);
   }
-  if (state.currentStep === 'cooler') {
+  if (step === 'cooler') {
     const cf = state.coolerFilters;
     if (cf.type)     list = list.filter(c => coolerType(c.specs)     === cf.type);
     if (cf.fanCount) list = list.filter(c => coolerFanCount(c.specs) === parseInt(cf.fanCount));
     if (cf.fanSize)  list = list.filter(c => coolerFanSize(c.specs)  === cf.fanSize);
     if (cf.lighting) list = list.filter(c => c.specs[3]              === cf.lighting);
   }
-  if (state.currentStep === 'case') {
+  if (step === 'case') {
     const cf = state.caseFilters;
-    if (cf.formFactor)    list = list.filter(c => c.caseFormFactor === cf.formFactor);
-    if (cf.style)         list = list.filter(c => c.style          === cf.style);
+    if (cf.formFactor)      list = list.filter(c => c.caseFormFactor === cf.formFactor);
+    if (cf.style)           list = list.filter(c => c.style          === cf.style);
     if (cf.fanCount !== '') list = list.filter(c => caseFanCount(c.specs) === parseInt(cf.fanCount));
   }
 
-  // ─── Smart compat pre-filters based on selected components ───────────────────
-  const sel = state.selected;
-  if (state.currentStep === 'motherboard' && sel.cpu?.socket) {
-    list = list.filter(c => c.socket === sel.cpu.socket);
-  }
-  if (state.currentStep === 'cpu' && sel.motherboard?.socket) {
-    list = list.filter(c => c.socket === sel.motherboard.socket);
-  }
-  if (state.currentStep === 'ram' && sel.motherboard?.ramType) {
-    list = list.filter(c => c.ramType === sel.motherboard.ramType);
-  }
-  if (state.currentStep === 'case' && sel.motherboard?.formFactor) {
+  // ─── Compat filters ───────────────────────────────────────────────────────────
+  if (step === 'case' && sel.motherboard?.formFactor)
     list = list.filter(c => c.supportedFormFactors?.includes(sel.motherboard.formFactor));
-  }
 
-  if (state.searchQuery) {
+  // ─── Fallback client-side search/sort (when backend offline) ─────────────────
+  if (state.searchQuery)
     list = list.filter(c =>
       `${c.brand} ${c.name}`.toLowerCase().includes(state.searchQuery) ||
-      c.specs.some(s => s.toLowerCase().includes(state.searchQuery))
-    );
-  }
+      c.specs.some(s => s.toLowerCase().includes(state.searchQuery)));
 
   switch (state.sortBy) {
     case 'price-asc':  list.sort((a, b) => a.price - b.price); break;
