@@ -33,13 +33,13 @@ public static class DataSeeder
             // Budget AM4
             new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 5 5600",    Price = 109.99m,
                 SpecsJson = S("6 ядер / 12 потоков","AM4 Socket","3.5 / 4.4 GHz","65W TDP","32MB L3 Cache"),
-                Socket = "AM4",     Tdp = 65,  Image = "img/cpu/cpu-1.png" },
+                Socket = "AM4",     Tdp = 65,  Image = "img/cpu/cpu-1.jpg" },
             new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 5 5600X",   Price = 129.99m,
                 SpecsJson = S("6 ядер / 12 потоков","AM4 Socket","3.7 / 4.6 GHz","65W TDP","32MB L3 Cache"),
-                Socket = "AM4",     Tdp = 65,  Image = "img/cpu/cpu-2.png" },
+                Socket = "AM4",     Tdp = 65,  Image = "img/cpu/cpu-2.jpg" },
             new() { CategoryId = cat["cpu"], Brand = "AMD",   Name = "Ryzen 7 5700X",   Price = 149.99m,
                 SpecsJson = S("8 ядер / 16 потоков","AM4 Socket","3.4 / 4.6 GHz","65W TDP","32MB L3 Cache"),
-                Socket = "AM4",     Tdp = 65,  Image = "img/cpu/cpu-3.png" },
+                Socket = "AM4",     Tdp = 65,  Image = "img/cpu/cpu-3.jpg" },
 
             // Budget Intel LGA1700
             new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i3-14100F",  Price = 109.99m,
@@ -201,7 +201,7 @@ public static class DataSeeder
             // Intel LGA2066 (HEDT)
             new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i9-9900X",      Price = 499.99m,
                 SpecsJson = S("10 ядер / 20 потоков","LGA2066 Socket","3.5 / 4.4 GHz","165W TDP","19.25MB L3 Cache"),
-                Socket = "LGA2066", Tdp = 165, Image = "img/cpu/cpu-47.png" },
+                Socket = "LGA2066", Tdp = 165, Image = "img/cpu/cpu-47.jpg" },
             new() { CategoryId = cat["cpu"], Brand = "Intel", Name = "Core i9-10980XE",    Price = 849.99m,
                 SpecsJson = S("18 ядер / 36 потоков","LGA2066 Socket","3.0 / 4.6 GHz","165W TDP","24.75MB L3 Cache"),
                 Socket = "LGA2066", Tdp = 165, Image = "img/cpu/cpu-48.png" },
