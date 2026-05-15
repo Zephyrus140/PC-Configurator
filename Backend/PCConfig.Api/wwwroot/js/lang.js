@@ -71,6 +71,7 @@ const LANG = {
     build_total:        'Итого',
     build_delete:       'Удалить',
     build_delete_confirm: 'Удалить сборку "{name}"?',
+    build_rename_prompt:  'Новое название сборки:',
     build_components:   'Компоненты',
 
     f_brand:       'Бренд',
@@ -204,6 +205,7 @@ const LANG = {
     build_total:        'Total',
     build_delete:       'Delete',
     build_delete_confirm: 'Delete build "{name}"?',
+    build_rename_prompt:  'New build name:',
     build_components:   'Components',
 
     f_brand:       'Brand',

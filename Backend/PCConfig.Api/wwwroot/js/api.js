@@ -50,5 +50,13 @@ const Api = (() => {
     async deleteBuild(id) {
       await fetch(`${BASE}/builds/${id}`, { method: 'DELETE' });
     },
+
+    async renameBuild(id, name) {
+      return await json(`${BASE}/builds/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name }),
+      });
+    },
   };
 })();

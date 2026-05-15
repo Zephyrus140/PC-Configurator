@@ -1134,6 +1134,9 @@ async function renderMyBuilds() {
           </div>
           <div class="d-flex align-items-center gap-2">
             <span class="build-card-total">$${b.totalPrice.toFixed(2)}</span>
+            <button class="btn btn-outline-secondary btn-sm" onclick="renameBuild(${b.id}, '${b.name.replace(/'/g, "\\'")}')">
+              <i class="bi bi-pencil"></i>
+            </button>
             <button class="btn btn-outline-danger btn-sm" onclick="deleteBuild(${b.id}, '${b.name.replace(/'/g, "\\'")}')">
               <i class="bi bi-trash"></i>
             </button>
@@ -1147,6 +1150,13 @@ async function renderMyBuilds() {
 async function deleteBuild(id, name) {
   if (!confirm(t('build_delete_confirm', { name }))) return;
   await Api.deleteBuild(id);
+  await renderMyBuilds();
+}
+
+async function renameBuild(id, currentName) {
+  const newName = prompt(t('build_rename_prompt'), currentName);
+  if (!newName || newName.trim() === currentName) return;
+  await Api.renameBuild(id, newName.trim());
   await renderMyBuilds();
 }
 
