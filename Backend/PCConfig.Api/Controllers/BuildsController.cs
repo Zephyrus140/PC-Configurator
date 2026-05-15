@@ -21,7 +21,6 @@ public class BuildsController(IBuildService service) : ControllerBase
     }
 
     [HttpPost]                         // User + Admin
-    [UserOnly]
     public async Task<IActionResult> Create(CreateBuildRequest request)
     {
         var build = await service.CreateAsync(request);
@@ -29,7 +28,6 @@ public class BuildsController(IBuildService service) : ControllerBase
     }
 
     [HttpPut("{id:int}")]              // User + Admin
-    [UserOnly]
     public async Task<IActionResult> Update(int id, UpdateBuildRequest request)
     {
         var updated = await service.UpdateAsync(id, request);
@@ -37,7 +35,6 @@ public class BuildsController(IBuildService service) : ControllerBase
     }
 
     [HttpDelete("{id:int}")]           // User + Admin
-    [UserOnly]
     public async Task<IActionResult> Delete(int id)
         => await service.DeleteAsync(id) ? NoContent() : NotFound();
 }
