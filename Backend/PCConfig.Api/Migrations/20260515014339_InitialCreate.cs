@@ -15,10 +15,10 @@ namespace PCConfig.Api.Migrations
                 name: "Builds",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
@@ -30,12 +30,12 @@ namespace PCConfig.Api.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Slug = table.Column<string>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Icon = table.Column<string>(type: "TEXT", nullable: false),
-                    SortOrder = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Slug = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Icon = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SortOrder = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,22 +46,24 @@ namespace PCConfig.Api.Migrations
                 name: "Components",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CategoryId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Brand = table.Column<string>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    Brand = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    SpecsJson = table.Column<string>(type: "TEXT", nullable: false),
-                    Socket = table.Column<string>(type: "TEXT", nullable: true),
-                    FormFactor = table.Column<string>(type: "TEXT", nullable: true),
-                    Tdp = table.Column<int>(type: "INTEGER", nullable: true),
-                    MaxTdp = table.Column<int>(type: "INTEGER", nullable: true),
-                    Wattage = table.Column<int>(type: "INTEGER", nullable: true),
-                    RamType = table.Column<string>(type: "TEXT", nullable: true),
-                    SupportedFormFactorsJson = table.Column<string>(type: "TEXT", nullable: true),
-                    ChipBrand = table.Column<string>(type: "TEXT", nullable: true),
-                    Image = table.Column<string>(type: "TEXT", nullable: true)
+                    SpecsJson = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Socket = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FormFactor = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Tdp = table.Column<int>(type: "int", nullable: true),
+                    MaxTdp = table.Column<int>(type: "int", nullable: true),
+                    Wattage = table.Column<int>(type: "int", nullable: true),
+                    RamType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SupportedFormFactorsJson = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ChipBrand = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Chipset = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RamSlots = table.Column<int>(type: "int", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -78,11 +80,11 @@ namespace PCConfig.Api.Migrations
                 name: "BuildItems",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    BuildId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ComponentId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CategorySlug = table.Column<string>(type: "TEXT", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BuildId = table.Column<int>(type: "int", nullable: false),
+                    ComponentId = table.Column<int>(type: "int", nullable: false),
+                    CategorySlug = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

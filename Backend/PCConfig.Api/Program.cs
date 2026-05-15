@@ -14,7 +14,7 @@ builder.Services.AddSwaggerGen(c =>
 // SQLite для разработки. Для SQL Server: заменить UseSqlite на UseSqlServer
 // и поменять строку подключения на "SqlServer" в appsettings.json
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
 
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IComponentService, ComponentService>();
