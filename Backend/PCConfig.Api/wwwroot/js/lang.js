@@ -49,6 +49,7 @@ const LANG = {
     your_build:   'Ваша сборка',
     total_label:  'Итого:',
     place_order:  'Оформить заказ',
+    save_build:   'Сохранить сборку',
     close:        'Закрыть',
     total_gb:     'итого',
 
@@ -59,8 +60,9 @@ const LANG = {
     reset_confirm: 'Сбросить всю сборку? Все выбранные компоненты будут удалены.',
     build_empty:   'Сборка пустая. Выберите хотя бы один компонент.',
     build_name:    'Моя сборка',
-    build_saved:   'Сборка #{id} сохранена в базе данных!',
-    build_error:   'Ошибка сохранения. Убедитесь что бэкенд запущен (dotnet run).',
+    build_saved:         'Сборка #{id} сохранена в базе данных!',
+    build_error:         'Ошибка сохранения. Убедитесь что бэкенд запущен (dotnet run).',
+    build_offline_error: 'Компоненты выбраны в офлайн-режиме и не сохранены в БД:\n{names}\n\nСбросьте сборку (↺) и выберите заново — бэкенд запущен.',
 
     my_builds:          'Мои сборки',
     my_builds_empty:    'Нет сохранённых сборок.',
@@ -180,6 +182,7 @@ const LANG = {
     your_build:   'Your Build',
     total_label:  'Total:',
     place_order:  'Place Order',
+    save_build:   'Save Build',
     close:        'Close',
     total_gb:     'total',
 
@@ -190,8 +193,9 @@ const LANG = {
     reset_confirm: 'Reset the entire build? All selected components will be removed.',
     build_empty:   'Build is empty. Select at least one component.',
     build_name:    'My Build',
-    build_saved:   'Build #{id} saved to database!',
-    build_error:   'Save error. Make sure the backend is running (dotnet run).',
+    build_saved:         'Build #{id} saved to database!',
+    build_error:         'Save error. Make sure the backend is running (dotnet run).',
+    build_offline_error: 'These components were selected offline and are not in the DB:\n{names}\n\nReset the build (↺) and reselect — the backend is running.',
 
     my_builds:          'My Builds',
     my_builds_empty:    'No saved builds.',

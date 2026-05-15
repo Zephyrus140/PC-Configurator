@@ -7,5 +7,6 @@ public interface IBuildService
     Task<IEnumerable<BuildDto>> GetAllAsync();
     Task<BuildDto?> GetByIdAsync(int id);
     Task<BuildDto> CreateAsync(CreateBuildRequest request);
+    Task<BuildDto?> UpdateAsync(int id, UpdateBuildRequest request);
     Task<bool> DeleteAsync(int id);
 }

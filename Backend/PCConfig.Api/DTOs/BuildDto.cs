@@ -36,3 +36,9 @@ public class CreateBuildItemRequest
     [Range(1, int.MaxValue, ErrorMessage = "Некорректный ID компонента.")]
     public int ComponentId { get; set; }
 }
+
+public class UpdateBuildRequest
+{
+    [Required, MaxLength(100)]
+    public string Name { get; set; } = string.Empty;
+}

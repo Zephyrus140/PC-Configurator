@@ -16,6 +16,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IComponentService, ComponentService>();
 builder.Services.AddScoped<IBuildService, BuildService>();
 

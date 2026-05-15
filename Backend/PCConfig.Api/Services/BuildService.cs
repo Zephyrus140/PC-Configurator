@@ -1,3 +1,4 @@
+using AutoMapper;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using PCConfig.Api.Data;
@@ -6,7 +7,7 @@ using PCConfig.Api.Models;
 
 namespace PCConfig.Api.Services;
 
-public class BuildService(AppDbContext db) : IBuildService
+public class BuildService(AppDbContext db, IMapper mapper) : IBuildService
 {
     public async Task<IEnumerable<BuildDto>> GetAllAsync()
     {
@@ -15,7 +16,7 @@ public class BuildService(AppDbContext db) : IBuildService
             .OrderByDescending(b => b.CreatedAt)
             .ToListAsync();
 
-        return builds.Select(MapToDto);
+        return mapper.Map<IEnumerable<BuildDto>>(builds);
     }
 
     public async Task<BuildDto?> GetByIdAsync(int id)
@@ -24,7 +25,7 @@ public class BuildService(AppDbContext db) : IBuildService
             .Include(b => b.Items).ThenInclude(i => i.Component)
             .FirstOrDefaultAsync(b => b.Id == id);
 
-        return build is null ? null : MapToDto(build);
+        return build is null ? null : mapper.Map<BuildDto>(build);
     }
 
     public async Task<BuildDto> CreateAsync(CreateBuildRequest request)
@@ -34,12 +35,10 @@ public class BuildService(AppDbContext db) : IBuildService
             .Where(c => componentIds.Contains(c.Id))
             .ToDictionaryAsync(c => c.Id);
 
-        // Проверяем что все компоненты существуют
         var missing = componentIds.Except(componentMap.Keys).ToList();
         if (missing.Count > 0)
             throw new ValidationException($"Компоненты не найдены: {string.Join(", ", missing)}");
 
-        // Проверяем дубли категорий (RAM разрешён несколько раз)
         var duplicates = request.Items
             .Where(i => i.CategorySlug != "ram")
             .GroupBy(i => i.CategorySlug)
@@ -52,7 +51,7 @@ public class BuildService(AppDbContext db) : IBuildService
 
         var build = new Build
         {
-            Name = request.Name,
+            Name  = request.Name,
             Items = request.Items.Select(i => new BuildItem
             {
                 ComponentId  = i.ComponentId,
@@ -69,6 +68,17 @@ public class BuildService(AppDbContext db) : IBuildService
         return (await GetByIdAsync(build.Id))!;
     }
 
+    public async Task<BuildDto?> UpdateAsync(int id, UpdateBuildRequest request)
+    {
+        var build = await db.Builds.FindAsync(id);
+        if (build is null) return null;
+
+        build.Name = request.Name;
+        await db.SaveChangesAsync();
+
+        return (await GetByIdAsync(id))!;
+    }
+
     public async Task<bool> DeleteAsync(int id)
     {
         var build = await db.Builds.FindAsync(id);
@@ -77,19 +87,4 @@ public class BuildService(AppDbContext db) : IBuildService
         await db.SaveChangesAsync();
         return true;
     }
-
-    private static BuildDto MapToDto(Build b) => new()
-    {
-        Id         = b.Id,
-        Name       = b.Name,
-        CreatedAt  = b.CreatedAt,
-        TotalPrice = b.TotalPrice,
-        Items = b.Items.Select(i => new BuildItemDto
-        {
-            CategorySlug  = i.CategorySlug,
-            ComponentId   = i.ComponentId,
-            ComponentName = $"{i.Component.Brand} {i.Component.Name}",
-            Price         = i.Component.Price,
-        }).ToList(),
-    };
 }

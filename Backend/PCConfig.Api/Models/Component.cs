@@ -18,6 +18,8 @@ public class Component
     public string? RamType { get; set; }                    // MB / RAM: "DDR5"
     public string? SupportedFormFactorsJson { get; set; }   // Case: JSON string[]
     public string? ChipBrand { get; set; }                   // GPU: "NVIDIA" | "AMD" | "Intel"
+    public string? Chipset { get; set; }                     // MB: "B550" | "Z790" | "X670E"
+    public int? RamSlots { get; set; }                       // MB: 2 | 4 | 8
     public string? Image { get; set; }                       // relative path: "img/cpu/cpu-1.png"
 
     public Category Category { get; set; } = null!;

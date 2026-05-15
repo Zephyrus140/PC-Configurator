@@ -53,25 +53,30 @@ body {
   z-index: 200;
 }
 
-/* Language toggle */
+/* My Builds button */
 .my-builds-btn {
   font-family: 'Rajdhani', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 1px;
-  color: var(--text);
-  background: transparent;
-  border: 1px solid var(--border);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--purple);
+  background: var(--purple-dim);
+  border: 1px solid rgba(155, 48, 255, 0.35);
   border-radius: var(--radius);
-  padding: 4px 12px;
+  padding: 5px 14px;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  transition: background 0.2s, box-shadow 0.2s, border-color 0.2s, color 0.2s;
   line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 .my-builds-btn:hover {
-  background: var(--surface-2);
-  border-color: var(--cyan);
-  color: var(--cyan);
+  background: rgba(155, 48, 255, 0.18);
+  border-color: var(--purple);
+  box-shadow: 0 0 10px var(--purple-glow);
+  color: #c060ff;
 }
 
 .build-card {

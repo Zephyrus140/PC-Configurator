@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PCConfig.Api.Data;
 using PCConfig.Api.DTOs;
@@ -6,7 +7,7 @@ using System.Text.Json;
 
 namespace PCConfig.Api.Services;
 
-public class ComponentService(AppDbContext db) : IComponentService
+public class ComponentService(AppDbContext db, IMapper mapper) : IComponentService
 {
     public async Task<IEnumerable<ComponentDto>> GetAllAsync(ComponentFilterDto filter)
     {
@@ -48,7 +49,7 @@ public class ComponentService(AppDbContext db) : IComponentService
             _            => query.OrderBy(c => c.Brand).ThenBy(c => c.Name),
         };
 
-        return (await query.ToListAsync()).Select(MapToDto);
+        return mapper.Map<IEnumerable<ComponentDto>>(await query.ToListAsync());
     }
 
     public async Task<ComponentDto?> GetByIdAsync(int id)
@@ -57,26 +58,76 @@ public class ComponentService(AppDbContext db) : IComponentService
             .Include(c => c.Category)
             .FirstOrDefaultAsync(c => c.Id == id);
 
-        return comp is null ? null : MapToDto(comp);
+        return comp is null ? null : mapper.Map<ComponentDto>(comp);
     }
 
-    private static ComponentDto MapToDto(Component c) => new()
+    public async Task<ComponentDto> CreateAsync(CreateComponentRequest request)
     {
-        Id     = c.Id,
-        Brand  = c.Brand,
-        Name   = c.Name,
-        Price  = c.Price,
-        Specs  = JsonSerializer.Deserialize<List<string>>(c.SpecsJson) ?? [],
-        Socket              = c.Socket,
-        FormFactor          = c.FormFactor,
-        Tdp                 = c.Tdp,
-        MaxTdp              = c.MaxTdp,
-        Wattage             = c.Wattage,
-        RamType             = c.RamType,
-        SupportedFormFactors = c.SupportedFormFactorsJson is not null
-            ? JsonSerializer.Deserialize<List<string>>(c.SupportedFormFactorsJson)
-            : null,
-        ChipBrand = c.ChipBrand,
-        Image     = c.Image,
-    };
+        var category = await db.Categories.FirstOrDefaultAsync(c => c.Slug == request.CategorySlug)
+            ?? throw new KeyNotFoundException($"Категория '{request.CategorySlug}' не найдена.");
+
+        var component = new Component
+        {
+            CategoryId               = category.Id,
+            Brand                    = request.Brand,
+            Name                     = request.Name,
+            Price                    = request.Price,
+            SpecsJson                = JsonSerializer.Serialize(request.Specs),
+            Socket                   = request.Socket,
+            FormFactor               = request.FormFactor,
+            Tdp                      = request.Tdp,
+            MaxTdp                   = request.MaxTdp,
+            Wattage                  = request.Wattage,
+            RamType                  = request.RamType,
+            SupportedFormFactorsJson = request.SupportedFormFactors is not null
+                                        ? JsonSerializer.Serialize(request.SupportedFormFactors)
+                                        : null,
+            ChipBrand                = request.ChipBrand,
+            Chipset                  = request.Chipset,
+            RamSlots                 = request.RamSlots,
+            Image                    = request.Image,
+        };
+
+        db.Components.Add(component);
+        await db.SaveChangesAsync();
+
+        return (await GetByIdAsync(component.Id))!;
+    }
+
+    public async Task<ComponentDto?> UpdateAsync(int id, UpdateComponentRequest request)
+    {
+        var component = await db.Components.FindAsync(id);
+        if (component is null) return null;
+
+        component.Brand                    = request.Brand;
+        component.Name                     = request.Name;
+        component.Price                    = request.Price;
+        component.SpecsJson                = JsonSerializer.Serialize(request.Specs);
+        component.Socket                   = request.Socket;
+        component.FormFactor               = request.FormFactor;
+        component.Tdp                      = request.Tdp;
+        component.MaxTdp                   = request.MaxTdp;
+        component.Wattage                  = request.Wattage;
+        component.RamType                  = request.RamType;
+        component.SupportedFormFactorsJson = request.SupportedFormFactors is not null
+                                             ? JsonSerializer.Serialize(request.SupportedFormFactors)
+                                             : null;
+        component.ChipBrand                = request.ChipBrand;
+        component.Chipset                  = request.Chipset;
+        component.RamSlots                 = request.RamSlots;
+        component.Image                    = request.Image;
+
+        await db.SaveChangesAsync();
+
+        return (await GetByIdAsync(id))!;
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var component = await db.Components.FindAsync(id);
+        if (component is null) return false;
+        db.Components.Remove(component);
+        await db.SaveChangesAsync();
+        return true;
+    }
 }

@@ -26,6 +26,13 @@ public class BuildsController(IBuildService service) : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = build.Id }, build);
     }
 
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update(int id, UpdateBuildRequest request)
+    {
+        var updated = await service.UpdateAsync(id, request);
+        return updated is null ? NotFound() : Ok(updated);
+    }
+
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
         => await service.DeleteAsync(id) ? NoContent() : NotFound();

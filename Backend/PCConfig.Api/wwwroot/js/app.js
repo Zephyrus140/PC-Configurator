@@ -231,8 +231,8 @@ async function getFiltered() {
     if (state.ramFilters.capacity) list = list.filter(c => ramCapacity(c.specs) === state.ramFilters.capacity);
   }
   if (step === 'motherboard') {
-    if (state.mbFilters.ramSlots) list = list.filter(c => mbRamSlots(c.specs) === parseInt(state.mbFilters.ramSlots));
-    if (state.mbFilters.chipset)  list = list.filter(c => c.chipset === state.mbFilters.chipset);
+    if (state.mbFilters.ramSlots) list = list.filter(c => getMbRamSlots(c) === parseInt(state.mbFilters.ramSlots));
+    if (state.mbFilters.chipset)  list = list.filter(c => (c.chipset ?? c.chipset) === state.mbFilters.chipset);
   }
   if (step === 'psu') {
     const pf = state.psuFilters;
@@ -384,11 +384,14 @@ function mbRamSlots(specs) {
   const m = s.match(/^(\d+)/);
   return m ? parseInt(m[1]) : 0;
 }
+function getMbRamSlots(c) {
+  return c.ramSlots ?? mbRamSlots(c.specs ?? []);
+}
 
 function getMaxRamKits() {
   const mb = state.selected.motherboard;
   if (!mb) return 2;
-  const slots = mbRamSlots(mb.specs);
+  const slots = getMbRamSlots(mb);
   return Math.max(1, Math.floor(slots / 2));
 }
 
@@ -528,8 +531,8 @@ async function renderBrandChips() {
     const afterFact  = state.mbFilters.formFactor ? afterSock.filter(c => c.formFactor === state.mbFilters.formFactor) : afterSock;
     const ramTypes   = [...new Set(afterFact.map(c => c.ramType).filter(Boolean))].sort();
     const afterType  = state.mbFilters.ramType ? afterFact.filter(c => c.ramType === state.mbFilters.ramType) : afterFact;
-    const slotCounts = [...new Set(afterType.map(c => mbRamSlots(c.specs)).filter(Boolean))].sort((a, b) => a - b);
-    const afterSlots  = state.mbFilters.ramSlots ? afterType.filter(c => mbRamSlots(c.specs) === parseInt(state.mbFilters.ramSlots)) : afterType;
+    const slotCounts = [...new Set(afterType.map(c => getMbRamSlots(c)).filter(Boolean))].sort((a, b) => a - b);
+    const afterSlots  = state.mbFilters.ramSlots ? afterType.filter(c => getMbRamSlots(c) === parseInt(state.mbFilters.ramSlots)) : afterType;
     const chipsets    = [...new Set(afterSlots.map(c => c.chipset).filter(Boolean))].sort();
 
     bar.innerHTML = [
@@ -1057,13 +1060,27 @@ function renderSummary() {
 // ─── Order ────────────────────────────────────────────────────────────────────
 async function handleOrder() {
   const items = [];
+  const offlineNames = [];
+
   for (const [categorySlug, val] of Object.entries(state.selected)) {
-    if (Array.isArray(val)) val.forEach(c => items.push({ categorySlug, componentId: Number(c.id) }));
-    else items.push({ categorySlug, componentId: Number(val.id) });
+    const comps = Array.isArray(val) ? val : [val];
+    for (const c of comps) {
+      const id = Number(c.id);
+      if (Number.isInteger(id) && id > 0) {
+        items.push({ categorySlug, componentId: id });
+      } else {
+        offlineNames.push(c.name);
+      }
+    }
   }
 
-  if (!items.length) {
+  if (!items.length && !offlineNames.length) {
     alert(t('build_empty'));
+    return;
+  }
+
+  if (offlineNames.length) {
+    alert(t('build_offline_error', { names: offlineNames.join(', ') }));
     return;
   }
 
