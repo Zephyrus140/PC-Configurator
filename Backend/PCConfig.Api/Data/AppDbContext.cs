@@ -9,6 +9,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Component> Components => Set<Component>();
     public DbSet<Build>     Builds     => Set<Build>();
     public DbSet<BuildItem> BuildItems => Set<BuildItem>();
+    public DbSet<User>      Users      => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder mb)
     {
