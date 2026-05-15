@@ -86,8 +86,9 @@ body {
   transition: border-color 0.2s;
 }
 .build-card:hover { border-color: rgba(0, 212, 255, 0.3); }
-.build-card-name  { font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text); }
+.build-card-name  { font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text); display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
 .build-card-total { font-family: 'Orbitron', monospace; font-size: 0.85rem; color: var(--cyan); white-space: nowrap; }
+.build-rename-input { max-width: 200px; background: var(--surface); border-color: var(--cyan); color: var(--text); }
 
 .lang-btn {
   font-family: 'Orbitron', monospace;

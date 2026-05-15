@@ -1134,10 +1134,10 @@ async function renderMyBuilds() {
           </div>
           <div class="d-flex align-items-center gap-2">
             <span class="build-card-total">$${b.totalPrice.toFixed(2)}</span>
-            <button class="btn btn-outline-secondary btn-sm" onclick="renameBuild(${b.id}, '${b.name.replace(/'/g, "\\'")}')">
+            <button class="btn btn-outline-secondary btn-sm build-rename-btn" data-id="${b.id}">
               <i class="bi bi-pencil"></i>
             </button>
-            <button class="btn btn-outline-danger btn-sm" onclick="deleteBuild(${b.id}, '${b.name.replace(/'/g, "\\'")}')">
+            <button class="btn btn-outline-danger btn-sm build-delete-btn" data-id="${b.id}">
               <i class="bi bi-trash"></i>
             </button>
           </div>
@@ -1145,6 +1145,20 @@ async function renderMyBuilds() {
         <ul class="mb-0 ps-3">${items}</ul>
       </div>`;
   }).join('');
+
+  body.querySelectorAll('.build-rename-btn').forEach(btn => {
+    const id   = Number(btn.dataset.id);
+    const card = btn.closest('.build-card');
+    const name = card.querySelector('.build-card-name').textContent;
+    btn.addEventListener('click', () => renameBuild(id, name));
+  });
+
+  body.querySelectorAll('.build-delete-btn').forEach(btn => {
+    const id   = Number(btn.dataset.id);
+    const card = btn.closest('.build-card');
+    const name = card.querySelector('.build-card-name').textContent;
+    btn.addEventListener('click', () => deleteBuild(id, name));
+  });
 }
 
 async function deleteBuild(id, name) {
@@ -1153,11 +1167,40 @@ async function deleteBuild(id, name) {
   await renderMyBuilds();
 }
 
-async function renameBuild(id, currentName) {
-  const newName = prompt(t('build_rename_prompt'), currentName);
-  if (!newName || newName.trim() === currentName) return;
-  await Api.renameBuild(id, newName.trim());
-  await renderMyBuilds();
+function renameBuild(id, currentName) {
+  const nameEl = document.querySelector(`.build-card[data-build-id="${id}"] .build-card-name`);
+  if (!nameEl || nameEl.querySelector('input')) return;
+
+  const input = document.createElement('input');
+  input.type  = 'text';
+  input.value = currentName;
+  input.className = 'form-control form-control-sm build-rename-input';
+
+  const save = document.createElement('button');
+  save.className = 'btn btn-accent btn-sm ms-1';
+  save.innerHTML = '<i class="bi bi-check"></i>';
+
+  const cancel = document.createElement('button');
+  cancel.className = 'btn btn-outline-secondary btn-sm ms-1';
+  cancel.innerHTML = '<i class="bi bi-x"></i>';
+
+  nameEl.innerHTML = '';
+  nameEl.append(input, save, cancel);
+  input.focus();
+  input.select();
+
+  async function doSave() {
+    const v = input.value.trim();
+    if (v && v !== currentName) await Api.renameBuild(id, v);
+    await renderMyBuilds();
+  }
+
+  save.addEventListener('click', doSave);
+  cancel.addEventListener('click', renderMyBuilds);
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter')  doSave();
+    if (e.key === 'Escape') renderMyBuilds();
+  });
 }
 
 // ─── Compare ──────────────────────────────────────────────────────────────────
